@@ -1,0 +1,73 @@
+*FILENAME: minimize.inp
+*PURPOSE:  minimize protein with xtal waters in vacuum
+*AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
+*
+! use harmonic constraints to make minimization gradual
+! take psf and coordinates that were generated with gen-prot.inp
+! Unix environment variable CHM_HOME has to point to CHARMM installation directory
+
+! Get definitions of amino acids and standard parameters
+!read rtf   card name $CHM_HOME/toppar/top_all22_prot.inp
+!read param card name $CHM_HOME/toppar/par_all22_prot.inp
+
+open read unit 1 card name "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup/top_all27_prot_na.rtf"
+read rtf card unit 1
+close unit 1
+
+open read unit 2 card name "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup/par_all27_prot_na.prm"
+read para card unit 2
+close unit 2
+
+! Get psf and coordinates
+read psf card name INPUT.psf
+read coor card name INPUT.crd
+
+stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+
+! Save coordinates also in comparsion coordinate set for later use
+coor copy comp
+
+! Harmonic constraints on all atoms
+cons harm force 20.0 sele all end
+
+! First used Steepest Descent (a gentle minimizer)
+minimize sd nstep 100 cdie eps 1.0 fshift vshift cutnb 13.0 ctofnb 12.0
+
+! How different is the structure now?
+coor orie rms sele all end
+
+write coor card name OUTPUT_min1.crd
+* 4oo8_abc coordinates after some minimization
+* rmsd from xtal: ?rms
+* total energy: ?ener
+*
+
+! Reduce harmonic constraints and minimize some more
+cons harm force 10.0 sele all end
+minimize abnr nstep 50
+coor orie rms sele all end
+
+write coord card name OUTPUT_min2.crd
+* 4oo8_abc coordinates after some minimization
+* rmsd from xtal: ?rms
+* total energy: ?ener
+*
+
+! turn off harmonic constraints
+cons harm force 0.0 sele all end
+! then small constraints on backbone only
+cons harm force 5.0 sele (segid A .or. segid B) .and. -
+    (type C .or. type N .or. type CA .or. type O) end
+
+minimize abnr nstep 50
+coor orie rms sele all end
+cons harm force  0.0 sele all end
+
+minimize abnr nstep 100 
+coor orie rms sele all end
+
+write coor card name OUTPUT_min3.crd
+* 4oo8_abc coordinates after some minimization
+* rmsd from xtal: ?rms
+* total energy: ?ener
+*

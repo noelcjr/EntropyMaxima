@@ -1,0 +1,42 @@
+! Inter Energy Calculations (A,B)
+! set path /nfs/user05/dfgreen/programs/noarch/lib/ice
+! =================================
+
+open read unit 1 card name "/home/noel/Projects/Protein_design/Parameters/top_all27_prot_na.rtf"
+read rtf card unit 1
+close unit 1
+
+open read unit 2 card name "/home/noel/Projects/Protein_design/Parameters/par_all27_prot_na.prm"
+read para card unit 2
+close unit 2
+
+! Read in structure files
+! =======================
+
+open read unit 1 card name INPSF.psf
+read psf unit 1 card
+close unit 1
+
+open read unit 1 card name INCRD.crd
+read coor unit 1 card
+close unit 1
+ 
+! Inter Chain Energy (A,B)
+! ==============================
+
+stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+
+coor trans xdir 0 ydir 0 zdir 500 factor 1.0 -
+  sele (segid A) end
+ 
+gbsw gbener molsurf sw 0.2 sgamma 0.01 dgp 1.5 CA 1 -
+aa0 1.2045 aa1 0.1866 epsp 1.0 epsw 80.0
+ 
+nbond -
+inbfrq 10 ctonnb 960.0 ctofnb 980.0 cutnb 900.0 wmin 1.5  -
+elec atom switch cdiel eps 1.0 vdw vatom vswitch -
+e14fac 1.0 nbxmod 5
+ 
+energy
+
+stop

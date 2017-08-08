@@ -1,0 +1,181 @@
+*FILENAME: minimize.inp
+*PURPOSE:  minimize protein with xtal waters in vacuum
+*AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
+*
+! use harmonic constraints to make minimization gradual
+! take psf and coordinates that were generated with gen-prot.inp
+! Unix environment variable CHM_HOME has to point to CHARMM installation directory
+
+! Get definitions of amino acids and standard parameters
+!read rtf   card name $CHM_HOME/toppar/top_all22_prot.inp
+!read param card name $CHM_HOME/toppar/par_all22_prot.inp
+
+open read unit 1 card name "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup/top_all27_prot_na.rtf"
+read rtf card unit 1
+close unit 1
+
+open read unit 2 card name "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup/par_all27_prot_na.prm"
+read para card unit 2
+close unit 2
+
+! Get psf and coordinates
+read psf card name INPUT.psf
+read coor card name INPUT.crd
+
+stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+
+! Save coordinates also in comparsion coordinate set for later use
+coor copy comp
+
+! Harmonic constraints on all atoms
+cons harm force 20.0 sele all end
+
+! First used Steepest Descent (a gentle minimizer)
+minimize sd nstep 100 cdie eps 1.0 fshift vshift cutnb 13.0 ctofnb 12.0
+
+! How different is the structure now?
+coor orie rms sele all end
+
+! Reduce harmonic constraints and minimize some more
+cons harm force 10.0 sele all end
+minimize abnr nstep 50
+coor orie rms sele all end
+
+! turn off harmonic constraints
+cons harm force 0.0 sele all end
+! then small constraints on backbone only
+cons harm force 5.0 sele (segid A .or. segid B) .and. -
+    (type C .or. type N .or. type CA .or. type O) end
+
+minimize abnr nstep 50
+coor orie rms sele all end
+cons harm force  0.0 sele all end
+
+open write unit 69 form name OUTPUT.dat
+write title unit 69
+*Min, Bond, Angles, Dihedrals, Impropers, VDW, ELEC, ENER, RMSD
+*
+
+set j 100
+label loop
+
+minimize abnr nstep 100 
+coor orie rms sele all end
+
+write coor card name OUTPUT_@j.crd
+* FILEID coordinates after some minimization
+* rmsd from xtal: ?rms
+* total energy: ?ener
+*
+
+set enr ?ENER
+set bnd ?BOND
+set ang ?ANGL
+set dih ?DIHE
+set imp ?IMPR
+set vdw ?VDW
+set ele ?ELEC
+set rs ?rms
+
+write title unit 69
+*@j, @bnd, @ang, @dih, @imp, @vdw, @ele, @enr, @rs
+*
+
+incr j by 100
+if j le 1000 goto loop
+close unit 69
+!#######################################################
+open write unit 69 form name OUTPUT_mmgbsa.dat
+
+write title unit 69
+*Min, elecS, gbenD, vdwaD, aspD, polarD, nonPolarD, mmgbsa
+*
+
+set jj 100
+label loop2
+
+open read unit 1 card name OUTPUT_@jj.crd
+read coor unit 1 card
+close unit 1
+
+stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+
+gbsw gbener molsurf sw 0.2 sgamma 0.01 dgp 1.5 CA 1 -
+aa0 1.2045 aa1 0.1866 epsp 1.0 epsw 80.0
+
+nbond -
+inbfrq 10 ctonnb 960.0 ctofnb 980.0 cutnb 900.0 wmin 1.5  -
+elec atom switch cdiel eps 1.0 vdw vatom vswitch -
+e14fac 1.0 nbxmod 5
+
+energy
+
+stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+
+set eleB ?ELEC
+set gbeB ?GBEN
+set vdwB ?VDW
+set aspB ?ASP
+
+coor trans xdir 0 ydir 0 zdir 500 factor 1.0 -
+  sele (segid A) end
+
+energy
+
+set eleU ?ELEC
+set gbeU ?GBEN
+set vdwU ?VDW
+set aspU ?ASP
+
+calc eleD @eleB - @eleU
+calc gbeD @gbeB - @gbeU
+calc vdwD @vdwB - @vdwU
+calc aspD @aspB - @aspU
+
+calc eegbD @eleD + @gbeD
+calc vdwsaD @vdwD + @aspD
+calc mmgbsa @eegbD + @vdwsaD
+
+write title unit 69
+*@jj, @eleD, @gbeD, @vdwD, @aspD, @eegbD, @vdwsaD, @mmgbsa
+*
+
+incr jj by 100
+if jj le 1000 goto loop2
+
+close unit 69
+!################################################################
+open write unit 69 form name OUTPUT_rmsd.dat
+
+write title unit 69
+*Min, full, center, link, rotate
+*
+
+set jjj 100
+label loop3
+
+open read unit 1 card name OUTPUT_@jjj.crd
+read coor unit 1 card
+close unit 1
+
+coor orien rms sele type CA end
+set rmsfull ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. resid ROTA) .or. (segid B .and. resid ROTB))) end
+set rmsrotate ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. resid LIKA) .or. (segid B .and. resid LIKB))) end
+set rmslinker ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. resid CENA) .or. (segid B .and. resid CENB))) end
+set rmscenter ?RMS
+
+write title unit 69
+*@jjj, @rmsfull, @rmscenter, @rmslinker, @rmsrotate
+*
+
+incr jjj by 100
+if jjj le 1000 goto loop3
+
+close unit 69
+

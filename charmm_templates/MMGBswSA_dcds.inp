@@ -1,0 +1,97 @@
+! Inter Energy Calculations (A,B)
+! Read parameter and topology files
+! =================================
+open read unit 1 card name "/home/noel/Projects/Protein_design/Parameters/top_all27_prot_na.rtf"
+read rtf card unit 1
+close unit 1
+open read unit 1 card name "/home/noel/Projects/Protein_design/Parameters/par_all27_prot_na.prm"
+read para card unit 1
+close unit 1
+! Read in structure files
+! =======================
+open read unit 1 card name 1brs_no_wat_ions.psf
+read psf unit 1 card
+close unit 1
+open read unit 1 card name 1brs_no_wat_ions.crd
+read coor unit 1 card
+close unit 1
+open read unit 41 unfo name 1brs_10ns_nosolv_fit.dcd
+set nf 1
+
+open write unit 51 form name 1brs_MMGBSA.dat
+! Inter Chain Energy (A,B)
+! ==============================
+stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+ 
+gbsw gbener molsurf sw 0.2 sgamma 0.01 dgp 1.5 -
+aa0 1.2045 aa1 0.1866 epsp 1.0 epsw 80.0
+ 
+nbond -
+inbfrq 10 ctonnb 16.0 ctofnb 18.0 cutnb 20.0 wmin 1.5  -
+elec atom switch cdiel eps 1.0 vdw vatom vswitch -
+e14fac 1.0 nbxmod 5
+ 
+energy
+
+traj query unit 41
+
+set nsteps ?NFILE
+set stepsize ?SKIP
+set firststep ?START
+set timestep ?DELTA
+
+rewind unit 41
+
+set factor = 1
+calc newskip = @stepsize * @factor
+calc stp = @nf*?NFILE
+ 
+traj iread 41 nread @nf skip @newskip begin @firststep
+
+write title unit 51
+*TS(ps),Energy, Elec, GB, VDW, SA
+*
+
+! Main loop for reading trajectory
+set ii 0
+label loop1
+incr ii by @factor
+   ! Load coordinates of frame ii
+     traj read
+
+calc new @ii*10
+
+energy
+
+set engB ?ENER
+set elcB ?ELEC
+set vdwB ?VDW
+set aspB ?ASP
+set gbeB ?GBEN
+
+coor trans xdir 0 ydir 0 zdir 500 factor 1.0 -
+ sele .not. (segid F) end
+
+energy
+
+set engU ?ENER
+set elcU ?ELEC
+set vdwU ?VDW
+set aspU ?ASP
+set gbeU ?GBEN
+
+calc engD @engB - @engU
+calc elcD @elcB - @elcU
+calc vdwD @vdwB - @vdwU
+calc aspD @aspB - @aspU
+calc gbeD @gbeB - @gbeU
+
+write title unit 51
+*@new, @engD, @elcD, @gbeD, @vdwD, @aspD
+*
+
+if ii lt @stp goto loop1
+
+close unit 41
+close unit 51
+stop

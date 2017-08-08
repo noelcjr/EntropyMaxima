@@ -1,0 +1,61 @@
+* This file is construct.inp.
+* Usage, charmm Phi=x Psi=y <construct.inp >construct.out.
+* Construct a peptide of 15 residues (specified below) with phi angles set to x
+*  and psi angles set to y.
+*                          Phi    Psi
+* Alpha helix              -57    -47
+* Beta sheet              -120    120
+* Polyproline II Helix     -75    145
+*
+
+! Open and read amino acid topology and parameter files.
+open read card unit 20 name "/home/noel/Programs/charmmSB/trunk/toppar/top_all27_prot_na.rtf" 
+read rtf card unit 20
+close unit 20
+
+open read card unit 21 name "/home/noel/Programs/charmmSB/trunk/toppar/par_all27_prot_na.prm" 
+read parameter card unit 21
+close unit 21
+
+! Read sequence of 15 residue peptide from this input script (Unit 5).
+read sequence card
+* This is the mandatory title
+*
+24
+GLY ALA ARG ASN ASP CYS GLU GLN GLY HSE HSP HSD ILE LEU LYS MET PHE PRO SER THR TRP TYR VAL GLY
+
+! Setup arrays for the peptide, fill ic table from residue topology file.
+!generate pep setup
+generate A first ACE last CTER setup 
+
+! Complete ic table, if necessary using values from parameter file.
+ic parameter
+
+! Each cycle through loop changes phi of a residue and psi of the next residue.
+! Note that first residue has only a psi dihedral and last residue only a phi.
+! set resno 1
+! set nextres 2
+! label loop
+
+! Adjust the dihedrals phi of residue numbered nextres and psi of residue
+!  numbered resno to the passed values Phi and Psi.
+! ic edit
+! dihedral @resno C @nextres N @nextres CA @nextres C 120
+! dihedral @resno N @resno CA @resno C @nextres N 120
+! end
+
+! increment resno 
+! increment nextres 
+! if resno lt 15 goto loop
+
+! Having set internal coordinates, now build cartesian coordinates.
+ic seed 1 N 1 CA 1 C
+ic build
+
+! Write out cartesian coordinates of the peptide.
+open write card name peptides.pdb unit 30
+write coordinates pdb select all end unit 30
+* Peptide with all phi set to Phi and all psi set to
+*
+
+stop
