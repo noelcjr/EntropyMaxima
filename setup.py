@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# References:
+# https://gist.github.com/blackfalcon/8428401
+# https://docs.python.org/2/distutils/setupscript.html
+# https://docs.python.org/2/distutils/introduction.html#a-simple-example
+
 from distutils.core import setup
 
 setup(name='Entropy Maxima',
@@ -8,7 +13,7 @@ setup(name='Entropy Maxima',
       author='Noel Carrascal, PhD',
       author_email='noelcarrascal@gmail.com',
       url='https://github.com/noelcjr/EntropyMaxima',
-      packages=['src'],
+      packages=['em','em.describe','em.energy','em.manipulate','em.tools'],
      )
 
 '''# -*- coding: utf-8 -*-

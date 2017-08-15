@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/python
+
 """
 Created on Mon Nov 21 22:50:36 2016
 
@@ -9,6 +10,7 @@ import sys
 # The paths below allows spyder to find .pyc, and the program to find param 
 # files, It is now set for my environment only but for distribution it needs
 # to be setup for each user installation or Errors will occur.
+'''
 folder = 'EntropyMaxima/'
 path = '/home/noel/Projects/Protein_design/'+folder
 sys_path = path+'/src'
@@ -29,8 +31,9 @@ for i in sys.path:
         is_in_path = True
 if not is_in_path:
     sys.path.append(sys_path)
+'''
 #import utilities as ut
-import input_output as IO
+import em.tools.input_output as IO
 
 import optparse
 

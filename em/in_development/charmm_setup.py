@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # Variables
 topology_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/top_all27_prot_na.rtf"
 parameter_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/par_all27_prot_na.prm"
