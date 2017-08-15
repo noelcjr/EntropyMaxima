@@ -1,4 +1,17 @@
-7# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+
+from distutils.core import setup
+
+setup(name='Entropy Maxima',
+      version='0.1',
+      description='Python Distribution for Protein Modeling and Design',
+      author='Noel Carrascal, PhD',
+      author_email='noelcarrascal@gmail.com',
+      url='https://github.com/noelcjr/EntropyMaxima',
+      packages=['src'],
+     )
+
+'''# -*- coding: utf-8 -*-
 """
 Created on Fri Jun 24 12:10:40 2016
 
@@ -26,3 +39,4 @@ py_compile.compile(sys_path+'/Super_Structures.py')
 py_compile.compile(sys_path+'/utilities.py')
 py_compile.compile(sys_path+'/Energy_Functions.py')
 py_compile.compile(sys_path+'/MMGBSA_CA_L.py')
+'''
