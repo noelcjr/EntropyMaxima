@@ -6,28 +6,9 @@ Created on Tue Oct 25 09:18:09 2016
 """
 import os
 import sys
-# The paths below allows spyder to find .pyc, and the program to find param 
-# files, It is now set for my environment only but for distribution it needs
-# to be setup for each user installation or Errors will occur.
-folder = 'EntropyMaxima/'
-path = '/home/noel/Projects/Protein_design/'+folder
-sys_path = path+'/src'
-if not os.path.isdir(sys_path):
-    print("Error: The parameter directory "+sys_path+" is not found.")
-    sys.exit(1)
-param_path = path+'params/charmm27.ff/'
-if not os.path.isdir(param_path):
-    print("Error: The parameter directory "+param_path+" is not found.")
-    sys.exit(1)
-is_in_path = False
-for i in sys.path:
-    if i == sys_path:
-        is_in_path = True
-if not is_in_path:
-    sys.path.append(sys_path)
-import CHARMM_Parser as CP
-import Super_Structures as SS
-import input_output as IO
+import em.tools.CHARMM_Parser as CP
+import em.tools.Super_Structures as SS
+import em.tools.input_output as IO
 import optparse
 
 def main():

@@ -1,15 +1,6 @@
 #!/usr/bin/python
 import sys
 import os
-# For debugging in spyder
-''' This script does not use any library in the OIPD folder.
-sys_path = '/home/noel/Projects/Protein_design/Insulin/OIPD/src'
-is_in_path = False
-for i in sys.path:
-    if i == sys_path:
-        is_in_path = True
-if not is_in_path:
-    sys.path.append('/home/noel/Projects/Protein_design/Insulin/OIPD/src')'''
 import optparse
 import numpy as np
 from Bio.PDB.PDBParser import PDBParser
