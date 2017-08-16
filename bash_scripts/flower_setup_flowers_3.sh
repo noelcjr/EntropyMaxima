@@ -3,11 +3,6 @@
 # Example run:
 #bash setup_flowers_3.sh DDDDK_DDDDK 2hiu_a_ddddk_b_ddddk_1rr.pdb 1brs_comp_1rr_1rr.pdb "A:F,B:C" 45 5 45 5
 
-# The following three variables should be set by a setup script at installation time
-ex="/home/noel/Projects/Protein_design/EntropyMaxima/src/"
-py="/usr/bin/python"
-charmm="/home/noel/Projects/Protein_design/EntropyMaxima/charmm_templates/"
-
 # This script creates a flower with a center (stigma) structure and a rotated (petal) structure.
 # This scripts works for linking two chains between two protein structure. A more general script for linking between trimers or
 # structures with higher number of monomers is not programmed yet.
@@ -71,7 +66,7 @@ else
       flwr1=${flwr1,,}
       mkdir $flwr1"_"$i
       cd $flwr1"_"$i
-      $py $ex"flower.py" --center "../"$centerPDB --rotate "../"$rotatePDB --angle $angle --distance $i --map yes --link $chn_lnk1
+      flower.py" --center "../"$centerPDB --rotate "../"$rotatePDB --angle $angle --distance $i --map yes --link $chn_lnk1
     
       for file in $(ls s_*);
       do  
@@ -86,7 +81,7 @@ else
         cp $charmm"setup_one.inp" .
         cp $charmm"min_enr_mmgbsa_rmsd_flower.inp" .
         reduce -HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000 $folder".pdb" > $folder"r.pdb"
-        $py $ex"pdb.py" --prepare --pdbin1 $folder"r.pdb" --crdout $folder"r.crd" --seqfix yes
+        pdb.py --prepare --pdbin1 $folder"r.pdb" --crdout $folder"r.crd" --seqfix yes
         perl -pi -e 's/generate A first none last none setup/generate '$rnm_chn1' first ACE last CTER setup/g' setup_one.inp
         perl -pi -e 's/generate B first none last none setup/generate '$rnm_chn2' first ACE last CTER setup/g' setup_one.inp
         perl -pi -e 's/A.SEQ/'$rnm_chn1'.SEQ/g' setup_one.inp
