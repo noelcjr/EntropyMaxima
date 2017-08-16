@@ -6,7 +6,7 @@ Created on Tue Mar 22 12:57:28 2016
 """
 import os
 import sys
-import CHARMM_Parser as CP
+import em.tools.CHARMM_Parser as CP
 #import RTPParser as rp
 
 class CenterOfMassCalculator(object):

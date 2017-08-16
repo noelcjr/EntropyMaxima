@@ -7,9 +7,9 @@ import sys
 import os
 import pandas as pd
 import Bio.PDB as struct
-import utilities as ut
+import em.describe.utilities as ut
 import string
-import Molecular_Rigid_Manipulations as MRM
+import em.manipulate.Molecular_Rigid_Manipulations as MRM
 
 class cif(object):
     def __init__(self, cif_file = ''):

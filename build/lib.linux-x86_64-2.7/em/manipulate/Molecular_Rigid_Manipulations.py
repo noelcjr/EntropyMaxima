@@ -6,7 +6,7 @@ Created on Wed Mar 23 19:27:04 2016
 """
 import numpy as np
 import Bio.PDB.Vector as vec
-import CHARMM_Parser as CP
+import em.tools.CHARMM_Parser as CP
 from Bio.PDB import *
 # FIXIT: this function is out Molecular_Rigid_manipulation
 # because it does not need charmdir to run and Molecular_rigid_manipulation does.

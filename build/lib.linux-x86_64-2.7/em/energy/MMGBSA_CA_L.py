@@ -6,23 +6,23 @@ Created on Thu Apr 13 23:01:32 2017
 """
 import os
 import sys
-folder = 'EntropyMaxima/'
-path = '/home/noel/Projects/Protein_design/'+folder
-sys_path = path+'/src'
-if not os.path.isdir(sys_path):
-    print("Error: The parameter directory "+sys_path+" is not found.")
-    sys.exit(1)
-param_path = path+'params/charmm27.ff/'
-if not os.path.isdir(param_path):
-    print("Error: The parameter directory "+param_path+" is not found.")
-    sys.exit(1)
-import CHARMM_Parser as CP
-import Energy_Functions as EF
-import Super_Structures as SS
+#folder = 'EntropyMaxima/'
+#path = '/home/noel/Projects/Protein_design/'+folder
+#sys_path = path+'/src'
+#if not os.path.isdir(sys_path):
+#    print("Error: The parameter directory "+sys_path+" is not found.")
+#    sys.exit(1)
+#param_path = path+'params/charmm27.ff/'
+#if not os.path.isdir(param_path):
+#    print("Error: The parameter directory "+param_path+" is not found.")
+#    sys.exit(1)
+import em.tools.CHARMM_Parser as CP
+import em.energy.Energy_Functions as EF
+import em.tools.Super_Structures as SS
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from input_output import crd,psf
+from em.tools.input_output import crd,psf
 
 # This class manages the search for a linker or loop in search of some outcome. It could me moved later if it is too
 # large to be here. It uses mmgbsa_ca_analysis.pyc and bash scripts to automate the search for a structure.
