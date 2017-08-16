@@ -8,7 +8,6 @@ Created on Fri Jun 24 12:10:40 2016
 """
 
 # References:
-# https://gist.github.com/blackfalcon/8428401
 # https://docs.python.org/2/distutils/setupscript.html
 # https://docs.python.org/2/distutils/introduction.html#a-simple-example
 

@@ -1,4 +1,6 @@
 Entropy Minima
 "Entropy Maxima is a corollary of Energy minima"
 
-1. Local branch modification.
+To branch, pull and merge files from a local branch to
+the remote master on github.com, I used the follwoing articla
+as a guide: https://gist.github.com/blackfalcon/8428401
