@@ -4,3 +4,10 @@ Entropy Minima
 To branch, pull and merge files from a local branch to
 the remote master on github.com, I used the follwoing articla
 as a guide: https://gist.github.com/blackfalcon/8428401
+
+To INSTALL the program in a unic=x environment type:
+
+sudo python setup.py install
+
+The above command minus the sudo will probably work on
+Mac and window's command prompt, but it has not been tested.
