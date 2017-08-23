@@ -38,7 +38,6 @@ def main():
     group.add_option("-i","--cif",type="str",help="Path to input cif file.")
     group.add_option("-o","--out1", type="str",help="Path to output csv.")
     group.add_option("-p","--pep", type="str",help="Path to CHARMM peptide file.")
-    group.add_option("-t","--top", type="str",help="Path to topology and paramter folder.")
     opt_parser.add_option_group(group)
     
     group = optparse.OptionGroup(opt_parser, "Generates a CSV file from CRD and PSF files.")
@@ -59,14 +58,10 @@ def main():
             print("Type -h or --help for description and options.")
             sys.exit(1)
         if not os.path.exists(options.pep):
-            print "Error: File with CHARMM's generated peptides does not exists."
+            print "Error: File with CHARMM generated peptides does not exists."
             print("Type -h or --help for description and options.")
             sys.exit(1)
-        if not os.path.exists(options.top):
-            print "Error: File with CHARMM's parameters and topology folder does not exists."
-            print("Type -h or --help for description and options.")
-            sys.exit(1)
-        params = CP.read_charmm_FF(options.top)
+        params = CP.read_charmm_FF(param_path)
         parser2 = PDBParser()
         p1 = parser2.get_structure('Peptides', options.pep)
         ###########################################################################
@@ -111,7 +106,7 @@ def main():
         file_name = filename.split('.')[0]
         ################################################################################################################
         ###################### After reading files, Generate and Index a Super Structure  ##############################
-        params = CP.read_charmm_FF(options.top)
+        params = CP.read_charmm_FF(param_path)
         myCSV = SS.Super_Structure(params, directory,'charmm_input')
         # At this point, a XPLOR psf could only have been creted from a complete structure, so no worries of gaps.
         myCSV.create_super_structure_df_from_CRD_PSF(crd_file,psf_file)

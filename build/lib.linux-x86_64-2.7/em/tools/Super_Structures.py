@@ -1314,12 +1314,10 @@ class Super_Structure(object):
            described in the data block to information archived in external
            databases.'''
         col1 = '_struct_ref.'
-        # col2 = ['id','db_name','db_code','entity_id','pdbx_db_accession',\
-        #         'pdbx_align_begin','pdbx_seq_one_letter_code','biol_id']
-        # col2 = ['id','db_name','db_code','entity_id','pdbx_db_accession',\
-        #         'pdbx_align_begin','biol_id']
+       # col2 = ['id','db_name','db_code','entity_id','pdbx_db_accession',\
+       #         'pdbx_align_begin','pdbx_seq_one_letter_code','biol_id']
         col2 = ['id','db_name','db_code','entity_id','pdbx_db_accession',\
-                'pdbx_align_begin']
+                'pdbx_align_begin','biol_id']
         self.struct_ref_df = pd.DataFrame(columns=col2)
         for i in col2:
             self.struct_ref_df[i] = pd.Series(self.header[col1+i])
@@ -1358,19 +1356,11 @@ class Super_Structure(object):
            displacement factors are only used if the corresponding items
            are not given in the ATOM_SITE_ANISOTROP category.'''
         col1 = "_atom_site."
-        #col2 = ['group_PDB','id','type_symbol','label_atom_id','label_alt_id', \
-        #        'label_comp_id','label_asym_id','label_entity_id','label_seq_id', \
-        #        'pdbx_PDB_ins_code','Cartn_x','Cartn_y','Cartn_z','occupancy', \
-        #        'B_iso_or_equiv','Cartn_x_esd','Cartn_y_esd','Cartn_z_esd', \
-        #        'occupancy_esd','B_iso_or_equiv_esd','pdbx_formal_charge', \
-        #        'auth_seq_id','auth_comp_id','auth_asym_id','auth_atom_id', \
-        #        'pdbx_PDB_model_num']
-        # Changed du to inconsitencies in formatting
         col2 = ['group_PDB','id','type_symbol','label_atom_id','label_alt_id', \
                 'label_comp_id','label_asym_id','label_entity_id','label_seq_id', \
-                'pdbx_PDB_ins_code','Cartn_x','Cartn_y','Cartn_z', 'occupancy',\
-                'B_iso_or_equiv', \
-                'pdbx_formal_charge', \
+                'pdbx_PDB_ins_code','Cartn_x','Cartn_y','Cartn_z','occupancy', \
+                'B_iso_or_equiv','Cartn_x_esd','Cartn_y_esd','Cartn_z_esd', \
+                'occupancy_esd','B_iso_or_equiv_esd','pdbx_formal_charge', \
                 'auth_seq_id','auth_comp_id','auth_asym_id','auth_atom_id', \
                 'pdbx_PDB_model_num']
         self.atom_site_df = pd.DataFrame()

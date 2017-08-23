@@ -51,13 +51,12 @@ class pdb(object):
     def __init__(self, pdb_file = ''):
         self.PDB_file = pdb_file
     def align_pdbs(self,optionsrefA,optionsfitA,optionsrefatomsA,optionsfitatomsA,optionsoutA,optionsaddatomsA = ""):
-        # pdb.align_pdbs(options.inputfile,options.fit,options.refatoms,options.fitatoms,options.out,options.addatoms)
         if not os.path.exists(optionsrefA):
-            print "Error: File path for reference PDB or CIF file does not exist."
+            print "Error: File path for reference PDB file does not exist."
             print("Type -h or --help for description and options.")
             sys.exit(1)
         if not os.path.exists(optionsfitA):
-            print "Error: File path for PDB or CIF file to fit to reference does not exist."
+            print "Error: File path for PDB file to fit to reference does not exist."
             print("Type -h or --help for description and options.")
             sys.exit(1)
         ref_al = []
@@ -66,30 +65,10 @@ class pdb(object):
         fit_al = []
         for i in optionsfitatomsA.split(':'):
             fit_al.append(tuple(i.split(',')))
-        file_name = os.path.basename(optionsrefA).split('.')[0]
-        file_sufix = os.path.basename(optionsrefA).split('.')[1]
         dir_path = os.path.dirname(optionsrefA)
-        if file_sufix == 'pdb':
-            pdb_parser = struct.PDBParser(QUIET = True)
-            ref_structure = pdb_parser.get_structure("reference", dir_path+optionsrefA)
-        elif file_sufix == 'cif':
-            cif_parser = struct.MMCIFParser(QUIET = True)
-            ref_structure = cif_parser.get_structure('reference', dir_path+optionsrefA)
-        else:
-            print("ERROR: Unreognized file type "+file_sufix+" in "+file_name)
-            sys.exit(1)
-        file_name = os.path.basename(optionsfitA).split('.')[0]
-        file_sufix = os.path.basename(optionsfitA).split('.')[1]
-        fit_dir_path = os.path.dirname(optionsfitA)
-        if file_sufix == 'pdb':
-            pdb_parser = struct.PDBParser(QUIET = True)
-            fit_structure = pdb_parser.get_structure("fit", dir_path+optionsfitA)
-        elif file_sufix == 'cif':
-            cif_parser = struct.MMCIFParser(QUIET = True)
-            fit_structure = cif_parser.get_structure('fit', dir_path+optionsfitA)
-        else:
-            print("ERROR: Unreognized file type "+file_sufix+" in "+file_name)
-            sys.exit(1) 
+        pdb_parser = struct.PDBParser(QUIET = True)
+        ref_structure = pdb_parser.get_structure("reference", dir_path+optionsrefA)
+        fit_structure = pdb_parser.get_structure("fit", dir_path+optionsfitA)
         # Use the first model in the pdb-files for alignment
         # Change the number 0 if you want to align to another structure
         ref_model = ref_structure[0]
@@ -119,37 +98,33 @@ class pdb(object):
         super_imposer.set_atoms(ref_atoms, fit_atoms)
         super_imposer.apply(fit_model.get_atoms())
         if optionsaddatomsA != "":
-            # A region is defined by a chain, an initial residue number, a followup residue number 
-            # to start of region, and another residue number fotr the end of the region B,3,10
-            # both begining and end are included. 
-            add_region = []
+            #add_res_range_from_to = [("B","1","2"),("C","1","2")]
+            add_res_range_from_to = []
             for i in optionsaddatomsA.split(':'):
-                add_region.append(tuple(i.split(',')))
-            if len(add_region) != 2:
+                add_res_range_from_to.append(tuple(i.split(',')))
+            if len(add_res_range_from_to) != 2:
                 print("ERROR: Only two entries in the addatomA option. One for reference, and one for fit.")
                 sys.exit(1)
-            print("Adding residues from ("+optionsrefA+","+add_region[0][0]+","+add_region[0][1]+","+add_region[0][2]+") ")
-            print(" to ("+optionsfitA+","+add_region[1][0]+","+add_region[1][1]+","+add_region[1][2]+")")
             add_res = []
             # Add residues before missing segment from incomplete chain (fit)
             for i in fit_model:
-                if i.get_id() == add_region[1][0]:
+                if i.get_id() == add_res_range_from_to[1][0]:
                     for j in i.get_residues():
-                        if j.get_id()[1] < int(add_region[0][1]):
+                        if j.get_id()[1] < int(add_res_range_from_to[0][1]):
                             add_res.append(j)
             # add residues in missing segment from complete chain (reference)
             for i in ref_model:
-                if i.get_id() == add_region[0][0]:
+                if i.get_id() == add_res_range_from_to[0][0]:
                     for j in i.get_residues():
-                        if j.get_id()[1] in range(int(add_region[0][1]),int(add_region[0][2])+1):
+                        if j.get_id()[1] in range(int(add_res_range_from_to[0][1]),int(add_res_range_from_to[0][2])+1):
                             add_res.append(j)
             # add residues after missing segment.from incomplete (fit)
             for i in fit_model:
-                if i.get_id() == add_region[1][0]:
+                if i.get_id() == add_res_range_from_to[1][0]:
                     for j in i.get_residues():
-                        if j.get_id()[1] > int(add_region[0][2]):
+                        if j.get_id()[1] > int(add_res_range_from_to[0][2]):
                             add_res.append(j)
-            newChain = struct.Chain.Chain(add_region[1][0])
+            newChain = struct.Chain.Chain(add_res_range_from_to[1][0])
             for i in add_res:
                 newChain.add(i)
             # put chains in a list
@@ -161,16 +136,10 @@ class pdb(object):
                 fit_model.detach_child(i.get_id())
             # Add chains back in fit_model making sure that newChain replaces the incoplete chain
             for i in chain_order:
-                if i.get_id() == add_region[1][0]:
+                if i.get_id() == add_res_range_from_to[1][0]:
                     fit_model.add(newChain)
                 else:
                     fit_model.add(i)
-            ###########   TEST  ###############
-            #for i in fit_model:
-            #    print(i,i.get_id())
-            #    for j in i.get_residues():
-            #        print(j.get_full_id(),j.get_resname())
-            #sys.exit(1)
             # TODO it is possible that a section with different resids is added to a fitted section. In this case residd
             #      fit the chains that were just added need to be renumbered approprietly.
             # Last check to make sure residue numbers in completed chain are monotonically increased.
@@ -198,33 +167,25 @@ class pdb(object):
      RMSD="+str(super_imposer.rms))
         # Save the aligned version
         io = struct.PDBIO()
-        io.set_structure(fit_model)
+        io.set_structure(fit_structure)
         io.save(dir_path+optionsoutA)
     def gap_report(self,optionsinp):
         if not os.path.exists(optionsinp):
             print "Error: File path for Super Structure CSV file does not exist."
             print("Type -h or --help for description and options.")
             sys.exit(1)
+        pdb_parser = struct.PDBParser()
+        sp = pdb_parser.get_structure('Costruct', optionsinp)
         file_name = os.path.basename(optionsinp).split('.')[0]
-        file_sufix = os.path.basename(optionsinp).split('.')[1]
         dir_path = os.path.dirname(optionsinp)
-        if file_sufix == 'pdb':
-            pdb_parser = struct.PDBParser()
-            sp = pdb_parser.get_structure('Costruct', optionsinp)
-        elif file_sufix == 'cif':
-            parser = struct.MMCIFParser()
-            sp = parser.get_structure('cif',optionsinp)
-        else:
-            print("ERROR: Unreognized file type "+file_sufix+" in "+file_name)
-            sys.exit(1)
-        print("Gap report for "+dir_path+"/"+file_name+" in tuple format:")
+        print("Gap report for "+dir_path+file_name+" in tuple format:")
         for i in sp.get_models():
             for j in i.get_chains():
                 aa_present = []
                 for k in j.get_residues():
                     if k.get_id()[1] != 'W' and k.resname != 'HOH':
                         aa_present.append(k.get_full_id()[3][1])
-                print("Model "+str(i.get_id())+", Chain "+j.get_id())
+                print("Chain "+j.get_id())
                 u = ut.utilities()
                 inserts = u.check_gaps(aa_present)
                 inserts_report = u.gap_report(inserts)
