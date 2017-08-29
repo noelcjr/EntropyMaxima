@@ -17,11 +17,19 @@ class cif(object):
     def CIF_summary(self):
         print("CIF summary needs to be coded.")
     def PDBs_from_CIF(self,inFile,optionsmodels,optionschains,optionsgroups):
-        if optionsmodels:
+        file_name = os.path.basename(inFile).split('.')[0]
+        file_sufix = os.path.basename(inFile).split('.')[1]
+        dir_path = os.path.dirname(inFile)
+        if file_sufix == 'pdb':
+            parser = struct.PDBParser(QUIET = True)
+            structure = parser.get_structure("pdb",inFile)                
+        elif file_sufix == 'cif':
             parser = struct.MMCIFParser()
             structure = parser.get_structure('cif',inFile)
-            file_name = os.path.basename(inFile).split('.')[0]
-            dir_path = os.path.dirname(inFile)
+        else:
+            print("ERROR: Unreognized file type "+file_sufix+" in "+file_name)
+            sys.exit(1)
+        if optionsmodels:
             for i in structure.get_models():
                 io = struct.PDBIO()
                 io.set_structure(i) 
@@ -30,10 +38,6 @@ class cif(object):
             if not optionsgroups:
                 print("ERROR: When outputing PDBs by chain identifier, and option groups must be included.")
                 sys.exit(1)
-            parser = struct.MMCIFParser()
-            structure = parser.get_structure('cif',inFile)
-            file_name = os.path.basename(inFile).split('.')[0]
-            dir_path = os.path.dirname(inFile)
             a = optionsgroups
             b = a.split(',')
             for h in b:
@@ -126,7 +130,7 @@ class pdb(object):
             for i in optionsaddatomsA.split(':'):
                 add_region.append(tuple(i.split(',')))
             if len(add_region) != 2:
-                print("ERROR: Only two entries in the addatomA option. One for reference, and one for fit.")
+                print("ERROR: Only two entries in the addatom option. One for reference, and one for fit.")
                 sys.exit(1)
             print("Adding residues from ("+optionsrefA+","+add_region[0][0]+","+add_region[0][1]+","+add_region[0][2]+") ")
             print(" to ("+optionsfitA+","+add_region[1][0]+","+add_region[1][1]+","+add_region[1][2]+")")
@@ -209,10 +213,10 @@ class pdb(object):
         file_sufix = os.path.basename(optionsinp).split('.')[1]
         dir_path = os.path.dirname(optionsinp)
         if file_sufix == 'pdb':
-            pdb_parser = struct.PDBParser()
+            pdb_parser = struct.PDBParser(QUIET = True)
             sp = pdb_parser.get_structure('Costruct', optionsinp)
         elif file_sufix == 'cif':
-            parser = struct.MMCIFParser()
+            parser = struct.MMCIFParser(QUIET = True)
             sp = parser.get_structure('cif',optionsinp)
         else:
             print("ERROR: Unreognized file type "+file_sufix+" in "+file_name)

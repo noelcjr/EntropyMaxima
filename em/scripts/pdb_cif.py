@@ -11,116 +11,208 @@ import em.tools.input_output as IO
 
 import optparse
 
-def main():
-    usage = "usage: %prog --inputfile [input file] [options]"
-    d = "This script is used to work with PDB or CIF files as input."
-    opt_parser = optparse.OptionParser(usage,description=d)
-    opt_parser.add_option("--inputfile", metavar="FILE", help="PDB or CIF input FILE needed for all operations li\
-sted below. Do not mix options from different operations. Each operation only works with its options enumerated below.")
-    group = optparse.OptionGroup(opt_parser, "1.To get a CIF or PDB structure's gaps")
-    group.add_option("--gaps", action="store_true", help=" Flag to get amino acid structural gaps in X-structures")
-    opt_parser.add_option_group(group)
-    
-    group = optparse.OptionGroup(opt_parser,"2.To align regions according to specified reference/input and fit sections\
- of\n    the structures. The fit structure is moved over the input structure. If \n    the optional --addatoms is inclu\
-ded, it adds atoms from the reference to\n    the fit structure's specified region. The format to specify --refatoms \
-\n    and --fitatoms is ATOMTYPE,CHAIN,FROMAMINOACID,TOAMINOACID Ex: CA,B,2,6")
-    group.add_option("--align", action="store_true", help="Flag to aligns two structures.")
-    group.add_option("--refatoms", type="str",help="String with atoms for alignment in reference structure.")
-    group.add_option("--fit", metavar="FILE",type="str",help="File path of structure to fit to reference structure.")
-    group.add_option("--fitatoms", type="str",help="String with atoms for alignment in fit structure.")
-    group.add_option("--out", metavar="FILE",type="str",help="File output name for the translated fit structure.")
-    group.add_option("--addatoms",default = "",type="str",help="Atoms to be added from reference to fit. Default is no\
- atoms added.")
-    opt_parser.add_option_group(group)
-    
-    group = optparse.OptionGroup(opt_parser,"3.To prepare a pdb file that has been run through the reduce program to a\
-dd\n    hydrogen atoms to the Histidines in the most likely configurations. Based on\n    that configuration, the progr\
-am ranames HIS to HSE, HSD or HSP. It also\n    generates *.SEQ and *_FIXERS.INP for proper structure preparation by CH\
-ARMM")
-    group.add_option("--prepare", action="store_true", help="Flag to prepare structure files for CHARMM setup.")
-    group.add_option('--crdout', metavar="FILE", type='str', help="Output CRD file. Coordinates are the same as PDB's.")
-    group.add_option('--seqfix', type='str', help='If followed by yes, it generates SEQ and _FiXRES files. if followed\
-by no or absent, nothing happens.')
-    opt_parser.add_option_group(group)
-    
-    group = optparse.OptionGroup(opt_parser,"4.To fix a pdb file that was output by CHARMM. The chain identifier is pl\
-aced\n    by CHARMM in a column that is different from what Biopython and this script\n    are programmed to handle. Th\
-is option will onlly work on PDB files, and not\n    on CIF files")
-    group.add_option("--fixpdb", action="store_true", help="Flag to fix PDB files output by CHARMM")
-    group.add_option('--frm', type="int", action = "store", default = 72, help = 'Optional arg if not present it is col\
-umn 72 in the pdb file. It should be at the column where the chain identifier is located.')
-    group.add_option('--to', type="int",action = "store", default = 21, help = 'Optional arg if not present it is colum\
-n 21 in the pdb file. It should be at the column where the chain identifier has to be placed')
-    opt_parser.add_option_group(group)
-    
-    group = optparse.OptionGroup(opt_parser,"5.To find the maximum and minimum coordinate values in each dimension")
-    group.add_option("--minmax", action="store_true", help="Flag to get minimum and maximum XYZ values of a structure.")
-    opt_parser.add_option_group(group)
-    
-    group = optparse.OptionGroup(opt_parser,"6.Extracts Basic General information from structural files.(Not Programmed yet)")
-    group.add_option("--summary", action="store_true", help="FLag to output summary.")
-    opt_parser.add_option_group(group)
+usage = "usage: %prog --inputfile [input file] [options] [args]"
+d = "This script is used to modify structures from PDB or CIF files as input."
+opt_parser = optparse.OptionParser(usage,description=d)
+group = optparse.OptionGroup(opt_parser,"An input file is necessary for all command options.")
+group.add_option("--input", metavar="FILE", help="Input File.")
+opt_parser.add_option_group(group)
 
-    group = optparse.OptionGroup(opt_parser, "7.To extract models or chain groups in the structure to separate PDB \
-files, and\n    it gets rid of unwanted HETEROATOMS.\n    The flags --chains and --models cannot be input at the same time")
-    group.add_option("--extract", action="store_true", help="Flag to indicate extraxtion.")
-    group.add_option("--chains", action="store_true", help="Flag to extract PDBs by groups of chains using \
-identifiers. Must specify --groups options and a string describing the grouping of chains in each output PDB by a comma\
- separated string as follows: \"ABC,DEF\" will output two pdbs from a structure with six chains, or \"AB,CD,EF\" will \
-output three pdbs from a CIF with six chains")
-    group.add_option("--models", action="store_true", help="Flag to extract all models that are outputs separately.")
-    group.add_option("--groups", type="str",help="Chain groups to be extracted together as separate PDBs. User must spe\
-cify the chains to be output together to each PDB. There is no checking for completeness. Ex: \"ABC,DEF\" will output  t\
-wo pdbs from a CIF with six chains, or \"AB,CD,EF\" will output three pdbs from a CIF with six chains.")
-    opt_parser.add_option_group(group)
-    options, args = opt_parser.parse_args()
-    # The program now does a few check to make sure options above were entered correctly
-    # First, make sure there is at least an input file in the arguments.
-    if not options.inputfile:
-        opt_parser.error("An --inputfile option is necessary.")
-        sys.exit(1)
-    # Second, a general check to make sure only one of the main options are selected.
-    options_dictionary = {'gaps':options.gaps,'align':options.align,'prepare':options.prepare,'fixpdb':options.fixpdb,\
-                          'minmax':options.minmax,'summary':options.summary,'extract':options.extract}
-    countTrue = 0
-    for i in options_dictionary:
-        if options_dictionary[i]:
-            countTrue += 1
-    if countTrue > 1:
-        print("Error: More than one option selected.")
-        for i in options_dictionary:
-            if options_dictionary[i]:
-                countTrue += 1
-                print("Opption "+i+" "+str(options_dictionary[i]))
-        opt_parser.error("Only one option permited at the time.")
-        sys.ecit(1)
-    # Third: Check path to input file is correct
-    if not os.path.exists(options.inputfile):
-        print("Error: Path to the input file does not exist,")
-        print("or input file name is incorrect.")
-        sys.exit(1)
-    # All checks passed, now do the work! 
-    if options.gaps:
+group = optparse.OptionGroup(opt_parser,"Command options that work on both PDB or CIF files types. Type 'more' after an\
+ option for \n  instructions to run these commands")
+group.add_option("--gaps", action="store_true", metavar="FILE", help="To find missing regions in structures.")
+group.add_option("--align", action="store_true", metavar="FILE", help="To align two structures and add atoms to missing\
+ regions from one structure to the other.")
+group.add_option("--summary", action="store_true", metavar="FILE", help="For relevant information on structure files.")
+group.add_option("--extract", action="store_true", help="Gets PDBs grouped by models or chains from PDB or CIF files.")
+opt_parser.add_option_group(group)
+
+group = optparse.OptionGroup(opt_parser,"Command options that work on PDB files only. Type 'more' after an option for i\
+nstructions\n  to run these commands")
+group.add_option("--fixpdb", action="store_true", metavar="FILE", help="Corrects biopython formating of PDB structures \
+so that PDBs can be read by CHARMM.")
+group.add_option("--prepare", action="store_true", metavar="FILE", help="Assigns right histidine type to PDBs and gener\
+ates files for preparing structures in CHARMM.")
+group.add_option("--maxmin", action="store_true", metavar="FILE", help="Outputs maximin and minimum values for XYZ coor\
+dinates of a PDB file.")
+opt_parser.add_option_group(group)
+
+
+group = optparse.OptionGroup(opt_parser,"FOR MORE HELP: Type 'more' after any of the above options to get more detail\
+ed\n  instructions about the arguments used by each command")
+# None for gaps
+# Five for align
+group.add_option("--refatoms", type="str",help=optparse.SUPPRESS_HELP)
+group.add_option("--fit", metavar="FILE",type="str",help=optparse.SUPPRESS_HELP)
+group.add_option("--fitatoms", type="str",help=optparse.SUPPRESS_HELP)
+group.add_option("--out", metavar="FILE",type="str",help=optparse.SUPPRESS_HELP)
+group.add_option("--addatoms",default = "",type="str",help=optparse.SUPPRESS_HELP)
+# None for summary
+# Three for extract
+group.add_option("--chains", action="store_true", help=optparse.SUPPRESS_HELP)
+group.add_option("--models", action="store_true", help=optparse.SUPPRESS_HELP)
+group.add_option("--groups", type="str",help=optparse.SUPPRESS_HELP)
+# Three for fixpdb
+group.add_option('--frm', type="int", action = "store", default = 72, help = optparse.SUPPRESS_HELP)
+group.add_option('--to', type="int",action = "store", default = 21, help = optparse.SUPPRESS_HELP)
+# Two for prepare
+group.add_option('--crdout', metavar="FILE", type='str', help=optparse.SUPPRESS_HELP)
+group.add_option('--seqfix', type='str', help=optparse.SUPPRESS_HELP)
+opt_parser.add_option_group(group)
+options, args = opt_parser.parse_args()
+# None for maxmin
+########################################################################################################################
+# Just Check for the argument 'more' to output more help.
+run_command = True
+for i in args:
+    if i == "more":
+        run_command = False
+########################################################################################################################
+if options.gaps:
+    if run_command:
         pdb = IO.pdb()
-        pdb.gap_report(options.inputfile) 
-    elif options.align:
+        pdb.gap_report(options.input) 
+    else:
+        print("Description and usage of --gaps:")
+        print("    This command detects gaps in the crystal structure of a protein. The search for gaps")
+        print("    is based on the amino acid residue number. It will detect missing amino acids at the")
+        print("    N-terminal of the protein if the structure's residue numbers begin with a number greater")
+        print("    than one, and it will miss gaps in the C-terminal in PDB and CIF files because it assumes")
+        print("    that the last residue number is actually the last one of the crystal structure.(TODO: use")
+        print("    sequence iformation found in CIF files to detect gaps in the C-terminal end of the protein)")
+        print("        --gaps                 Flag to signal the program to check for gaps.")
+        print("        --input = FILE         Follow this option by the path to a file.")
+        print("    Example: pdb_cif.py --gaps --input 1BRS.pdb")
+elif options.align:
+    if run_command:
+        #group = optparse.OptionGroup(opt_parser,"")
+        #group.add_option("--refatoms", type="str",help="")
+        #group.add_option("--fit", metavar="FILE",type="str",help="")
+        #group.add_option("--fitatoms", type="str",help="")
+        #group.add_option("--out", metavar="FILE",type="str",help="")
+        #group.add_option("--addatoms",default = "",type="str",help="")
+        #opt_parser.add_option_group(group)
+        #options, args = opt_parser.parse_args()
         pdb = IO.pdb()
-        pdb.align_pdbs(options.inputfile,options.fit,options.refatoms,options.fitatoms,options.out,options.addatoms)
-    elif options.prepare:
+        pdb.align_pdbs(options.input,options.fit,options.refatoms,options.fitatoms,options.out,options.addatoms)
+    else:
+        print("Description and usage of --align:")
+        print("    This command aligns regions according to specific atoms and amino acid contigous sections of two")
+        print("    crystal structures. The fit structure is moved over the input structure according to reference and")
+        print("    fit atoms selections respectively. If the opion to addatoms is included, it adds atoms from the")
+        print("    reference to the fit structure's specified region. The format to specify reference and fit atoms")
+        print("    is ATOMTYPE,CHAIN,FROMAMINOACID,TOAMINOACID Ex: CA,B,2,6. Multiple regions for aligment can be")
+        print("    defined by separating them with a column. Ex: CA,B,2,6:CA,B,10,26 ")
+        print("        --align              Flag to signal the programm to align two structures.")
+        print("        --input = FILE       Follow this option by the path to a file.")
+        print("        --refatoms = String  String with atoms for alignment in reference structure.")
+        print("        --fit = FILE         Path to file for the fit structure.")
+        print("        --fitatoms = String  String with atoms for alignment in fit structure.")
+        print("        --out = FILE         Path to output file of reference structure aligned over the fit struscture")
+        print("        --addatoms = String  Optional option, default no atoms. Cuts and pastes all atoms corresponding")
+        print("                             to amino acids defined by a string such as A,202,217:A,202,217. The region")
+        print("                             before the column corresponds to the region to be cut from the reference")
+        print("                             structure, and the region defined after the colum to are to be pasted to")
+        print("                             the fit structure. Unlike the string that defines reference and fit")
+        print("                             atoms, atom type is not needed, and all atoms in the amino acid are added")
+        print("    Example: pdb_cif.py --align --input 1GIA.cif --refatoms CA,B,199,201:CA,B,218,220 --fit 1GDD.pdb --f\
+itatoms CA,B,199,201:CA,B,218,220 --out 1GDD_aligned_completed_with_1GIA.pdb --addatoms A,202,218:A,202,218")
+elif options.summary:
+    if run_command:
         pdb = IO.pdb()
         pdb.prepare_pdb_for_charmm(options.inputfile,options.crdout,options.seqfix)
-    elif options.fixpdb:
-        pdb = IO.pdb(options.inputfile)
+    else:
+        print("Description and usage of --summary:")
+        print("    This command gives a brief or summarized output of the structure as a guide for other commands.")
+        print("    The output gives information that is relevant to biopython, and that options that will help decide")
+        print("    command line inputs for other options for this program such as --align and --extract.")
+        print("    The output gives information on number of models and chains.(TODO: This option is not coded yet)")
+        print("        --summary              Flag to signal the program to do a summary.")
+        print("        --input = FILE         Follow this option by the path to a file.\n")
+        print("    Example: pdb_cif.py --summary --input 1HIU.pdb")
+elif options.extract:
+    run_command = True
+    for i in args:
+        if i == "more":
+            run_command = False
+    if run_command:
+        #group = optparse.OptionGroup(opt_parser,"")
+        #group.add_option("--chains", action="store_true", help="")
+        #group.add_option("--models", action="store_true", help="")
+        #group.add_option("--groups", type="str",help="")
+        #opt_parser.add_option_group(group)
+        cif = IO.cif()
+        cif.PDBs_from_CIF(options.input,options.models,options.chains,options.groups)
+    else:
+        print("Description and usage of --extract:")
+        print("    It extracts models or chain groups in the structure to separate PDB files, and it also gets rid of")
+        print("    unwanted HETEROATOMS if they have a different chain identifier. The flags --chains and --models")
+        print("    cannot be input at the same time. Use --summary to know what models and chains are inside the structure.")
+        print("        --exract             Flag to extract models or chains from a structure file.")
+        print("        --input = FILE       Follow this option by the path to a file.")
+        print("        --chains             Flag to extract PDBs by groups of chains using chain identifiers.")
+        print("        --models             Flag to extract all models to separate outputs. No need to specify groups")
+        print("        --groups             Chain groups to be extracted together as separate PDBs. User must specify")
+        print("                             the chains to be output together to each PDB. There is no checking for")
+        print("                             completeness. Ex: \"ABC,DEF\" will output two pdbs from a CIF with six")
+        print("                             chains, or \"AB,CD,EF\" will output three pdbs from a CIF with six chains.")
+        print("    Example: pdb_cif.py --extract --input 1BRS.pdb --chains --groups AB,CD,EF")
+        print("    Example: pdb_cif.py --extract --input 1BRS.pdb --models")
+elif options.fixpdb:
+    if run_command:
+        #group = optparse.OptionGroup(opt_parser,"")
+        #group.add_option("--fixpdb", action="store_true", help="")
+        #group.add_option('--frm', type="int", action = "store", default = 72, help = "")
+        #group.add_option('--to', type="int",action = "store", default = 21, help = "")
+        #opt_parser.add_option_group(group)
+        pdb = IO.pdb(options.input)
         pdb.fix_pdb_from_CHARMM(options.to,options.frm)
-    elif options.minmax:
+    else:
+        print("Description and usage of --fixpdb:")
+        print("    It fixes a PDB file that was output by CHARMM. The chain identifier is placed by CHARMM in a column")
+        print("    that is different from what Biopython and Entropy Maxima can handle. The chain identifier is swapped")
+        print("    from column 72 to column 21 in the PDB file.")
+        print("        --fixpdb             Flag to extract models or chains from a structure file.")
+        print("        --input = FILE       Follow this option by the path to a file.")
+        print("        --frm = INT          This option takes an integer value for initial column. Default is 72.")
+        print("        --to = INT           This option takes an integer value for destination column. Default is 21.")
+        print("    Example: pdb_cif.py --fixpdb --input 2GIA.pdb ")
+        print("    Example: pdb_cif.py --fixpdb --input 2GIA.pdb --frm 72 --to 21")
+elif options.prepare:
+    if run_command:
+        #group = optparse.OptionGroup(opt_parser,"")
+        #group.add_option('--crdout', metavar="FILE", type='str', help="")
+        #group.add_option('--seqfix', type='str', help="")
+        #opt_parser.add_option_group(group)
         pdb = IO.pdb()
-        pdb.min_max(options.inputfile)
-    elif options.summary:
-        cif = IO.cif()
-        cif.CIF_summary()
-    elif options.extract:
-        cif = IO.cif()
-        cif.PDBs_from_CIF(options.inputfile,options.models,options.chains,options.groups)
-if __name__ == '__main__':
-    main()
+        pdb.prepare_pdb_for_charmm(options.input,options.crdout,options.seqfix)
+    else:
+        print("Description and usage of --prepare:")
+        print("    This command takes a PDB file that has been run through the reduce program to determine missing")
+        print("    hydrogen atoms in hystidines, and based on the added hydrogens by reduce, to identify HIS residues")
+        print("    as any of the three histidine types in CHARMM, HSD, HSE or HSP. Runing reduce before this program")
+        print("    is strongly recomended because hydrogen atoms added without running reduce are likely to be wrong.")
+        print("    The input PDB file is outputed as a CRD structure file which is the type CHARMM takes as input.")
+        print("    Prepare has an optional feature that outputs to files needed by CHARMM to finish setting up the")
+        print("    structure. The files generated have the following suffixes .SEQ and _FIXERS.INP.")
+        print("        --crdout = FILE      Path and name to output file with a 'crd' suffix. This file is needed for")
+        print("                             CHARMM to prepare a structure for simulation.")
+        print("        --seqfix = String    This option takes only a 'Yes' or 'no', default is no. This file is needed")
+        print("                             for CHARMM to an amino acid sequence of a structure for simulations.")
+        print("    Example: pdb_cif.py --prepare --input 2GIA.pdb --crdout 1GIA.crd --seqfix yes")
+elif options.maxmin:
+    if run_command:
+        pdb = IO.pdb()
+        pdb.min_max(options.input)
+    else:
+        print("Description and usage of --maxmin:")
+        print("    This command gives the maximum and minim XYZ coordinate values of all atoms in the structure.")
+        print("    This information is used to add a water box around the protein that extends a defined number of")
+        print("    agnstroms from the protein. This values are used to determine the right box dimensions for ")
+        print("    minimum-image conversion.")
+        print("        --maxmin                 Flag to signal the program to ")
+        print("        --inputfile = FILE       Follow this option by the path to a file.\n")
+        print("    Example: pdb_cif.py --maxmin --input 1HIU.pdb")
+else:
+    print("Follow the options by --help for instructions. Ex: %prog --help")
+    options, args = opt_parser.parse_args()
