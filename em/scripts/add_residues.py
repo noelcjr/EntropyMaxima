@@ -20,7 +20,7 @@ def main():
          Multiple residues can be added at the time, No terminal will be added..\n \
          This program can only add residues or terminals that are in the parameter file."
     opt_parser = optparse.OptionParser(usage,description=d)
-    opt_parser.add_option("-a","--apn", type="str",help="Enter Instruction for where to append residues in hard '\"'\n \
+    opt_parser.add_option("--apn", type="str",help="Enter Instruction for where to append residues in hard '\"'\n \
                                                          quotes. Place: Amino Acid Number, Entity ID, Chain ID and  \n \
                                                          the direction to add residues separated by comas. Add. The \
                                                          direction to add residues is either Ndir or Cdir. This means \
@@ -32,8 +32,10 @@ def main():
                                                          and do not need to go in quotes.\n")
     opt_parser.add_option("-r","--res", type="str",help="Enter list of amino acids to be added in hard quotes.'\"'\n\
                                                          Example: \"ALA,VAL,ASP,ASN,GLU\".")
-    opt_parser.add_option("-i","--inp", type="str",help="Path to CSV file for adding residue.")
-    opt_parser.add_option("-o","--out", type="str",help="Path and name to CSV and PDB outputs with added residues.")
+    opt_parser.add_option("--inp", type="str",help="Path to CSV file for adding residue.")
+    opt_parser.add_option("--out", type="str",help="Path and name to CSV and PDB outputs with added residues.")
+    opt_parser.add_option("--pep", type="str",help="Path to peptide file.")
+    opt_parser.add_option("--par", type="str",help="Path to Charmm parameter files.")
     options, args = opt_parser.parse_args()
     if not os.path.exists(options.inp):
         print "Error: File path Super Structure CSV file does not exist."
@@ -42,7 +44,7 @@ def main():
     ########################## Init Setup #####################################
     # Comment out the next four lines to test in Spyder.
     directory, filename = os.path.split(options.inp)
-    params = CP.read_charmm_FF(param_path)
+    params = CP.read_charmm_FF(options.par)
     insulin = SS.Super_Structure(params, options.inp,'add_linker')
     parse_list = options.apn.split(',')
     if options.res.find(',') == -1:
@@ -51,7 +53,7 @@ def main():
     else:
         aa_add =  options.res.split(',')
     parser2 = PDBParser()
-    pep_file = parser2.get_structure('Peptides',peptide)
+    pep_file = parser2.get_structure('Peptides',options.pep)
     # Uncomment the next four lines to test
     #file_path = '/home/noel/Projects/Protein_design/EntropyMaxima/examples/Linker_minimization/2hiu.csv'
     #insulin = SS.Super_Structure(params, file_path,'add_linker')

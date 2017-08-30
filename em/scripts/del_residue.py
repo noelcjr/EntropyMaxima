@@ -19,7 +19,7 @@ def main():
          This program can only delete residues or terminals that are in the parameter file.\
          The program will create a new and modified CSV file with the name of the input file plus the entity number."
     opt_parser = optparse.OptionParser(usage,description=d)
-    opt_parser.add_option("-r","--rem", type="str",help="Enter Instruction for removing amino acid or terminal in hard \n \
+    opt_parser.add_option("--rem", type="str",help="Enter Instruction for removing amino acid or terminal in hard \n \
                                                          quotes '\"'. Place: Amino Acid Number, Entity ID, Chain ID, \
                                                          Residue or Terminal to be deleted separated by comas.\n \
                                                          Example \"1,1,A,ACE\", \"1,1,A,CTER\" or \"20,2,A,LYS\". \n \
@@ -27,15 +27,15 @@ def main():
                                                          do not need to go in quotes.\n\
                                                          For residues all atoms will be deleted. For terminals, only the \
                                                          atoms that correspond to the terminal will be deleted.")
-    opt_parser.add_option("-i","--inp", type="str",help="Path to CSV file for removing residue.")
-    opt_parser.add_option("-o","--out", type="str",help="Name of output CSV file after removal of amino acid or terminal.")
-    
+    opt_parser.add_option("--inp", type="str",help="Path to CSV file for removing residue.")
+    opt_parser.add_option("--out", type="str",help="Name of output CSV file after removal of amino acid or terminal.")
+    opt_parser.add_option("--par", type="str",help="Path to charmm parameters folder.")
     options, args = opt_parser.parse_args()
     if not os.path.exists(options.inp):
         print "Error: File path for Super Structure CSV file does not exist."
         print("Type -h or --help for description and options.")
         sys.exit(1)
-    params = CP.read_charmm_FF(param_path)
+    params = CP.read_charmm_FF(options.par)
     insulin = SS.Super_Structure(params, options.inp,'add_linker')
     parse_list = options.rem.split(',') 
     #insulin = SS.Super_Structure(params, '/home/noel/Projects/Protein_design/EntropyMaxima/examples/Linker_minimization/2zta.csv','add_linker')
