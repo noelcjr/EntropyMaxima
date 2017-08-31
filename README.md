@@ -18,7 +18,7 @@ any problems.
 
 To do so run this inside the __container__
 ```bash
-./bin/run-unit.sh
+./bin/test.sh
 ```
 
 ## Installing
