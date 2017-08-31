@@ -1,4 +1,4 @@
-#Entropy Maxima
+# Entropy Maxima
 
 "The Entropy Maximum is a corollary of the Energy minimum" David Chandler
 "but there are many local maxima, just like there multiple local minima." Noel Carrascal
