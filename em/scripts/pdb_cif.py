@@ -1,12 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Aug 20 22:53:59 2017
-
-@author: noel
-"""
-import os
-import sys
 import em.tools.input_output as IO
 
 import optparse
@@ -70,8 +63,7 @@ for i in args:
 ########################################################################################################################
 if options.gaps:
     if run_command:
-        pdb = IO.pdb()
-        pdb.gap_report(options.input) 
+        IO.gap_report(options.input)
     else:
         print("Description and usage of --gaps:")
         print("    This command detects gaps in the crystal structure of a protein. The search for gaps")
@@ -93,8 +85,7 @@ elif options.align:
         #group.add_option("--addatoms",default = "",type="str",help="")
         #opt_parser.add_option_group(group)
         #options, args = opt_parser.parse_args()
-        pdb = IO.pdb()
-        pdb.align_pdbs(options.input,options.fit,options.refatoms,options.fitatoms,options.out,options.addatoms)
+        IO.align_pdbs(options.input,options.fit,options.refatoms,options.fitatoms,options.out,options.addatoms)
     else:
         print("Description and usage of --align:")
         print("    This command aligns regions according to specific atoms and amino acid contigous sections of two")
@@ -119,8 +110,7 @@ elif options.align:
 itatoms CA,B,199,201:CA,B,218,220 --out 1GDD_aligned_completed_with_1GIA.pdb --addatoms A,202,218:A,202,218")
 elif options.summary:
     if run_command:
-        pdb = IO.pdb()
-        pdb.prepare_pdb_for_charmm(options.inputfile,options.crdout,options.seqfix)
+        IO.prepare_pdb_for_charmm(options.inputfile,options.crdout,options.seqfix)
     else:
         print("Description and usage of --summary:")
         print("    This command gives a brief or summarized output of the structure as a guide for other commands.")
@@ -141,8 +131,7 @@ elif options.extract:
         #group.add_option("--models", action="store_true", help="")
         #group.add_option("--groups", type="str",help="")
         #opt_parser.add_option_group(group)
-        cif = IO.cif()
-        cif.PDBs_from_CIF(options.input,options.models,options.chains,options.groups)
+        IO.PDBs_from_CIF(options.input,options.models,options.chains,options.groups)
     else:
         print("Description and usage of --extract:")
         print("    It extracts models or chain groups in the structure to separate PDB files, and it also gets rid of")
@@ -165,8 +154,7 @@ elif options.fixpdb:
         #group.add_option('--frm', type="int", action = "store", default = 72, help = "")
         #group.add_option('--to', type="int",action = "store", default = 21, help = "")
         #opt_parser.add_option_group(group)
-        pdb = IO.pdb(options.input)
-        pdb.fix_pdb_from_CHARMM(options.to,options.frm)
+        IO.fix_pdb_from_CHARMM(options.to,options.frm)
     else:
         print("Description and usage of --fixpdb:")
         print("    It fixes a PDB file that was output by CHARMM. The chain identifier is placed by CHARMM in a column")
@@ -184,8 +172,7 @@ elif options.prepare:
         #group.add_option('--crdout', metavar="FILE", type='str', help="")
         #group.add_option('--seqfix', type='str', help="")
         #opt_parser.add_option_group(group)
-        pdb = IO.pdb()
-        pdb.prepare_pdb_for_charmm(options.input,options.crdout,options.seqfix)
+        IO.prepare_pdb_for_charmm(options.input,options.crdout,options.seqfix)
     else:
         print("Description and usage of --prepare:")
         print("    This command takes a PDB file that has been run through the reduce program to determine missing")
@@ -202,8 +189,7 @@ elif options.prepare:
         print("    Example: pdb_cif.py --prepare --input 2GIA.pdb --crdout 1GIA.crd --seqfix yes")
 elif options.maxmin:
     if run_command:
-        pdb = IO.pdb()
-        pdb.min_max(options.input)
+        IO.min_max(options.input)
     else:
         print("Description and usage of --maxmin:")
         print("    This command gives the maximum and minim XYZ coordinate values of all atoms in the structure.")

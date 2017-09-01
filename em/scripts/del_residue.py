@@ -88,8 +88,7 @@ def main():
             insulin.models = [str(i) for i in range(1,num_models+1)]
             
             insulin.write_csv(dir_path,file_name)
-            outPDB = IO.pdb()
-            outPDB.write_pdb(insulin,dir_path,file_name,'all')
+            IO.write_pdb(insulin, dir_path, file_name, 'all')
         else:
             print('ERROR: del_residue.py only works with natural aminoacids and ACE and CTER terminals.')
             sys.exit(1)
