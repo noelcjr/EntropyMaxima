@@ -7,7 +7,7 @@ import sys
 import os
 import pandas as pd
 import Bio.PDB as struct
-import em.describe.utilities as ut
+import em.describe.utilities as utilities
 import string
 import em.manipulate.Molecular_Rigid_Manipulations as MRM
 
@@ -16,29 +16,33 @@ def CIF_summary():
     raise NotImplementedError("CIF summary needs to be coded.")
 
 
-def _read_structure(path):
+def _read_structure(path, pdb_id='pdb', cif_id='cif' ):
     file_name = os.path.basename(path).split('.')[0]
     file_sufix = os.path.basename(path).split('.')[1]
     dir_path = os.path.dirname(path)
     if file_sufix == 'pdb':
         parser = struct.PDBParser(QUIET=True)
-        structure = parser.get_structure("pdb", path)
+        structure = parser.get_structure(pdb_id, path)
     elif file_sufix == 'cif':
         parser = struct.MMCIFParser()
-        structure = parser.get_structure('cif', path)
+        structure = parser.get_structure(cif_id, path)
     else:
         print("ERROR: Unreognized file type " + file_sufix + " in " + file_name)
         sys.exit(1)
     return structure, dir_path, file_name
 
 
+def _save_structure(structure, path):
+    io = struct.PDBIO()
+    io.set_structure(structure)
+    io.save(path)
+
+
 def PDBs_from_CIF(inFile, optionsmodels, optionschains, optionsgroups):
     structure, dir_path, file_name = _read_structure(inFile)
     if optionsmodels:
         for i in structure.get_models():
-            io = struct.PDBIO()
-            io.set_structure(i)
-            io.save(dir_path + file_name + "_" + str(i.get_id()) + ".pdb")
+            _save_structure(i, dir_path + file_name + "_" + str(i.get_id()) + ".pdb")
     if optionschains:
         if not optionsgroups:
             print("ERROR: When outputing PDBs by chain identifier, and option groups must be included.")
@@ -53,18 +57,16 @@ def PDBs_from_CIF(inFile, optionsmodels, optionschains, optionsgroups):
                 for j in i.get_chains():
                     if j.get_id() in h:
                         m2.add(j)
-                io = struct.PDBIO()
-                io.set_structure(s2)
-                io.save(dir_path + file_name + "_" + str(i.get_id()) + "_" + h + ".pdb")
+                _save_structure(s2, dir_path + file_name + "_" + str(i.get_id()) + "_" + h + ".pdb")
 
 
-def align_pdbs(optionsrefA, optionsfitA, optionsrefatomsA, optionsfitatomsA, optionsoutA,
+def align_pdbs(referencePath, fitPath, optionsrefatomsA, optionsfitatomsA, optionsoutA,
                optionsaddatomsA=""):
-    if not os.path.exists(optionsrefA):
+    if not os.path.exists(referencePath):
         print "Error: File path for reference PDB or CIF file does not exist."
         print("Type -h or --help for description and options.")
         sys.exit(1)
-    if not os.path.exists(optionsfitA):
+    if not os.path.exists(fitPath):
         print "Error: File path for PDB or CIF file to fit to reference does not exist."
         print("Type -h or --help for description and options.")
         sys.exit(1)
@@ -74,30 +76,10 @@ def align_pdbs(optionsrefA, optionsfitA, optionsrefatomsA, optionsfitatomsA, opt
     fit_al = []
     for i in optionsfitatomsA.split(':'):
         fit_al.append(tuple(i.split(',')))
-    file_name = os.path.basename(optionsrefA).split('.')[0]
-    file_sufix = os.path.basename(optionsrefA).split('.')[1]
-    dir_path = os.path.dirname(optionsrefA)
-    if file_sufix == 'pdb':
-        pdb_parser = struct.PDBParser(QUIET=True)
-        ref_structure = pdb_parser.get_structure("reference", dir_path + optionsrefA)
-    elif file_sufix == 'cif':
-        cif_parser = struct.MMCIFParser(QUIET=True)
-        ref_structure = cif_parser.get_structure('reference', dir_path + optionsrefA)
-    else:
-        print("ERROR: Unreognized file type " + file_sufix + " in " + file_name)
-        sys.exit(1)
-    file_name = os.path.basename(optionsfitA).split('.')[0]
-    file_sufix = os.path.basename(optionsfitA).split('.')[1]
-    fit_dir_path = os.path.dirname(optionsfitA)
-    if file_sufix == 'pdb':
-        pdb_parser = struct.PDBParser(QUIET=True)
-        fit_structure = pdb_parser.get_structure("fit", dir_path + optionsfitA)
-    elif file_sufix == 'cif':
-        cif_parser = struct.MMCIFParser(QUIET=True)
-        fit_structure = cif_parser.get_structure('fit', dir_path + optionsfitA)
-    else:
-        print("ERROR: Unreognized file type " + file_sufix + " in " + file_name)
-        sys.exit(1)
+
+    ref_structure, dir_path, _ = _read_structure(referencePath, 'reference', 'reference')
+    fit_structure, dir_path, _ = _read_structure(fitPath, 'fit', 'fit')
+
         # Use the first model in the pdb-files for alignment
     # Change the number 0 if you want to align to another structure
     ref_model = ref_structure[0]
@@ -136,10 +118,10 @@ def align_pdbs(optionsrefA, optionsfitA, optionsrefatomsA, optionsfitatomsA, opt
         if len(add_region) != 2:
             print("ERROR: Only two entries in the addatom option. One for reference, and one for fit.")
             sys.exit(1)
-        print("Adding residues from (" + optionsrefA + "," + add_region[0][0] + "," + add_region[0][1] + "," +
+        print("Adding residues from (" + referencePath + "," + add_region[0][0] + "," + add_region[0][1] + "," +
               add_region[0][2] + ") ")
         print(
-            " to (" + optionsfitA + "," + add_region[1][0] + "," + add_region[1][1] + "," + add_region[1][2] + ")")
+            " to (" + fitPath + "," + add_region[1][0] + "," + add_region[1][1] + "," + add_region[1][2] + ")")
         add_res = []
         # Add residues before missing segment from incomplete chain (fit)
         for i in fit_model:
@@ -204,12 +186,10 @@ def align_pdbs(optionsrefA, optionsfitA, optionsrefatomsA, optionsfitatomsA, opt
                 #                    get_ref_first_res_id = False
                 #                    ref_first_res_id = j.get_id()[1]
     # Print RMSD:
-    print("Fiting " + optionsfitA + " by " + optionsrefatomsA + " to " + optionsrefA + " by " + optionsfitatomsA + "\
+    print("Fiting " + fitPath + " by " + optionsrefatomsA + " to " + referencePath + " by " + optionsfitatomsA + "\
  RMSD=" + str(super_imposer.rms))
     # Save the aligned version
-    io = struct.PDBIO()
-    io.set_structure(fit_model)
-    io.save(dir_path + optionsoutA)
+    _save_structure(fit_model, dir_path + optionsoutA)
 
 
 def gap_report(optionsinp):
@@ -217,18 +197,8 @@ def gap_report(optionsinp):
         print "Error: File path for Super Structure CSV file does not exist."
         print("Type -h or --help for description and options.")
         sys.exit(1)
-    file_name = os.path.basename(optionsinp).split('.')[0]
-    file_sufix = os.path.basename(optionsinp).split('.')[1]
-    dir_path = os.path.dirname(optionsinp)
-    if file_sufix == 'pdb':
-        pdb_parser = struct.PDBParser(QUIET=True)
-        sp = pdb_parser.get_structure('Costruct', optionsinp)
-    elif file_sufix == 'cif':
-        parser = struct.MMCIFParser(QUIET=True)
-        sp = parser.get_structure('cif', optionsinp)
-    else:
-        print("ERROR: Unreognized file type " + file_sufix + " in " + file_name)
-        sys.exit(1)
+    sp, dir_path, file_name = _read_structure(optionsinp)
+
     print("Gap report for " + dir_path + "/" + file_name + " in tuple format:")
     for i in sp.get_models():
         for j in i.get_chains():
@@ -237,9 +207,8 @@ def gap_report(optionsinp):
                 if k.get_id()[1] != 'W' and k.resname != 'HOH':
                     aa_present.append(k.get_full_id()[3][1])
             print("Model " + str(i.get_id()) + ", Chain " + j.get_id())
-            u = ut.utilities()
-            inserts = u.check_gaps(aa_present)
-            inserts_report = u.gap_report(inserts)
+            inserts = utilities.check_gaps(aa_present)
+            inserts_report = utilities.gap_report(inserts)
             for c in inserts_report:
                 print(c)
 
