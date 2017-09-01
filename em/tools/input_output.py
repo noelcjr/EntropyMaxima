@@ -622,47 +622,31 @@ def prepare_pdb_for_charmm(optionspdbin, optionscrdout, optionsseqfix):
         print('          Modifications to the code might be required.')
 
 
-
-def min_max(optionspdbin3):
-    pdb_parser = struct.PDBParser(QUIET=True)
-    sp = pdb_parser.get_structure('Costruct', optionspdbin3)
-    initMin = True
-    initMax = True
-    count = 0
+def _get_atom_coordinates(sp):
+    atoms = []
     for i in sp.get_models():
         for j in i.get_chains():
             for k in j.get_atoms():
-                if initMin:
-                    Xmin = k.get_coord()[0]
-                    Ymin = k.get_coord()[1]
-                    Zmin = k.get_coord()[2]
-                    initMin = False
-                if initMax:
-                    Xmax = k.get_coord()[0]
-                    Ymax = k.get_coord()[1]
-                    Zmax = k.get_coord()[2]
-                    initMax = False
-                if Xmin > k.get_coord()[0]:
-                    Xmin = k.get_coord()[0]
-                if Ymin > k.get_coord()[1]:
-                    Ymin = k.get_coord()[1]
-                if Zmin > k.get_coord()[2]:
-                    Zmin = k.get_coord()[2]
-                if Xmax < k.get_coord()[0]:
-                    Xmax = k.get_coord()[0]
-                if Ymax < k.get_coord()[1]:
-                    Ymax = k.get_coord()[1]
-                if Zmax < k.get_coord()[2]:
-                    Zmax = k.get_coord()[2]
-                count += 1
-    print('Results from ', optionspdbin3)
-    print('Number of Atoms ', count)
+                atoms.append(k.get_coord())
+    return atoms
+
+
+def min_max(path):
+    sp, _, _2 = _read_structure(path)
+    atom_coordinates = _get_atom_coordinates(sp)
+    x,y,z = zip(*atom_coordinates)
+
+    Xmin,Xmax = min(x), max(x)
+    Ymin,Ymax = min(y), max(y)
+    Zmin,Zmax = min(z), max(z)
+
+    print('Results from ', path)
+    print('Number of Atoms ', len(atom_coordinates))
     print('Xmin - Xmax', Xmin, ' - ', Xmax)
     print('Ymin - Ymax', Ymin, ' - ', Ymax)
     print('Zmin - Zmax', Zmin, ' - ', Zmax)
     print('--------------------------------')
     print('Celbasis X, Y, Z:', (Xmax - Xmin), (Ymax - Ymin), (Zmax - Zmin))
-
 
 
 class crd(object):
