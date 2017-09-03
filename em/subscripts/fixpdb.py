@@ -16,7 +16,7 @@ def add_arguments(parser):
 
 
 def run(options):
-    IO.fix_pdb_from_CHARMM(options.to, options.frm)
+    IO.fix_pdb_from_CHARMM(options.input,options.to, options.frm)
 
 
 def description():

@@ -329,7 +329,7 @@ def write_pdb(SS, basedir, filename, output='original'):
         outFile.close()
 
 
-def fix_pdb_from_CHARMM(PDB_file='', a=21, b=72):
+def fix_pdb_from_CHARMM(PDB_file, a=21, b=72):
     """ This fixes the problem of CHARMM not generating a chain id.
     But needs to be tested in more systems """
     if not os.path.exists(PDB_file):
