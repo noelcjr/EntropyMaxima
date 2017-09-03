@@ -21,7 +21,7 @@ setuptools.setup(
       author='Noel Carrascal, PhD',
       author_email='noelcarrascal@gmail.com',
       url='https://github.com/noelcjr/EntropyMaxima',
-      packages=['em','em.describe','em.energy','em.manipulate','em.tools'],
+      packages=['em','em.describe','em.energy','em.manipulate','em.tools', 'em.subscripts'],
       license='GNU GENERAL PUBLIC LICENSE',
       long_description='A program for the classification and manipulation of protein structures.',
       platforms='Tested on a Ubuntu linux machine with python 2.7.12. Should work with Windows or Macs but not tested.',
