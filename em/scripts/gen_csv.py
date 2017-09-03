@@ -67,7 +67,7 @@ def main():
             print("Type -h or --help for description and options.")
             sys.exit(1)
         params = CP.read_charmm_FF(options.top)
-        parser2 = PDBParser()
+        parser2 = PDBParser(QUIET = True)
         p1 = parser2.get_structure('Peptides', options.pep)
         ###########################################################################
         # The peptide construct is build with charmm so corrections for some atom
