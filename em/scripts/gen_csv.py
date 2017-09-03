@@ -94,8 +94,8 @@ def main():
         myCIF.build_missing_aa()
         file_name = os.path.basename(options.cif).split('.')[0]
         myCIF.write_csv('',file_name)
-        outPDB = IO.pdb()
-        outPDB.write_pdb(myCIF,'',file_name,'all')
+        #outPDB = IO.pdb()
+        IO.write_pdb(myCIF,'',file_name,'all')
     if options.frompsfcrd:
         if not os.path.exists(options.psf):
             print "Error: File path for PSF file does not exist."
