@@ -1,3 +1,5 @@
+import argparse
+
 import em.tools.input_output as IO
 
 
@@ -33,4 +35,7 @@ def usage():
 
 
 if __name__ == '__main__':
-    pass
+    arg_parser = argparse.ArgumentParser(description=description())
+    add_arguments(arg_parser)
+    args = arg_parser.parse_args()
+    args.func(args)

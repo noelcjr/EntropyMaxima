@@ -1,4 +1,6 @@
-import em.tools.input_output as IO
+import argparse
+
+from em.tools.input_output import gap_report
 
 
 def register_parser(subparsers):
@@ -12,7 +14,7 @@ def add_arguments(parser):
 
 
 def run(args):
-    IO.gap_report(args.input)
+    gap_report(args.input)
 
 
 def description():
@@ -30,4 +32,7 @@ def usage():
     return 'pdb_cif.py gaps --input 1BRS.pdb'
 
 if __name__ == '__main__':
-    pass
+    arg_parser = argparse.ArgumentParser(description=description())
+    add_arguments(arg_parser)
+    args = arg_parser.parse_args()
+    args.func(args)

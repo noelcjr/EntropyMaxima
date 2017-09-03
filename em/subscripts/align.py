@@ -1,3 +1,5 @@
+import argparse
+
 import em.tools.input_output as IO
 
 
@@ -46,4 +48,7 @@ itatoms CA,B,199,201:CA,B,218,220 --out 1GDD_aligned_completed_with_1GIA.pdb --a
 
 
 if __name__ == '__main__':
-    pass
+    arg_parser = argparse.ArgumentParser(description=description())
+    add_arguments(arg_parser)
+    args = arg_parser.parse_args()
+    args.func(args)
