@@ -14,7 +14,7 @@ def add_arguments(parser):
 
 
 def run(options):
-    IO.prepare_pdb_for_charmm(options.inputfile,options.crdout,options.seqfix)
+    IO.CIF_summary(options.input)
 
 
 def description():

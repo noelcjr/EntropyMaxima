@@ -12,7 +12,7 @@ import string
 import em.manipulate.Molecular_Rigid_Manipulations as MRM
 
 
-def CIF_summary():
+def CIF_summary(path):
     raise NotImplementedError("CIF summary needs to be coded.")
 
 
