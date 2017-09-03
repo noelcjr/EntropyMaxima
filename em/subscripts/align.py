@@ -43,7 +43,7 @@ def description():
 
 
 def usage():
-    return 'pdb_cif.py --align --input 1GIA.cif --refatoms CA,B,199,201:CA,B,218,220 --fit 1GDD.pdb --f\
+    return 'pdb_cif.py align --input 1GIA.cif --refatoms CA,B,199,201:CA,B,218,220 --fit 1GDD.pdb --f\
 itatoms CA,B,199,201:CA,B,218,220 --out 1GDD_aligned_completed_with_1GIA.pdb --addatoms A,202,218:A,202,218'
 
 

@@ -30,8 +30,8 @@ def description():
 
 
 def usage():
-    return 'pdb_cif.py --fixpdb --input 2GIA.pdb \n' \
-           'pdb_cif.py --fixpdb --input 2GIA.pdb --frm 72 --to 21'
+    return 'pdb_cif.py fixpdb --input 2GIA.pdb \n' \
+           'pdb_cif.py fixpdb --input 2GIA.pdb --frm 72 --to 21'
 
 
 if __name__ == '__main__':

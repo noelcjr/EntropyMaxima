@@ -36,8 +36,7 @@ def description():
 
 
 def usage():
-    return 'pdb_cif.py --extract --input 1BRS.pdb --chains --groups AB,CD,EF\n' \
-           'pdb_cif.py --extract --input 1BRS.pdb --models'
+    return 'pdb_cif.py prepare --input 1BRS.pdb --crdout 1BRS.crd --seqfix yes\n'
 
 
 if __name__ == '__main__':

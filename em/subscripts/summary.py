@@ -28,7 +28,7 @@ def description():
 
 
 def usage():
-    return 'pdb_cif.py --summary --input 1HIU.pdb'
+    return 'pdb_cif.py summary --input 1HIU.pdb'
 
 
 if __name__ == '__main__':
