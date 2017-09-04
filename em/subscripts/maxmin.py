@@ -18,14 +18,14 @@ def run(options):
 
 
 def description():
-    return '''This command gives the maximum and minim XYZ coordinate values of all atoms in the structure.")
-    This information is used to add a water box around the protein that extends a defined number of")
-    agnstroms from the protein. This values are used to determine the right box dimensions for ")
-    minimum-image conversion.")'''
+    return '''This command gives the maximum and minim XYZ coordinate values of all atoms in the structure.
+    This information is used to add a water box around the protein that extends a defined number of
+    agnstroms from the protein. This values are used to determine the right box dimensions for
+    minimum-image conversion.'''
 
 
 def usage():
-    return 'pdb_cif.py --extract maxmin --input 1BRS.pdb\n'
+    return '\npdb_cif.py maxmin --input 1BRS.pdb\n'
 
 
 if __name__ == '__main__':

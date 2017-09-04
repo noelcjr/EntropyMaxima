@@ -18,17 +18,13 @@ def run(options):
 
 
 def description():
-    return '''
-        This command gives a brief or summarized output of the structure as a guide for other commands.
+    return '''This command gives a brief or summarized output of the structure as a guide for other commands.
         The output gives information that is relevant to biopython, and that options that will help decide
-        command line inputs for other options for this program such as --align and --extract.
-        The output gives information on number of models and chains.(TODO: This option is not coded yet)
-            --summary              Flag to signal the program to do a summary.
-            --input = FILE         Follow this option by the path to a file.'''
-
+        command line inputs for other options for this program such as --align and --extract. The output gives
+        information on number of models and chains.(TODO: This option is not coded yet)'''
 
 def usage():
-    return 'pdb_cif.py summary --input 1HIU.pdb'
+    return '\npdb_cif.py summary --input 1HIU.pdb'
 
 
 if __name__ == '__main__':

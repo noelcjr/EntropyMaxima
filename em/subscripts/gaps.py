@@ -18,8 +18,7 @@ def run(args):
 
 
 def description():
-    return '''
-    This command detects gaps in the crystal structure of a protein. The search for gaps
+    return '''This command detects gaps in the crystal structure of a protein. The search for gaps
     is based on the amino acid residue number. It will detect missing amino acids at the
     N-terminal of the protein if the structure's residue numbers begin with a number greater
     than one, and it will miss gaps in the C-terminal in PDB and CIF files because it assumes
@@ -29,7 +28,7 @@ def description():
 
 
 def usage():
-    return 'pdb_cif.py gaps --input 1BRS.pdb'
+    return '\npdb_cif.py gaps --input 1BRS.pdb'
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description=description())

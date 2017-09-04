@@ -28,15 +28,10 @@ def description():
         is strongly recomended because hydrogen atoms added without running reduce are likely to be wrong.
         The input PDB file is outputed as a CRD structure file which is the type CHARMM takes as input.
         Prepare has an optional feature that outputs to files needed by CHARMM to finish setting up the
-        structure. The files generated have the following suffixes .SEQ and _FIXERS.INP.
-            --crdout = FILE      Path and name to output file with a 'crd' suffix. This file is needed for
-                                 CHARMM to prepare a structure for simulation.
-            --seqfix = String    This option takes only a 'Yes' or 'no', default is no. This file is needed
-                                 for CHARMM to an amino acid sequence of a structure for simulations.'''
-
+        structure. The files generated have the following suffixes .SEQ and _FIXERS.INP.'''
 
 def usage():
-    return 'pdb_cif.py prepare --input 1BRS.pdb --crdout 1BRS.crd --seqfix yes\n'
+    return '\npdb_cif.py prepare --input 1BRS.pdb --crdout 1BRS.crd --seqfix yes\n'
 
 
 if __name__ == '__main__':
