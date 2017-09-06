@@ -162,34 +162,6 @@ class Molecular_Rigid_Manipulation(object):
 
     def center_molecule(self, center):
         return [x * -1 for x in center]
-    '''Deprecated and Moved input_output.py
-    def fix_pdb_from_CHARMM(self,path,a,b):
-        """ This fixes the problem of CHARMM not generating a chain id.
-        But needs to be tested in more systems """
-        file_lines = []
-        count = 0
-        infile = open(path, 'r')
-        off1 = a + 5
-        off2 = a + 3
-        with infile as f:
-            for line in f:
-                if line[0:4] == "ATOM":
-                    #get chain from column count location
-                    if count == 0:
-                        print('Check the following lines to ensure right changes:')
-                        print(line)
-                    line = line.replace(line[a:off1],line[a:off2]+' '+line[b],1)
-                    file_lines.append(line)
-                    if count == 0:
-                        print(line)
-                    count += 1
-                else:
-                    file_lines.append(line)
-        infile.close()
-        outfile = open(path,'w')
-        for i in file_lines:
-            outfile.write(i)
-        outfile.close()'''
     
     def print_residue_atoms(self, struct, s_id, chain, res_num):
         for i in struct[s_id]:
@@ -691,7 +663,7 @@ class Molecular_Rigid_Manipulation(object):
 
     # REMEBER WEBSITE
     #http://www.j3d.org/matrix_faq/matrfaq_latest.html
-    # This method works but it deprecated in favor of Bio.Vector class
+    # This method works but it is deprecated in favor of Bio.Vector class
     def alignVectors(self, v1,v2):
         v1 = v1/np.linalg.norm(v1)
         v2 = v2/np.linalg.norm(v2)

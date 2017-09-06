@@ -218,8 +218,7 @@ def main():
             file_name = os.path.basename(options.out).split('.')[0]
             dir_path = os.path.dirname(options.out)
             insulin.write_csv(os.path.dirname(options.out),file_name)
-            outPDB = IO.pdb()
-            outPDB.write_pdb(insulin,dir_path,file_name,'all')
+            IO.write_pdb(insulin,dir_path,file_name,'all')
         else:
             print("ERROR: only two directions to add residues, Ndir and Cdir.")
             print("       The entries are not case sensitive.")
