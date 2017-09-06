@@ -71,7 +71,7 @@ open write unit 1 card name OUTPUT.psf
 write psf card unit 1
 close unit 1
 
-write psf card xplo name OUTPUT.psf
+write psf card xplo name OUTPUT_xplor.psf
 
 !incr j by 1
 !if j le 10 goto loop
