@@ -1,0 +1,79 @@
+! ======================================
+! Read in topology and parameter files
+! ======================================
+set paramdir = "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup"
+
+set topology  = @paramdir/top_all27_prot_na.rtf
+set parameter = @paramdir/par_all27_prot_na.prm
+
+! ==========================================
+! Read in topology and parameter files
+! ====================================
+
+! Open and read amino acid topology file
+open read card unit 20 name "/home/Programs/EntropyMaxima/params/charmm27.ff/top_all27_prot_na.rtf"
+read rtf card unit 20
+close unit 20
+
+! Open and read protein parameter file
+open read card unit 21 name "/home/Programs/EntropyMaxima/params/charmm27.ff/par_all27_prot_na.prm"
+read parameter card unit 21
+close unit 21
+! ======================================
+! Read in structure files
+! ======================================
+!set j 1
+!label loop
+
+set inpsf = "PATH/INPUT.psf"
+set incrd = "PATH/INPUT.crd"
+
+! Open and read amino acid topology file
+open read card unit 20 name @inpsf
+read psf card unit 20
+close unit 20
+
+! Open and read protein parameter file
+open read card unit 21 name @incrd 
+read coor card unit 21
+close unit 21
+
+! ==============================================================
+! Replace random water molecules with counterions
+!	In this case, we need 4 Na since 2hiu has ~ -2.0 charge
+!       and 2 Cl
+!   as seen at the end of the output waterbox.out
+!	(residdue name sod, segid will be ION)
+!	Just pick 16 waters at random
+! ==============================================================
+define WATREPL sele segid WAT .and. -
+() end
+set ion sod
+stream "/home/Programs/EntropyMaxima/params/charmm27.ff/add_Na.str"
+
+define WATREPL2 sele segid WAT .and. -
+() end
+set ion cla
+stream "/home/Programs/EntropyMaxima/params/charmm27.ff/add_Cl.str"
+
+! =======================================
+! Save coordinates and psf
+! =======================================
+write coor card name OUTPUT.crd
+* sub TIP3 water in box with Na and Cl ions 
+* 
+
+open unit 11 write card name OUTPUT.pdb
+write coor pdb unit 11
+close unit 11
+
+open write unit 1 card name OUTPUT.psf
+write psf card unit 1
+close unit 1
+
+write psf card xplo name OUTPUT.psf
+
+!incr j by 1
+!if j le 10 goto loop
+
+stop

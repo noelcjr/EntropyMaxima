@@ -148,16 +148,16 @@ def main():
     param_path = options.par
     ###########################################################################
     # Uncomment to test from spyder IDE
-    #pdb_parser = PDBParser()
-    #Angle = 45
-    #distance = 45
+    pdb_parser = PDBParser()
+    Angle = 45
+    distance = 45
     ##file_name = os.path.basename(options.out).split('.')[0]
-    #directory = "/home/noel/Projects/Protein_design/temp_lectures/Lecture_4/"
-    #filepath1 = directory+'2hiu_1rr.pdb'
-    #filepath2 = directory+'2zta_1rr.pdb'
-    #param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
-    #map_o = "yes"
-    #lnk_o = "A:B,B:A"
+    directory = "/home/noel/Projects/Protein_design/temp_lectures/Lecture_4/"
+    filepath1 = directory+'2hiu_1rr.pdb'
+    filepath2 = directory+'2zta_1rr.pdb'
+    param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
+    map_o = "yes"
+    lnk_o = "A:A,B:B"
     ####################################################################################################################
     # Process strig that the determines how the centered and rotated structures will be connected.
     lnk_o = lnk_o.split(',')
@@ -269,6 +269,9 @@ def main():
                 v2 = [j.get_coord()[0],j.get_coord()[1],j.get_coord()[2]]
                 jj = np.dot(v2,RM)
                 j.set_coord(jj)
+            io = PDBIO()
+            io.set_structure(s2)
+            io.save(directory+'s_before_align.pdb')
             # After aligning along centerofcharge/dipolemoment, the structure
             # is flipped to have the cterm closest to insulin. This only works with
             # LZ because it is a homodimer with both helices aligned in parallel.
@@ -280,6 +283,9 @@ def main():
                 v3 = v2.left_multiply(m)
                 j2.set_coord(v3.get_array())
             last_direction = i
+            io = PDBIO()
+            io.set_structure(s2)
+            io.save(directory+'s_after_align.pdb')
         else:
             # FIX: Something is wrong with rig.alignVectors([0,0,1],[0,0,-1]) it could just be a trigonometry case that
             # gives some sort of singularity. The following code inside the if statement patch just avoids the problem 
@@ -316,7 +322,7 @@ def main():
 
         io = PDBIO()
         io.set_structure(s3)
-        io.save('s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
+        io.save(directory+'s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         #io.save(directory+options.id+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         structure_id = structure_id + 1
         rig.translate_molecule(s2,modelS2,rig.center_molecule(cmc.get_center_of_mass(s2)))

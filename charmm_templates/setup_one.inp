@@ -5,15 +5,15 @@
 ! ========================================== 
 ! Read in topology and parameter files
 ! ====================================
-open read unit 1 card name "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/top_all27_prot_na.rtf"
+open read unit 1 card name "/home/Programs/EntropyMaxima/params/charmm27.ff/top_all27_prot_na.rtf"
 read rtf card unit 1
 close unit 1
 
-open read unit 2 card name "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/par_all27_prot_na.prm"
+open read unit 2 card name "/home/Programs/EntropyMaxima/params/charmm27.ff/par_all27_prot_na.prm"
 read para card unit 2
 close unit 2
 
-!stream "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/radii_prot_na_dfg.str"
+!stream "/home/Programs/EntropyMaxima/params/charmm27.ff/radii_prot_na_dfg.str"
 
 open read unit 1 card name A.SEQ
 read sequence unit 1 card

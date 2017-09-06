@@ -1,0 +1,32 @@
+*FILENAME: add-ions.str
+*PURPOSE: replace some waters with ions; which ones to replace you have to
+* decide beforehand, based on random picking, low energy, ...
+*AUTHOR: Lennart Nilsson, Karolinska Institutet, October 20 2003
+*
+!ASSUMPTIONS:
+! 1/ your psf and coordinates are in place
+! 2/ the selection WATREPL has been defined as the water molecules
+!    you want to replace in the water segment which has SEGID WAT.  
+! 34/ the variable ION has to be set to the residue name of the ion in the RTF
+!RESULTS: 
+! A new segment named IONS will be created. Variable NIONS is set to number
+! of ions in this segment.
+! The water segment will have some molecules
+! deleted, and the rest will be consecutively numbered. 
+!USAGE EXAMPLE:
+!define watrepl select segid wat .and. (resi 23 .or. resi 48 .or. resi 999) end
+!set ion sod 
+!stream add-ions.str
+
+! Script starts here
+! basically we believe in a 3-center water
+coor stat sele WATREPL .and. .not. hydrogen end 
+set pions ?nsel
+read sequence @ion @pions
+gene ions 
+coor dupl sele watrepl .and. .not. hydrogen end sele segid ions end
+delete atom sele .byres. watrepl end
+join WAT renumber ! fix numbering of residues in the modified water segment
+return
+
+

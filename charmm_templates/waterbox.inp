@@ -1,33 +1,33 @@
 * Build waters around protein
 
-set paramdir = "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup"
+!set paramdir = "/home/Programs/EntropyMaxima/params/charmm27.ff"
 
-set topology  = @paramdir/top_all27_prot_na.rtf
-set parameter = @paramdir/par_all27_prot_na.prm
-set watercrd = tip216.crd 
+!set topology  = @paramdir/top_all27_prot_na.rtf
+!set parameter = @paramdir/par_all27_prot_na.prm
+!set watercrd = tip216.crd 
 
 ! ==========================================
 ! Read in topology and parameter files
 ! ====================================
 
 ! Open and read amino acid topology file
-open read card unit 20 name "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup/top_all27_prot_na.rtf" 
+open read card unit 20 name "/home/Programs/EntropyMaxima/params/charmm27.ff/top_all27_prot_na.rtf" 
 read rtf card unit 20
 close unit 20
 
 ! Open and read protein parameter file
-open read card unit 21 name "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup/par_all27_prot_na.prm" 
+open read card unit 21 name "/home/Programs/EntropyMaxima/params/charmm27.ff/par_all27_prot_na.prm" 
 read parameter card unit 21
 close unit 21
 
-set j 1
-label loop
+!set j 1
+!label loop
 
-set inpsf = "/home/noel/Projects/Protein_design/Insulin/Struct_Prep/insulin/init_setup/2hiu_"@j"rr.psf"
-set incrd = "/home/noel/Projects/Protein_design/Insulin/Struct_Prep/insulin/init_setup/2hiu_"@j"rr.crd"
-set outpsf1  = 2hiu_box_@j.psf
-set outcrd1  = 2hiu_box_@j.crd
-set outpdb1  = 2hiu_box_@j.pdb
+set inpsf = "PATH/INFILE.psf"
+set incrd = "PATH/INFILE_min3.crd"
+set outpsf1  = OUTFILE.psf
+set outcrd1  = OUTFILE.crd
+set outpdb1  = OUTFILE.pdb
 ! ==========================================
 ! Read in structure files
 ! ==========================================
@@ -55,7 +55,7 @@ calc YSIZ = INT( ?YMAX - ?YMIN + 20)
 calc ZSIZ = INT( ?ZMAX - ?ZMIN + 20)
 
 define SOLUTE sele segid A .or. segid N end
-stream "./solvent-box.str"
+stream "/home/Programs/EntropyMaxima/charmm_templates/solvent-box.str"
 
 open write unit 1 card name @outcrd1
 write coor card unit 1
@@ -69,7 +69,7 @@ open unit 11 write card name @outpdb1
 write coor pdb unit 11
 close unit 11
 
-incr j by 1
-if j le 10 goto loop
+!incr j by 1
+!if j le 10 goto loop
 
 stop
