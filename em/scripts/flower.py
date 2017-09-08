@@ -148,16 +148,16 @@ def main():
     param_path = options.par
     ###########################################################################
     # Uncomment to test from spyder IDE
-    pdb_parser = PDBParser()
-    Angle = 45
-    distance = 45
+    #pdb_parser = PDBParser(QUIET = True)
+    #Angle = 45
+    #distance = 45
     ##file_name = os.path.basename(options.out).split('.')[0]
-    directory = "/home/noel/Projects/Protein_design/temp_lectures/Lecture_4/"
-    filepath1 = directory+'2hiu_1rr.pdb'
-    filepath2 = directory+'2zta_1rr.pdb'
-    param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
-    map_o = "yes"
-    lnk_o = "A:A,B:B"
+    #directory = "/home/noel/Projects/Protein_design/ccl_lectures/Lecture_4/"
+    #filepath1 = directory+'2hiu_1rr.pdb'
+    #filepath2 = directory+'2zta_1rr.pdb'
+    #param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
+    #map_o = "yes"
+    #lnk_o = "A:A,B:B"
     ####################################################################################################################
     # Process strig that the determines how the centered and rotated structures will be connected.
     lnk_o = lnk_o.split(',')
@@ -233,7 +233,8 @@ def main():
         for i in s1[0]:
             ids[i.id] = True
         # Now we go through structure 2 and if there are any chains with the same id as those found in structure 1, 
-        # we will change the chain ids to something else
+        # we will change the chain ids to something else becase if chain id is repeated in the same structure
+        # it will be consider one chain when they are actually separated.
         for i in s2[0]:
             if ids[i.id]:
                 id_found = False
@@ -269,23 +270,19 @@ def main():
                 v2 = [j.get_coord()[0],j.get_coord()[1],j.get_coord()[2]]
                 jj = np.dot(v2,RM)
                 j.set_coord(jj)
-            io = PDBIO()
-            io.set_structure(s2)
-            io.save(directory+'s_before_align.pdb')
+            last_direction = i
             # After aligning along centerofcharge/dipolemoment, the structure
             # is flipped to have the cterm closest to insulin. This only works with
             # LZ because it is a homodimer with both helices aligned in parallel.
             # For any other structure, this might not work. 
             # TODO This Vector needs to be picked by the user from information from the pdb_cif.py --summary
-            m = rotaxis(np.pi, Vector(0, 1, 0))
-            for j2 in s2.get_atoms():
-                v2 = Vector([j2.get_coord()[0],j2.get_coord()[1],j2.get_coord()[2]]) 
-                v3 = v2.left_multiply(m)
-                j2.set_coord(v3.get_array())
-            last_direction = i
-            io = PDBIO()
-            io.set_structure(s2)
-            io.save(directory+'s_after_align.pdb')
+            # 
+            # For some reason after modifications to flower the next comented out code in this if step does not seem necessery
+            #m = rotaxis(np.pi, Vector(0, 1, 0))
+            #for j2 in s2.get_atoms():
+            #    v2 = Vector([j2.get_coord()[0],j2.get_coord()[1],j2.get_coord()[2]]) 
+            #    v3 = v2.left_multiply(m)
+            #    j2.set_coord(v3.get_array())
         else:
             # FIX: Something is wrong with rig.alignVectors([0,0,1],[0,0,-1]) it could just be a trigonometry case that
             # gives some sort of singularity. The following code inside the if statement patch just avoids the problem 
@@ -306,6 +303,7 @@ def main():
         # This 45 changes to explore different distaces between insulin and LZ
         ii = [k*distance for k in i]
         rig.translate_molecule(s2,modelS2,ii)
+        
         # We want to join the two structures into one structure, with one model
         # and the chains of structure 1 and 2 joined and name consistently.
         if map_o.lower() == 'no' and lnk_o.lower() == 'x':
@@ -319,10 +317,9 @@ def main():
             join_range2 = [(chain_info_s2[lnk_o[1][0]]['min_res'],chain_info_s2[lnk_o[1][0]]['max_res']),
                            (chain_info_s1[lnk_o[1][1]]['min_res'],chain_info_s1[lnk_o[1][1]]['max_res'])]
             join_chains(s3,s2,s1,lnk_o[1],join_range2)          
-
         io = PDBIO()
         io.set_structure(s3)
-        io.save(directory+'s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
+        io.save('s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         #io.save(directory+options.id+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         structure_id = structure_id + 1
         rig.translate_molecule(s2,modelS2,rig.center_molecule(cmc.get_center_of_mass(s2)))

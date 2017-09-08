@@ -381,7 +381,7 @@ def prepare_pdb_for_charmm(optionspdbin, optionscrdout, optionsseqfix):
         ids[i] = False
     for i in sp[0]:
         ids[i.id] = True
-    # TODO: FOR some reason ids are not Flased consecutively but functions works
+    # TODO: FOR some reason ids are not lased consecutively but functions works
     # def get_next_avail_id():
     #    id_val = -1
     #    for i in ids:
