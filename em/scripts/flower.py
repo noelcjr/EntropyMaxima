@@ -166,7 +166,7 @@ def main():
     for i in lnk_o:
         lnk_label += '_'
         for j in i:
-            lnk_label += j
+            lnk_label += j.lower()
     params = CP.read_charmm_FF(param_path)
     cmc = md.CenterOfMassCalculator(params)
     rig = MRM.Molecular_Rigid_Manipulation(param_path)
