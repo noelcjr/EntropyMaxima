@@ -218,7 +218,7 @@ class mmgbsa_ca_analysis(object):
         psf_file = psf(self.dirpath+'/'+options.psf)
         out_file = os.path.basename(options.crd).split('.')[0]
         ###################### After reading files, Generate and Index and Super Structure  ##############################
-        params = CP.read_charmm_FF(param_path)
+        params = CP.read_charmm_FF()
         insu = SS.Super_Structure(params, self.dirpath,'charmm_input')
         # At this point, a XPLOR psf could only have been creted from a complete structure, so no worries of gaps.
         insu.create_super_structure_df_from_CRD_PSF(crd_file,psf_file)
