@@ -122,7 +122,6 @@ def main():
                              other option is A:B,B:A. There can be as many chains linked separated \
                              by commas but be careful because the program does not checks the \
                              physicality of this connections.")
-    option_parser.add_option("--par", type="str",help="Path to charmm parameters folder.")
     options, args = option_parser.parse_args()     
     if not os.path.exists(options.center):
         print "Error: File path for molecule to be centered does not exist."
@@ -145,7 +144,6 @@ def main():
     filepath2 = options.rotate
     map_o = options.map
     lnk_o = options.link
-    param_path = options.par
     ###########################################################################
     # Uncomment to test from spyder IDE
     #pdb_parser = PDBParser(QUIET = True)
@@ -167,9 +165,9 @@ def main():
         lnk_label += '_'
         for j in i:
             lnk_label += j.lower()
-    params = CP.read_charmm_FF(param_path)
+    params = CP.read_charmm_FF()
     cmc = md.CenterOfMassCalculator(params)
-    rig = MRM.Molecular_Rigid_Manipulation(param_path)
+    rig = MRM.Molecular_Rigid_Manipulation(params)
     ####################################################################################################################
     # Check that the structures only have one model, and Place the structures' center of mass at (0,0,0) to give an idea 
     # of their location in the cartesian coordinate system 

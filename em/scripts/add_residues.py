@@ -35,7 +35,6 @@ def main():
     opt_parser.add_option("--inp", type="str",help="Path to CSV file for adding residue.")
     opt_parser.add_option("--out", type="str",help="Path and name to CSV and PDB outputs with added residues.")
     opt_parser.add_option("--pep", type="str",help="Path to peptide file.")
-    opt_parser.add_option("--par", type="str",help="Path to Charmm parameter folder.")
     options, args = opt_parser.parse_args()
     if not os.path.exists(options.inp):
         print "Error: File path Super Structure CSV file does not exist."
@@ -44,7 +43,7 @@ def main():
     ########################## Init Setup #####################################
     # Comment out the next four lines to test in Spyder.
     directory, filename = os.path.split(options.inp)
-    params = CP.read_charmm_FF(options.par)
+    params = CP.read_charmm_FF()
     insulin = SS.Super_Structure(params, options.inp,'add_linker')
     parse_list = options.apn.split(',')
     if options.res.find(',') == -1:

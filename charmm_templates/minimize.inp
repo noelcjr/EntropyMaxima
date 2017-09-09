@@ -10,11 +10,11 @@
 !read rtf   card name $CHM_HOME/toppar/top_all22_prot.inp
 !read param card name $CHM_HOME/toppar/par_all22_prot.inp
 
-open read unit 1 card name "/home/Programs/EntropyMaxima/params/charmm27.ff/top_all27_prot_na.rtf"
+open read unit 1 card name "/code/em/params/charmm27.ff/top_all27_prot_na.rtf"
 read rtf card unit 1
 close unit 1
 
-open read unit 2 card name "/home/Programs/EntropyMaxima/params/charmm27.ff/par_all27_prot_na.prm"
+open read unit 2 card name "/code/em/params/charmm27.ff/par_all27_prot_na.prm"
 read para card unit 2
 close unit 2
 

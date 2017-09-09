@@ -3,7 +3,7 @@
 Created on Wed Mar 30 20:50:51 2016
 @author: noel
 """
-import re
+import re, pkg_resources
     
 class amino_acid():  # To diferentiate from _Residue in RTPParser
     def __init__(self,typeRES):
@@ -70,10 +70,10 @@ class atom_mass():
             self.MASS[s[2]] = [s[1],s[3],s[4],d]
 
 class read_charmm_FF():
-    def __init__(self, path, verbose=False):
-        # FIXME: Check that files exist and throw excpetion if necessary
-        self.toppath = path+'top_all27_prot_na.rtf'
-        self.parpath = path+'par_all27_prot_na.prm'
+    def __init__(self, verbose=False):
+
+        self.toppath = pkg_resources.resource_filename('em', 'params/charmm27.ff/' + 'top_all27_prot_na.rtf')
+        self.parpath = pkg_resources.resource_filename('em', 'params/charmm27.ff/' + 'par_all27_prot_na.prm')
         self.v = verbose
         # FIXME: Do not load DNA because of formating differences witn amino acids.
         self.exceptions = ['GUA','ADE','CYT','THY','URA',\
