@@ -1,7 +1,7 @@
 # Entropy Maxima
 
-"The Entropy Maximum is a corollary of the Energy minimum" David Chandler
-"but there are many local maxima, just like there multiple local minima." Noel Carrascal
+"The Entropy Maximum principle has a corollary that is the Energy minimum principle" David Chandler
+".. So there are multiple local maxima, just like there are multiple local minima." Noel Carrascal
 
 ## How to run
 
