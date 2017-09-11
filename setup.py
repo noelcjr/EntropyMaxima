@@ -22,7 +22,7 @@ setuptools.setup(
       author_email='noelcarrascal@gmail.com',
       url='https://github.com/noelcjr/EntropyMaxima',
       packages=['em','em.describe','em.energy','em.manipulate','em.tools', 'em.subscripts'],
-      package_data={'em': ['params/charmm27.ff/*']},
+      package_data={'em': ['params/*','params/charmm27.ff/*']},
       license='GNU GENERAL PUBLIC LICENSE',
       long_description='A program for the classification and manipulation of protein structures.',
       platforms='Tested on a Ubuntu linux machine with python 2.7.12. Should work with Windows or Macs but not tested.',

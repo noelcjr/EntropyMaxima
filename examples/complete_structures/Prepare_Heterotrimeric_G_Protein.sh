@@ -87,7 +87,7 @@ pdb_cif.py align --input 1GIA.cif --refatoms CA,A,198,201:CA,A,218,221 --fit 1GD
 #   method. This method takes a CIF file, and it outputs the structure in a comma separated 
 #   file as well as a PDB file for each model in the structure.
 
-gen_csv.py --fromcif --cif 1GDD.cif --out1 1GDD_0.csv --pep /home/noel/Projects/Protein_design/EntropyMaxima/charmm_templates/peptides.pdb
+gen_csv.py --fromcif --cif 1GDD.cif --out1 1GDD_0.csv
 
 #   CONLCUSION: In this lecture we saw that two identical proteins have a region that is
 #                missing when the protein is bound to GDP, and present when bound to GTP.

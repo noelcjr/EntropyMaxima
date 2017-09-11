@@ -16,7 +16,6 @@ def add_arguments(parser):
 def run(options):
     IO.min_max(options.input)
 
-
 def description():
     return '''This command gives the maximum and minim XYZ coordinate values of all atoms in the structure.
     This information is used to add a water box around the protein that extends a defined number of

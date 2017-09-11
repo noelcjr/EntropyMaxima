@@ -11,7 +11,7 @@ import em.tools.Super_Structures as SS
 import Bio.PDB.PDBParser as PDBParser
 import pandas as pd
 import em.tools.input_output as IO
-import optparse
+import optparse, pkg_resources
 
 def main():
     usage = "usage: %prog [options] arg"
@@ -34,7 +34,7 @@ def main():
                                                          Example: \"ALA,VAL,ASP,ASN,GLU\".")
     opt_parser.add_option("--inp", type="str",help="Path to CSV file for adding residue.")
     opt_parser.add_option("--out", type="str",help="Path and name to CSV and PDB outputs with added residues.")
-    opt_parser.add_option("--pep", type="str",help="Path to peptide file.")
+    #opt_parser.add_option("--pep", type="str",help="Path to peptide file.")
     options, args = opt_parser.parse_args()
     if not os.path.exists(options.inp):
         print "Error: File path Super Structure CSV file does not exist."
@@ -52,7 +52,9 @@ def main():
     else:
         aa_add =  options.res.split(',')
     parser2 = PDBParser()
-    pep_file = parser2.get_structure('Peptides',options.pep)
+    pep_file_path = pkg_resources.resource_filename('em', 'params/' + 'peptides.pdb')
+    # pep_file_path= /home/noel/.cache/Python-Eggs/Entropy_Maxima-0.1.0-py2.7.egg-tmp/em/params/peptides.pdb # 
+    pep_file = parser2.get_structure('Peptides',pep_file_path)
     # Uncomment the next four lines to test
     #file_path = '/home/noel/Projects/Protein_design/EntropyMaxima/examples/Linker_minimization/2hiu.csv'
     #insulin = SS.Super_Structure(params, file_path,'add_linker')

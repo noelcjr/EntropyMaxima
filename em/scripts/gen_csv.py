@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+#!/usr/bin/pytho
 """
 Created on Fri Jun 24 16:49:07 2016 
 @author: noel
@@ -19,17 +18,17 @@ from Bio.PDB.PDBParser import PDBParser
 import em.tools.CHARMM_Parser as CP
 import em.tools.Super_Structures as SS
 import em.tools.input_output as IO
-import optparse
+import optparse, pkg_resources
 
 def main():
     usage = "usage: %prog [options] arg"
     d = "This program reads a CIF file and checks that all residues in the file\
-         are found in the CHARMM top_27 parameters. Residues not found \
-         are added to the structure. The full structure is outputed to a \
-         CSV file where Charmm, CIF and additional information is stored. \
+         are found in the CHARMM top_27 parameters. Residues found, but missing in \
+         the structure, are added to the structure. The full structure is outputed \
+         to a CSV file where Charmm, CIF and additional information is stored. \
          Added residues are copied from a peptide structure with all amino acids \
          present in the local CHARMM parameters files with fixed dihedral angles. \
-         Info in the CSV file is all there is to explore the conformational \
+         Info in the CSV file should be all there is to explore the conformational \
          space of added atoms."
     opt_parser = optparse.OptionParser(usage,description=d)
     
@@ -57,13 +56,10 @@ def main():
             print "Error: File path for input file does not exist."
             print("Type -h or --help for description and options.")
             sys.exit(1)
-        if not os.path.exists(options.pep):
-            print "Error: File with CHARMM's generated peptides does not exists."
-            print("Type -h or --help for description and options.")
-            sys.exit(1)
         params = CP.read_charmm_FF()
         parser2 = PDBParser(QUIET = True)
-        p1 = parser2.get_structure('Peptides', options.pep)
+        pep_file_path = pkg_resources.resource_filename('em', 'params/' + 'peptides.pdb')
+        p1 = parser2.get_structure('Peptides', pep_file_path)
         ###########################################################################
         # The peptide construct is build with charmm so corrections for some atom
         # names to PDB/Databank atom types is needed.

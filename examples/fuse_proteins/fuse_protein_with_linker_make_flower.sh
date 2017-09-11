@@ -9,6 +9,9 @@
 # Extending a protein structure by adding a linker to the N-terminal and fusing this
 # to another protein.  
 
+# Uncommment to clean up direcetory
+#rm *.pdb *cif *psf *csv *crd *ic *inp
+
 #1. Download insulin (2HIU) and Leucine zipper (2ZTA).
 
 wget https://files.rcsb.org/view/2HIU.cif
@@ -44,8 +47,8 @@ pdb_cif.py gaps --input 2ZTA.cif
 #   information for detecting gaps, and it found two missing residues in Leucine zipper's (2ZTA)
 #   C-term.
 
-gen_csv.py --fromcif --cif 2HIU.cif --out1 2HIU.csv --pep ../../EntropyMaxima/charmm_templates/peptides.pdb
-gen_csv.py --fromcif --cif 2ZTA.cif --out1 2ZTA.csv --pep ../../EntropyMaxima/charmm_templates/peptides.pdb
+gen_csv.py --fromcif --cif 2HIU.cif --out1 2HIU.csv
+gen_csv.py --fromcif --cif 2ZTA.cif --out1 2ZTA.csv
 
 #4. The previous steps added N and C terminals to cap the ends of the proteins.
 
@@ -64,8 +67,8 @@ del_residue.py --rem "34,1,B,CTER" --inp 2ZTA.csv --out 2ZTA.csv
 #   N-terminal would be, and Cdir in the opositite directions. The two possible directions would add amino acids
 #   in oposites directions using atoms on the amino acid that is attached to as reference point.
 
-add_residues.py --apn "1,1,A,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS" --inp 2HIU.csv --out 2HIU.csv --pep ../../charmm_templates/peptides.pdb
-add_residues.py --apn "1,2,B,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS" --inp 2HIU.csv --out 2HIU.csv --pep ../../charmm_templates/peptides.pdb
+add_residues.py --apn "1,1,A,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS" --inp 2HIU.csv --out 2HIU.csv
+add_residues.py --apn "1,2,B,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS" --inp 2HIU.csv --out 2HIU.csv
 
 #6. Clean up. We will work on only one insulin structure, so we will delete some other files to
 #   make things neat.
@@ -100,3 +103,16 @@ flower.py --center 2hiu_1rr.pdb --rotate 2zta_1rr.pdb --angle 45 --distance 45 -
 # Great command to substitute system specific paths during installation
 mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
 perl -pi -e "s/YOURPATH/"$mypath"/g" flower.vmd
+
+# clean up
+rm A_FIXRES.INP
+rm A.SEQ
+rm B_FIXRES.INP
+rm B.SEQ
+
+rm 2HIU_1.pdb    
+rm 2zta_1rr.ic        
+rm 2hiu_1r.pdb   
+rm 2ZTA_1.pdb
+rm 2zta_1r.pdb 
+rm *out   

@@ -1,3 +1,11 @@
+examples/complete_structures/*pdb
+examples/complete_structures/*cif
+examples/complete_structures/*csv
+examples/complete_structures/*ic
+examples/fuse_proteins/*pdb
+examples/fuse_proteins/*cif
+examples/fuse_proteins/*csv
+examples/fuse_proteins/*ic
 Entropy_Maxima.egg-info/
 build/
 dist/

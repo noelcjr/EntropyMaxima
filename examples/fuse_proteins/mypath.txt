@@ -1,1 +1,0 @@
-/home/noel/Projects/Protein_design/EntropyMaxima/examples/fuse_proteins
