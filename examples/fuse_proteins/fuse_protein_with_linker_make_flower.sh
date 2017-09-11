@@ -100,7 +100,10 @@ pdb_cif.py fixpdb --input 2zta_1rr.pdb
 
 flower.py --center 2hiu_1rr.pdb --rotate 2zta_1rr.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
 
-# Great command to substitute system specific paths during installation
+#11.A flower was built in the previous step. The following command will modify a flower.vmd file. This
+#   files allows you to see the 26 pdb files output by flower.py. The vmd and pdb files need to be copied
+#   From the docker container to the operating system for visualization.
+#   The following bash command is great to substitute system specific paths during installation
 mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
 perl -pi -e "s/YOURPATH/"$mypath"/g" flower.vmd
 
