@@ -1,8 +1,7 @@
 #!/bin/bash
 
 yourfile="s_90_315_18_aa_bb"
-
-cp "../Lecture_4/"$yourfile".pdb" .
+mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
 
 mkdir $yourfile
 cp $yourfile".pdb" $yourfile
@@ -10,11 +9,9 @@ cp /home/Programs/EntropyMaxima/charmm_templates/setup_one.inp $yourfile"/setup_
 cp /home/Programs/EntropyMaxima/charmm_templates/minimize.inp $yourfile"/minimize.inp"
 cd $yourfile
 
-perl -pi -e "s/code/home\/noel\/Projects\/Protein_design\/EntropyMaxima/g" setup_one.inp
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" setup_one.inp
 perl -pi -e "s/first none last none/first ACE last CTER/g" setup_one.inp
-perl -pi -e "s/code/home\/noel\/Projects\/Protein_design\/EntropyMaxima/g" minimize.inp
-
-
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" minimize.inp
 
 # Warning setup_one.inp has a path that will not be found for par and top
 perl -pi -e 's/INFILE/'$yourfile'/g' setup_one.inp
@@ -35,8 +32,9 @@ mkdir box_setup
 cd box_setup
 cp /home/Programs/EntropyMaxima/charmm_templates/waterbox.inp .
 
-perl -pi -e "s/PATH/\/home\/CCL_Lectures\/Lecture_5\/"$yourfile"/g" waterbox.inp
-perl -pi -e "s/INFILE/..\/"$yourfile"r/g" waterbox.inp
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" waterbox.inp
+perl -pi -e "s/PATH/"$mypath"\/"$yourfile"/g" waterbox.inp
+perl -pi -e "s/INFILE/"$yourfile"r/g" waterbox.inp
 perl -pi -e "s/OUTFILE/"$yourfile"r_min3_box/g" waterbox.inp
 
 charmm < waterbox.inp > waterbox.out
@@ -46,23 +44,16 @@ mkdir add_ions
 cd add_ions
 cp /home/Programs/EntropyMaxima/charmm_templates/add_NaCl.inp .
 
-perl -pi -e "s/PATH/\/home\/CCL_Lectures\/Lecture_5\/"$yourfile"box_setup/g" add_NaCl.inp
-perl -pi -e "s/INPUT/"$yourfile"r_min3_box/g" add_NaCl.inp
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" add_NaCl.inp
+
+perl -pi -e "s/PATH/"$mypath"/g" add_NaCl.inp
+perl -pi -e "s/INPUT/"$yourfile"\/box_setup\/"$yourfile"r_min3_box/g" add_NaCl.inp
 perl -pi -e "s/OUTPUT/"$yourfile"r_min3_box_ions/g" add_NaCl.inp
 
-#resid 23294 .or. resid 7732 .or. resid 23188 .or. resid 18521 .or. resid 13532 .or. -
-#resid 26196 .or. resid 11922 .or. resid 2797 .or. resid 31311 .or. resid 22681 .or. -
-#resid 30947 .or. resid 27474 .or. resid 28245 .or. resid 2507 .or. resid 1439 .or. -
-#resid 3133 .or. resid 27125 .or. resid 6735 .or. resid 12568 .or. resid 16326 .or. -
-#resid 4105 .or. resid 17784 .or. resid 20966 .or. resid 28651 .or. resid 22830 .or. -
-#resid 5108 .or. resid 5796 .or. resid 21058 .or. resid 22218 .or. resid 24112 .or. -
-#resid 11472 
+perl -pi -e "s/SOD/resid 7396 .or. resid 3578 .or. resid 9121 .or. resid 4861 .or. resid 8441 .or. -\nresid 7003 .or. resid 9138 .or. resid 3376 .or. resid 7666 .or. resid 56 .or. -\nresid 1875 .or. resid 2241 .or. resid 1947 .or. resid 2124 .or. resid 4390 .or. -\nresid 6670 .or. resid 3750 .or. resid 3084 .or. resid 3987 .or. resid 8163 .or. -\nresid 2099 .or. resid 6717 .or. resid 7759 .or. resid 7148 .or. resid 3498 .or. -\nresid 1334 .or. resid 967/g" add_NaCl.inp
 
-#resid 9420 .or. resid 27150 .or. resid 16208 .or. resid 29689 .or. resid 11628 .or. -
-#resid 16053 .or. resid 16674 .or. resid 29483 .or. resid 15944 .or. resid 9225 .or. -
-#resid 18921 .or. resid 21926 .or. resid 4376 .or. resid 12951 .or. resid 11388 .or. -
-#resid 389 .or. resid 24358 .or. resid 4103 .or. resid 16723 .or. resid 32512 .or. -
-#resid 8475 .or. resid 33687 .or. resid 19381 .or. resid 31323 .or. resid 18149 .or.
+perl -pi -e "s/CLA/resid 8466 .or. resid 4115 .or. resid 8082 .or. resid 8530 .or. resid 2587 .or. -\nresid 7260 .or. resid 9543 .or. resid 8080 .or. resid 7897 .or. resid 5145 .or. -\nresid 5966 .or. resid 6796 .or. resid 5363 .or. resid 7311 .or. resid 8720 .or. -\nresid 2715 .or. resid 1375 .or. resid 7256 .or. resid 4421 .or. resid 3185 .or. -\nresid 1943/g" add_NaCl.inp
+
 
 charmm < add_NaCl.inp > add_NaCl.out
 
@@ -71,22 +62,25 @@ mkdir NAMDsim
 cd NAMDsim
 cp /home/Programs/EntropyMaxima/charmm_templates/NAMD.conf $yourfile".conf"
 
-perl -pi -e "s/PATH/\/home\/CCL_Lectures\/Lecture_5\/"$yourfile"\/add_ions/g" $yourfile".conf"
-perl -pi -e "s/INPUT/"$yourfile"r_min3_box_ions/g" $yourfile".conf"
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" $yourfile".conf"
+perl -pi -e "s/PATH/"$mypath"/g" $yourfile".conf"
+perl -pi -e "s/INPUT/"$yourfile"\/add_ions\/"$yourfile"r_min3_box_ions/g" $yourfile".conf"
 perl -pi -e "s/OUTPUT/"$yourfile"r_min3_box_ions_namd/g" $yourfile".conf"
 
-pdb_cif.py maxmin --input ../add_ions/s_0_0_0_aa_bbr_min3_box_ions.pdb 
-#('Number of Atoms ', 33357)
-#('Xmin - Xmax', -54.646999, ' - ', 54.738998)
-#('Ymin - Ymax', -30.139999, ' - ', 30.367001)
-#('Zmin - Zmax', -25.535, ' - ', 25.527)
+pdb_cif.py maxmin --input ../add_ions/"$yourfile"r_min3_box_ions.pdb 
+#('Results from ', '../add_ions/s_90_315_18_aa_bbr_min3_box_ions.pdb')
+#('Number of Atoms ', 29567)
+#('Xmin - Xmax', -53.646999, ' - ', 53.597)
+#('Ymin - Ymax', -30.639999, ' - ', 30.701)
+#('Zmin - Zmax', -22.627001, ' - ', 22.811001)
 #--------------------------------
-#('Celbasis X, Y, Z:', 109.386, 60.507, 51.062)
+#('Celbasis X, Y, Z:', 107.244, 61.341, 45.438004)
 
-perl -pi -e "s/CELL_X/109.386/g" $yourfile".conf"
-perl -pi -e "s/CELL_Y/60.507/g" $yourfile".conf"
-perl -pi -e "s/CELL_Z/51.062/g" $yourfile".conf"
+perl -pi -e "s/CELL_X/107.244/g" $yourfile".conf"
+perl -pi -e "s/CELL_Y/61.341/g" $yourfile".conf"
+perl -pi -e "s/CELL_Z/45.438/g" $yourfile".conf"
 
 cp /home/Programs/NAMD/NAMD_2.11_Linux-x86_64-multicore/namd2 /usr/local/bin/namd2_multicore
 
-namd2_multicore +p8 s_0_0_0_aa_bb.conf &> s_0_0_0_aa_bb_1.out &
+# I do not comment out commands without good reason.
+# namd2_multicore +p6 s_90_315_18_aa_bb_long.conf &> s_90_315_18_aa_bb_long.out &

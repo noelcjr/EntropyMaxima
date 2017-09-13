@@ -9,11 +9,11 @@
 *
 
 ! Open and read amino acid topology and parameter files.
-open read card unit 20 name "/home/noel/Programs/charmmSB/trunk/toppar/top_all27_prot_na.rtf" 
+open read card unit 20 name "/code/em/params/charmm27.ff/top_all27_prot_na.rtf" 
 read rtf card unit 20
 close unit 20
 
-open read card unit 21 name "/home/noel/Programs/charmmSB/trunk/toppar/par_all27_prot_na.prm" 
+open read card unit 21 name "/code/em/params/charmm27.ff/top_all27_prot_na.prm" 
 read parameter card unit 21
 close unit 21
 

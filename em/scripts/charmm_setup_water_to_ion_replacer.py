@@ -33,9 +33,9 @@ def main():
     #if not args:
     #    print "Error: No input options provided. Type -h or --help."
     #    sys.exit(1)
-    if not os.path.exists(options.f):
-        print "Error: File path for molecule to be rotated does not exist."
-        sys.exit(1)
+    #if not os.path.exists(options.f):
+    #    print "Error: File path for molecule to be rotated does not exist."
+    #    sys.exit(1)
     #pdb_file = pdb_parser.get_structure('waterbox', pdb_path)
     count_atoms = 0
     count_waters = 0
@@ -96,6 +96,8 @@ def main():
 
     number_of_NA = int(VOLUME*Num_molecA)
     number_of_CL = number_of_NA
+    print("Number of NA:",number_of_NA)
+    print("Number of CL:",number_of_CL)
     charge = options.c
     if charge > 0:
         number_of_NA = number_of_NA + charge

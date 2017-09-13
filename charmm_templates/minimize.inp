@@ -22,7 +22,7 @@ close unit 2
 read psf card name INPUT.psf
 read coor card name INPUT.crd
 
-stream "/home/Programs/EntropyMaxima/params/radii_prot_na_dfg.str"
+stream "/code/em/params/radii_prot_na_dfg.str"
 
 ! Save coordinates also in comparsion coordinate set for later use
 coor copy comp

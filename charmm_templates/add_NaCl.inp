@@ -1,21 +1,11 @@
-! ======================================
-! Read in topology and parameter files
-! ======================================
-set paramdir = "/home/noel/Projects/Protein_design/Brazzein/pdb_aln/init_setup"
-
-set topology  = @paramdir/top_all27_prot_na.rtf
-set parameter = @paramdir/par_all27_prot_na.prm
-
 ! ==========================================
 ! Read in topology and parameter files
 ! ====================================
 
-! Open and read amino acid topology file
 open read card unit 20 name "/code/em/params/charmm27.ff/top_all27_prot_na.rtf"
 read rtf card unit 20
 close unit 20
 
-! Open and read protein parameter file
 open read card unit 21 name "/code/em/params/charmm27.ff/par_all27_prot_na.prm"
 read parameter card unit 21
 close unit 21
@@ -28,12 +18,10 @@ close unit 21
 set inpsf = "PATH/INPUT.psf"
 set incrd = "PATH/INPUT.crd"
 
-! Open and read amino acid topology file
 open read card unit 20 name @inpsf
 read psf card unit 20
 close unit 20
 
-! Open and read protein parameter file
 open read card unit 21 name @incrd 
 read coor card unit 21
 close unit 21
@@ -47,12 +35,12 @@ close unit 21
 !	Just pick 16 waters at random
 ! ==============================================================
 define WATREPL sele segid WAT .and. -
-() end
+(SOD) end
 set ion sod
 stream "/home/Programs/EntropyMaxima/charmm_templates/add_na.str"
 
 define WATREPL2 sele segid WAT .and. -
-() end
+(CLA) end
 set ion cla
 stream "/home/Programs/EntropyMaxima/charmm_templates/add_cl.str"
 

@@ -1,27 +1,27 @@
 ! Inter Energy Calculations (A,B)
 ! Read parameter and topology files
 ! =================================
-open read unit 1 card name "/home/noel/Projects/Protein_design/Parameters/top_all27_prot_na.rtf"
+open read unit 1 card name "/code/em/params/top_all27_prot_na.rtf"
 read rtf card unit 1
 close unit 1
-open read unit 1 card name "/home/noel/Projects/Protein_design/Parameters/par_all27_prot_na.prm"
+open read unit 1 card name "/code/em/params/par_all27_prot_na.prm"
 read para card unit 1
 close unit 1
 ! Read in structure files
 ! =======================
-open read unit 1 card name 1brs_no_wat_ions.psf
+open read unit 1 card name INPUT.psf
 read psf unit 1 card
 close unit 1
-open read unit 1 card name 1brs_no_wat_ions.crd
+open read unit 1 card name INPUT.crd
 read coor unit 1 card
 close unit 1
-open read unit 41 unfo name 1brs_10ns_nosolv_fit.dcd
+open read unit 41 unfo name INPUT.dcd
 set nf 1
 
 open write unit 51 form name 1brs_MMGBSA.dat
 ! Inter Chain Energy (A,B)
 ! ==============================
-stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+stream "/code/em/params/radii_prot_na_dfg.str"
  
 gbsw gbener molsurf sw 0.2 sgamma 0.01 dgp 1.5 -
 aa0 1.2045 aa1 0.1866 epsp 1.0 epsw 80.0
