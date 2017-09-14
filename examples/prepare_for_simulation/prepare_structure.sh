@@ -3,6 +3,19 @@
 yourfile="s_90_315_18_aa_bb"
 mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
 
+echo "WARNING: This script will run a molecular dynamics simulations. It will take"
+echo "         about 26 minutes using only one core of your computer. If you have more"
+echo "         than one core, and you want to run this script faster,"
+echo "         enter a number for the number of cores you want to use:"
+
+read cores
+
+echo The NAMD simulatiosn will be run using $cores cores.
+
+# ...
+# call it
+pause 'Press [Enter] key to continue...'
+
 mkdir $yourfile
 cp $yourfile".pdb" $yourfile
 cp /home/Programs/EntropyMaxima/charmm_templates/setup_one.inp $yourfile"/setup_one.inp"
@@ -81,6 +94,11 @@ perl -pi -e "s/CELL_Y/61.341/g" $yourfile".conf"
 perl -pi -e "s/CELL_Z/45.438/g" $yourfile".conf"
 
 cp /home/Programs/NAMD/NAMD_2.11_Linux-x86_64-multicore/namd2 /usr/local/bin/namd2_multicore
+cp ../add_ions/s_90_315_18_aa_bbr_min3_box_ions.psf .
+cp ../../NAMD_simulation.vmd .
+
+echo "After running the simulation, copy the NAMDsim/ folder to your computer and open the "
+echo "NAMD_simulation.vmd file using vmd by opening vmd and go to main -> Load Visualisation state, and click on NAMD_simulation.vmd"
 
 # I do not comment out commands without good reason.
-# namd2_multicore +p6 s_90_315_18_aa_bb_long.conf &> s_90_315_18_aa_bb_long.out &
+namd2_multicore +p$cores s_90_315_18_aa_bb.conf &> s_90_315_18_aa_bb.out &

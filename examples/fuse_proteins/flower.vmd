@@ -340,7 +340,7 @@ display aodirect 0.300000
 display dof off
 display dof_fnumber 64.000000
 display dof_focaldist 0.700000
-mol new YOURPATH/s_0_0_0_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_0_0_0_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -380,7 +380,7 @@ mol rename top s_0_0_0_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 0
-mol new YOURPATH/s_0_45_8_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_0_45_8_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -420,7 +420,7 @@ mol rename top s_0_45_8_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 1
-mol new YOURPATH/s_0_90_24_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_0_90_24_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -460,7 +460,7 @@ mol rename top s_0_90_24_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 2
-mol new YOURPATH/s_0_270_25_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_0_270_25_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -500,7 +500,7 @@ mol rename top s_0_270_25_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 3
-mol new YOURPATH/s_0_315_16_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_0_315_16_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -540,7 +540,7 @@ mol rename top s_0_315_16_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 4
-mol new YOURPATH/s_45_0_1_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_45_0_1_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -580,7 +580,7 @@ mol rename top s_45_0_1_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 5
-mol new YOURPATH/s_45_45_9_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_45_45_9_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -620,7 +620,7 @@ mol rename top s_45_45_9_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 6
-mol new YOURPATH/s_45_315_17_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_45_315_17_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -660,7 +660,7 @@ mol rename top s_45_315_17_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 7
-mol new YOURPATH/s_90_0_2_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_90_0_2_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -700,7 +700,7 @@ mol rename top s_90_0_2_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 8
-mol new YOURPATH/s_90_45_10_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_90_45_10_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -740,7 +740,7 @@ mol rename top s_90_45_10_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 9
-mol new YOURPATH/s_90_315_18_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_90_315_18_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -780,7 +780,7 @@ mol rename top s_90_315_18_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 10
-mol new YOURPATH/s_135_0_3_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_135_0_3_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -820,7 +820,7 @@ mol rename top s_135_0_3_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 11
-mol new YOURPATH/s_135_45_11_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_135_45_11_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -860,7 +860,7 @@ mol rename top s_135_45_11_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 12
-mol new YOURPATH/s_135_315_19_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_135_315_19_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -900,7 +900,7 @@ mol rename top s_135_315_19_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 13
-mol new YOURPATH/s_180_0_4_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_180_0_4_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -940,7 +940,7 @@ mol rename top s_180_0_4_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 14
-mol new YOURPATH/s_180_45_12_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_180_45_12_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -980,7 +980,7 @@ mol rename top s_180_45_12_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 15
-mol new YOURPATH/s_180_315_20_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_180_315_20_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1020,7 +1020,7 @@ mol rename top s_180_315_20_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 16
-mol new YOURPATH/s_225_0_5_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_225_0_5_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1060,7 +1060,7 @@ mol rename top s_225_0_5_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 17
-mol new YOURPATH/s_225_45_13_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_225_45_13_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1100,7 +1100,7 @@ mol rename top s_225_45_13_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 18
-mol new YOURPATH/s_225_315_21_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_225_315_21_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1140,7 +1140,7 @@ mol rename top s_225_315_21_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 19
-mol new YOURPATH/s_270_0_6_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_270_0_6_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1180,7 +1180,7 @@ mol rename top s_270_0_6_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 20
-mol new YOURPATH/s_270_45_14_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_270_45_14_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1220,7 +1220,7 @@ mol rename top s_270_45_14_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 21
-mol new YOURPATH/s_270_315_22_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_270_315_22_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1260,7 +1260,7 @@ mol rename top s_270_315_22_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 22
-mol new YOURPATH/s_315_0_7_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_315_0_7_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1300,7 +1300,7 @@ mol rename top s_315_0_7_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 23
-mol new YOURPATH/s_315_45_15_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_315_45_15_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain
@@ -1340,7 +1340,7 @@ mol rename top s_315_45_15_aa_bb.pdb
 set viewpoints([molinfo top]) {{{1 0 0 -15.0317} {0 1 0 14.9839} {0 0 1 15.0373} {0 0 0 1}} {{-0.761312 -0.474665 -0.442024 0} {-0.557574 0.827123 0.0723576 0} {0.331143 0.301544 -0.894296 0} {0 0 0 1}} {{0.0238151 0 0 0} {0 0.0238151 0 0} {0 0 0.0238151 0} {0 0 0 1}} {{1 0 0 -0.27} {0 1 0 -0.42} {0 0 1 0} {0 0 0 1}}}
 lappend viewplist [molinfo top]
 # done with molecule 24
-mol new YOURPATH/s_315_315_23_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
+mol new ./s_315_315_23_aa_bb.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all
 mol delrep 0 top
 mol representation NewCartoon 0.300000 10.000000 4.100000 0
 mol color Chain

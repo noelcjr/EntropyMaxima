@@ -14,6 +14,9 @@
 
 #1. Download insulin (2HIU) and Leucine zipper (2ZTA).
 
+mkdir flower_pot
+cd flower_pot
+
 wget https://files.rcsb.org/view/2HIU.cif
 wget https://files.rcsb.org/view/2ZTA.cif
 
@@ -79,10 +82,20 @@ rm 2HIU_2.pdb 2HIU_3.pdb 2HIU_4.pdb 2HIU_5.pdb 2HIU_6.pdb 2HIU_7.pdb 2HIU_8.pdb 
  
 reduce -HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000 2HIU_1.pdb > 2hiu_1r.pdb
 pdb_cif.py prepare --input 2hiu_1r.pdb --crdout 2hiu_1r.crd --seqfix yes
+cp /home/Programs/EntropyMaxima/charmm_templates/setup_one.inp setup_2hiu.inp
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" setup_2hiu.inp
+perl -pi -e "s/first none last none/first none last CTER/g" setup_2hiu.inp
+perl -pi -e 's/INFILE/2hiu_1r/g' setup_2hiu.inp
+perl -pi -e 's/OUTFILE/2hiu_1rr/g' setup_2hiu.inp
 charmm < setup_2hiu.inp > setup_2hiu.out
 
 reduce -HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000 2ZTA_1.pdb > 2zta_1r.pdb
 pdb_cif.py prepare --input 2zta_1r.pdb --crdout 2zta_1r.crd --seqfix yes
+cp /home/Programs/EntropyMaxima/charmm_templates/setup_one.inp setup_2zta.inp
+perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" setup_2zta.inp
+perl -pi -e "s/first none last none/first ACE last none/g" setup_2zta.inp
+perl -pi -e 's/INFILE/2zta_1r/g' setup_2zta.inp
+perl -pi -e 's/OUTFILE/2zta_1rr/g' setup_2zta.inp
 charmm < setup_2zta.inp > setup_2zta.out
 
 #9. Fix PDBs from Charmm output. For some reason charmm places the chain identifier in a different column that
@@ -104,9 +117,10 @@ flower.py --center 2hiu_1rr.pdb --rotate 2zta_1rr.pdb --angle 45 --distance 45 -
 #   files allows you to see the 26 pdb files output by flower.py. The vmd and pdb files need to be copied
 #   From the docker container to the operating system for visualization.
 #   The following bash command is great to substitute system specific paths during installation
-mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
-perl -pi -e "s/YOURPATH/"$mypath"/g" flower.vmd
+cp ../flower.vmd .
 
+echo "Copy all of the pdb files in the flower_pot directory to your operating system. You can visualize"
+echo "the flower using vmd by opening vmd and go to main -> Load Visualisation state, and click on flower.vmd"
 # clean up
 rm A_FIXRES.INP
 rm A.SEQ
