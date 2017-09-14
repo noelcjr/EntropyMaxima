@@ -1,17 +1,25 @@
 #!/bin/bash
 
+############################################################################################
+########### Input Variables  Modify to match your system specifications   ##################
 yourfile="s_90_315_18_aa_bb"
+solute="segid A .or. segid B"
+#  Enter the full path to your entropy minima location in your file system 
+basedir1="/home/noel/Projects/Protein_design/EntropyMaxima"
+#  same as before but add space characters before forward slashes.
+basedir2="home\/noel\/Projects\/Protein_design\/EntropyMaxima"
+############################################################################################
 mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
 
 mkdir $yourfile
 cp $yourfile".pdb" $yourfile
-cp /home/Programs/EntropyMaxima/charmm_templates/setup_one.inp $yourfile"/setup_one.inp"
-cp /home/Programs/EntropyMaxima/charmm_templates/minimize.inp $yourfile"/minimize.inp"
+cp $basedir1"/charmm_templates/setup_one.inp" $yourfile"/setup_one.inp"
+cp $basedir1"/charmm_templates/minimize.inp" $yourfile"/minimize.inp"
 cd $yourfile
 
-perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" setup_one.inp
+perl -pi -e "s/code/"$basedir2"/g" setup_one.inp
 perl -pi -e "s/first none last none/first ACE last CTER/g" setup_one.inp
-perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" minimize.inp
+perl -pi -e "s/code/"$basedir2"/g" minimize.inp
 
 # Warning setup_one.inp has a path that will not be found for par and top
 perl -pi -e 's/INFILE/'$yourfile'/g' setup_one.inp
@@ -19,35 +27,41 @@ perl -pi -e 's/OUTFILE/'$yourfile'r/g' setup_one.inp
 
 pdb_cif.py prepare --input $yourfile".pdb" --crdout $yourfile".crd" --seqfix yes
 
-charmm < setup_one.inp > setup_one.out
+charmm_40b2 < setup_one.inp > setup_one.out
 
 perl -pi -e 's/INPUT/'$yourfile'r/g' minimize.inp
 perl -pi -e 's/OUTPUT/'$yourfile'r/g' minimize.inp
 
-charmm < minimize.inp > minimize.out
+charmm_40b2 < minimize.inp > minimize.out
 
 # Now, copy and paste the pdb files to your computer and load them in VMD
 
 mkdir box_setup
 cd box_setup
-cp /home/Programs/EntropyMaxima/charmm_templates/waterbox.inp .
+cp $basedir1"/charmm_templates/waterbox.inp" .
+cp $basedir1"/charmm_templates/solvent-box.str" .
 
-perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" waterbox.inp
+perl -pi -e "s/code/"$basedir2"/g" waterbox.inp
+#perl -pi -e "s/local/"$basedir2"\/examples\/prepare_for_simulation\/"$yourfile"\/box_setup/g" waterbox.inp
+perl -pi -e "s/\/local/./g" waterbox.inp
+perl -pi -e "s/segid A .or. segid N/"$solute"/g" waterbox.inp
+perl -pi -e "s/code/"$basedir2"/g" solvent-box.str
 perl -pi -e "s/PATH/"$mypath"\/"$yourfile"/g" waterbox.inp
 perl -pi -e "s/INFILE/"$yourfile"r/g" waterbox.inp
 perl -pi -e "s/OUTFILE/"$yourfile"r_min3_box/g" waterbox.inp
 
-charmm < waterbox.inp > waterbox.out
+charmm_40b2 < waterbox.inp > waterbox.out
 
 cd ..
 mkdir add_ions
 cd add_ions
-cp /home/Programs/EntropyMaxima/charmm_templates/add_NaCl.inp .
+cp $basedir1"/charmm_templates/add_NaCl.inp" .
 
-perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" add_NaCl.inp
+perl -pi -e "s/code/"$basedir2"/g" add_NaCl.inp
 
-perl -pi -e "s/PATH/"$mypath"/g" add_NaCl.inp
-perl -pi -e "s/INPUT/"$yourfile"\/box_setup\/"$yourfile"r_min3_box/g" add_NaCl.inp
+perl -pi -e "s/PATH/..\/box_setup/g" add_NaCl.inp
+#perl -pi -e "s/INPUT/"$yourfile"\/box_setup\/"$yourfile"r_min3_box/g" add_NaCl.inp
+perl -pi -e "s/INPUT/"$yourfile"r_min3_box/g" add_NaCl.inp
 perl -pi -e "s/OUTPUT/"$yourfile"r_min3_box_ions/g" add_NaCl.inp
 
 perl -pi -e "s/SOD/resid 7396 .or. resid 3578 .or. resid 9121 .or. resid 4861 .or. resid 8441 .or. -\nresid 7003 .or. resid 9138 .or. resid 3376 .or. resid 7666 .or. resid 56 .or. -\nresid 1875 .or. resid 2241 .or. resid 1947 .or. resid 2124 .or. resid 4390 .or. -\nresid 6670 .or. resid 3750 .or. resid 3084 .or. resid 3987 .or. resid 8163 .or. -\nresid 2099 .or. resid 6717 .or. resid 7759 .or. resid 7148 .or. resid 3498 .or. -\nresid 1334 .or. resid 967/g" add_NaCl.inp
@@ -55,14 +69,14 @@ perl -pi -e "s/SOD/resid 7396 .or. resid 3578 .or. resid 9121 .or. resid 4861 .o
 perl -pi -e "s/CLA/resid 8466 .or. resid 4115 .or. resid 8082 .or. resid 8530 .or. resid 2587 .or. -\nresid 7260 .or. resid 9543 .or. resid 8080 .or. resid 7897 .or. resid 5145 .or. -\nresid 5966 .or. resid 6796 .or. resid 5363 .or. resid 7311 .or. resid 8720 .or. -\nresid 2715 .or. resid 1375 .or. resid 7256 .or. resid 4421 .or. resid 3185 .or. -\nresid 1943/g" add_NaCl.inp
 
 
-charmm < add_NaCl.inp > add_NaCl.out
+charmm_40b2 < add_NaCl.inp > add_NaCl.out
 
 cd ..
 mkdir NAMDsim
 cd NAMDsim
-cp /home/Programs/EntropyMaxima/charmm_templates/NAMD.conf $yourfile".conf"
+cp $basedir1"/charmm_templates/NAMD.conf" $yourfile".conf"
 
-perl -pi -e "s/code/home\/Programs\/EntropyMaxima/g" $yourfile".conf"
+perl -pi -e "s/code/"$basedir2"/g" $yourfile".conf"
 perl -pi -e "s/PATH/"$mypath"/g" $yourfile".conf"
 perl -pi -e "s/INPUT/"$yourfile"\/add_ions\/"$yourfile"r_min3_box_ions/g" $yourfile".conf"
 perl -pi -e "s/OUTPUT/"$yourfile"r_min3_box_ions_namd/g" $yourfile".conf"
@@ -80,7 +94,7 @@ perl -pi -e "s/CELL_X/107.244/g" $yourfile".conf"
 perl -pi -e "s/CELL_Y/61.341/g" $yourfile".conf"
 perl -pi -e "s/CELL_Z/45.438/g" $yourfile".conf"
 
-cp /home/Programs/NAMD/NAMD_2.11_Linux-x86_64-multicore/namd2 /usr/local/bin/namd2_multicore
+#cp /home/Programs/NAMD/NAMD_2.11_Linux-x86_64-multicore/namd2 /usr/local/bin/namd2_multicore
 
 # I do not comment out commands without good reason.
 # namd2_multicore +p6 s_90_315_18_aa_bb_long.conf &> s_90_315_18_aa_bb_long.out &

@@ -55,7 +55,7 @@ calc YSIZ = INT( ?YMAX - ?YMIN + 20)
 calc ZSIZ = INT( ?ZMAX - ?ZMIN + 20)
 
 define SOLUTE sele segid A .or. segid N end
-stream "/home/Programs/EntropyMaxima/charmm_templates/solvent-box.str"
+stream "/local/solvent-box.str"
 
 open write unit 1 card name @outcrd1
 write coor card unit 1
