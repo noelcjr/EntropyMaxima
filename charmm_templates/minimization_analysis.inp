@@ -6,21 +6,17 @@
 ! take psf and coordinates that were generated with gen-prot.inp
 ! Unix environment variable CHM_HOME has to point to CHARMM installation directory
 
-! Get definitions of amino acids and standard parameters
-!read rtf   card name $CHM_HOME/toppar/top_all22_prot.inp
-!read param card name $CHM_HOME/toppar/par_all22_prot.inp
-
 open read unit 1 card name "/code/em/params/charmm27.ff/top_all27_prot_na.rtf"
 read rtf card unit 1
 close unit 1
 
-open read unit 2 card name "/code/em/params/charmm27.ff/top_all27_prot_na.prm"
+open read unit 2 card name "/code/em/params/charmm27.ff/par_all27_prot_na.prm"
 read para card unit 2
 close unit 2
 
 ! Get psf and coordinates
-read psf card name INPUT.psf
-read coor card name INPUT.crd
+read psf card name s_90_315_18_aa_bbr.psf
+read coor card name s_90_315_18_aa_bbr.crd
 
 stream "/code/em/params/radii_prot_na_dfg.str"
 
@@ -51,15 +47,21 @@ minimize abnr nstep 50
 coor orie rms sele all end
 cons harm force  0.0 sele all end
 
-open write unit 69 form name OUTPUT.dat
+open write unit 69 form name OUTPUT_enr.dat
 write title unit 69
-*Min, Bond, Angles, Dihedrals, Impropers, VDW, ELEC, ENER, RMSD
+*Min, Bond, Angles, Dihedrals, Impropers, VDW, ELEC
 *
 
-set j 100
+open write unit 70 form name OUTPUT_rmsd.dat
+
+write title unit 70
+*Min, full, center, link, rotate, ener
+*
+
+set j 10
 label loop
 
-minimize abnr nstep 100 
+minimize abnr nstep 10
 coor orie rms sele all end
 
 write coor card name OUTPUT_@j.crd
@@ -75,30 +77,51 @@ set dih ?DIHE
 set imp ?IMPR
 set vdw ?VDW
 set ele ?ELEC
-set rs ?rms
 
 write title unit 69
-*@j, @bnd, @ang, @dih, @imp, @vdw, @ele, @enr, @rs
+*@j, @bnd, @ang, @dih, @imp, @vdw, @ele
 *
 
-incr j by 100
+open read unit 1 card name OUTPUT_@j.crd
+read coor unit 1 card
+close unit 1
+
+coor orien rms sele type CA end
+set rmsfull ?RMS
+
+! example ROT1 = resid 1 : 34 
+coor orien rms sele (type CA .and. ((segid A .and. (ROT1)) .or. (segid B .and. (ROT2)))) end
+set rmsrotate ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. (LIN1)) .or. (segid B .and. (LIN2)))) end
+set rmslinker ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. (CEN1)) .or. (segid B .and. (CEN2)))) end
+set rmscenter ?RMS
+
+write title unit 70
+*@j, @rmsfull, @rmscenter, @rmslinker, @rmsrotate, @enr
+*
+
+incr j by 10
 if j le 1000 goto loop
 close unit 69
+close unit 70
 !#######################################################
 open write unit 69 form name OUTPUT_mmgbsa.dat
 
 write title unit 69
-*Min, elecS, gbenD, vdwaD, aspD, polarD, nonPolarD, mmgbsa
+*Min, elecS, gbenD, vdwaD, aspD
 *
 
-set jj 100
+set jj 10
 label loop2
 
 open read unit 1 card name OUTPUT_@jj.crd
 read coor unit 1 card
 close unit 1
 
-stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+stream "/code/em/params/radii_prot_na_dfg.str"
 
 gbsw gbener molsurf sw 0.2 sgamma 0.01 dgp 1.5 -
 aa0 1.2045 aa1 0.1866 epsp 1.0 epsw 80.0
@@ -110,7 +133,7 @@ e14fac 1.0 nbxmod 5
 
 energy
 
-stream "/home/noel/Projects/Protein_design/Parameters/radii_prot_na_dfg.str"
+stream "/code/em/params/radii_prot_na_dfg.str"
 
 set eleB ?ELEC
 set gbeB ?GBEN
@@ -132,50 +155,12 @@ calc gbeD @gbeB - @gbeU
 calc vdwD @vdwB - @vdwU
 calc aspD @aspB - @aspU
 
-calc eegbD @eleD + @gbeD
-calc vdwsaD @vdwD + @aspD
-calc mmgbsa @eegbD + @vdwsaD
-
 write title unit 69
-*@jj, @eleD, @gbeD, @vdwD, @aspD, @eegbD, @vdwsaD, @mmgbsa
+*@jj, @eleD, @gbeD, @vdwD, @aspD
 *
 
-incr jj by 100
+incr jj by 10
 if jj le 1000 goto loop2
 
 close unit 69
 !################################################################
-open write unit 69 form name OUTPUT_rmsd.dat
-
-write title unit 69
-*Min, full, center, link, rotate
-*
-
-set jjj 100
-label loop3
-
-open read unit 1 card name OUTPUT_@jjj.crd
-read coor unit 1 card
-close unit 1
-
-coor orien rms sele type CA end
-set rmsfull ?RMS
-
-coor orien rms sele (type CA .and. ((segid A .and. resid ROTA) .or. (segid B .and. resid ROTB))) end
-set rmsrotate ?RMS
-
-coor orien rms sele (type CA .and. ((segid A .and. resid LIKA) .or. (segid B .and. resid LIKB))) end
-set rmslinker ?RMS
-
-coor orien rms sele (type CA .and. ((segid A .and. resid CENA) .or. (segid B .and. resid CENB))) end
-set rmscenter ?RMS
-
-write title unit 69
-*@jjj, @rmsfull, @rmscenter, @rmslinker, @rmsrotate
-*
-
-incr jjj by 100
-if jjj le 1000 goto loop3
-
-close unit 69
-
