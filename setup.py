@@ -31,6 +31,7 @@ setuptools.setup(
                'em/scripts/flower.py','em/scripts/gen_csv.py','em/scripts/MMGBSA_CA.py','em/scripts/pdb_cif.py'],
       install_requires=[
         'biopython',
-        'pandas'
+        'pandas',
+        'jinja2'
       ]
 )
