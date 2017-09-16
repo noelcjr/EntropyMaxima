@@ -78,7 +78,8 @@ calc NSLAB = @ZNUM * @NROD
 !generate one rod of boxes along Y-axis
 read sequence tip3 216
 gene wat0 noangle nodihe
-stream "/home/Programs/EntropyMaxima/charmm_templates/read-watbox.str"
+!stream "/home/Programs/EntropyMaxima/charmm_templates/read-watbox.str"
+stream "/code/charmm_templates/read-watbox.str"
 ! put it in the first octant
 coor stat sele segid wat0 .and. .not. hydrogen end
 calc XTR = - ?XMIN

@@ -22,7 +22,8 @@
 #  From this observation, we write the first command. 
 
 #1. Get barnase-barstar crystal structure from rcsb.org
-
+mkdir Barnase_Barstar
+cd Barnase_Barstar 
 wget https://files.rcsb.org/view/1BRS.cif
 
 #1. Extract chains corresponding to dimers in the PDB file. For most protein
@@ -60,7 +61,7 @@ pdb_cif.py gaps --input 1BRS_0_CF.pdb
 #   present in other dimers. Completing resideus 1 and 2 missing in chain C in one 
 #   dimer from chain B of another dimer using the following command.
 
-pdb_cif.py align --ref 1BRS_0_BE.pdb --refatoms CA,B,3,6 --fit 1BRS_0_CF.pdb --fitatoms CA,C,3,6 --out 1BRS_complete_CD_1.pdb --addatoms B,1,2:C,1,2
+pdb_cif.py align --input 1BRS_0_BE.pdb --refatoms CA,B,3,6 --fit 1BRS_0_CF.pdb --fitatoms CA,C,3,6 --out 1BRS_complete_CD_1.pdb --addatoms B,1,2:C,1,2
 
 #   The --addatoms section is optional. Excluding this option allows alignments 
 #   that are required for comparing structural features without changing them. 
@@ -70,6 +71,7 @@ pdb_cif.py align --ref 1BRS_0_BE.pdb --refatoms CA,B,3,6 --fit 1BRS_0_CF.pdb --f
 #   and open them with VMD to check that atoms were added from one structure to
 #   the other after aligning the structures.
 
+cd ..
 #CONCLUSION: It is important to know what is inside a CIF structure file to find out
 #            if there are mutiple repeated structures of the same protein. We then can
 #extract only one dimer from the original crystal structure and use the other dimers

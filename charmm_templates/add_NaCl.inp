@@ -37,12 +37,12 @@ close unit 21
 define WATREPL sele segid WAT .and. -
 (SOD) end
 set ion sod
-stream "/home/Programs/EntropyMaxima/charmm_templates/add_na.str"
+stream "/code/charmm_templates/add_na.str"
 
 define WATREPL2 sele segid WAT .and. -
 (CLA) end
 set ion cla
-stream "/home/Programs/EntropyMaxima/charmm_templates/add_cl.str"
+stream "/code/charmm_templates/add_cl.str"
 
 ! =======================================
 ! Save coordinates and psf

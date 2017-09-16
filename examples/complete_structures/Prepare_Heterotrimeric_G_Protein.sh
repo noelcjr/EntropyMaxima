@@ -30,6 +30,8 @@
 #1. if you are working on the same container as in Lecture 1, you should still
 #   have the wget program and the following command should run:
 
+mkdir Het_Gprot
+cd Het_Gprot
 wget https://files.rcsb.org/view/1GDD.cif
 wget https://files.rcsb.org/view/1GIA.cif
 
@@ -105,3 +107,4 @@ gen_csv.py --fromcif --cif 1GDD.cif --out1 1GDD_0.csv
 #   We also learn that we cannot trust crystal structures in their naming conventions of 
 #   chains, or even their numbering. This should easily be solved by a careful modeller of
 #   proteins, but it requires a lot of reading to be sure that what we model is sound.
+cd ..
