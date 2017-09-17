@@ -1,7 +1,7 @@
 from jinja2 import Environment, PackageLoader
 
 env = Environment(
-    loader=PackageLoader('em.charmm.gen', 'templates')
+    loader=PackageLoader('em.charmm.gen','templates')
 )
 
 

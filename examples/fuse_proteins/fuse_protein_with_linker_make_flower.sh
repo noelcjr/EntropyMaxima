@@ -107,12 +107,10 @@ script_cmd pdb_cif.py fixpdb --input 2zta_1rr.pdb
 
 script_cmd flower.py --center 2hiu_1rr.pdb --rotate 2zta_1rr.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
 
-#11.A flower was built in the previous step. The following command will modify a flower.vmd file. This
-#   files allows you to see the 26 pdb files output by flower.py. The vmd and pdb files need to be copied
-#   From the docker container to the operating system for visualization.
-#   The following bash command is great to substitute system specific paths during installation
-mypath=$(echo "`pwd`" | sed 's/\//\\\//g')
-script_cmd perl -pi -e "s/YOURPATH/"$mypath"/g" flower.vmd
+#11.A flower was built in the previous step. The flower.vmd file opens the structure in VMD. This
+#   allows you to see the 26 pdb files output. The vmd and pdb files need to be copied from the docker 
+#   container to the operating system for visualization. The following bash command is great to substitute
+#   system specific paths during installation
 
 # clean up
 script_cmd rm A_FIXRES.INP
@@ -120,9 +118,9 @@ script_cmd rm A.SEQ
 script_cmd rm B_FIXRES.INP
 script_cmd rm B.SEQ
 
-script_cmd rm 2HIU_1.pdb
+#script_cmd rm 2HIU_1.pdb
 script_cmd rm 2zta_1rr.ic
 script_cmd rm 2hiu_1r.pdb
-script_cmd rm 2ZTA_1.pdb
+#script_cmd rm 2ZTA_1.pdb
 script_cmd rm 2zta_1r.pdb
 script_cmd rm *out

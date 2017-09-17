@@ -23,7 +23,7 @@ def run(options):
 
 def description():
     return '''This command takes a PDB file that has been run through the reduce program to determine missing
-        hydrogen atoms in hystidines, and based on the added hydrogens by reduce, to identify HIS residues
+        hydrogen atoms in histidines, and based on the added hydrogens by reduce, to identify HIS residues
         as any of the three histidine types in CHARMM, HSD, HSE or HSP. Runing reduce before this program
         is strongly recomended because hydrogen atoms added without running reduce are likely to be wrong.
         The input PDB file is outputed as a CRD structure file which is the type CHARMM takes as input.
