@@ -10,15 +10,15 @@ def register_parser(subparsers):
 
 def add_arguments(parser):
     parser.add_argument("--input", metavar="FILE", help="Input File.", required=True)
-    parser.add_argument('--crdout', metavar="FILE", type=str, help=
-    "Path and name to output file with a 'crd' suffix. This file is needed for CHARMM to prepare a structure for simulation.")
-    parser.add_argument('--seqfix', type=str, help=
-    "This option takes only a 'Yes' or 'no', default is no. This file is needed for CHARMM to an amino acid sequence of a structure for simulations.")
+    parser.add_argument('--terminals', type=str, help=
+    "Format: A,none,CTER:B,ACE,none (e.i. for chain A, not ACE and a CTER. For chain B, an Ace, and no CTER.)")
+    #parser.add_argument('--seqfix', type=str, help=
+    #"This option takes only a 'Yes' or 'no', default is no. This file is needed for CHARMM to an amino acid sequence of a structure for simulations.")
     parser.set_defaults(func=run)
 
 
 def run(options):
-    IO.prepare_pdb_for_charmm(options.input, options.crdout, options.seqfix)
+    IO.prepare_pdb_for_charmm(options.input,options.terminals)
 
 
 def description():
@@ -31,7 +31,7 @@ def description():
         structure. The files generated have the following suffixes .SEQ and _FIXERS.INP.'''
 
 def usage():
-    return '\npdb_cif.py prepare --input 1BRS.pdb --crdout 1BRS.crd --seqfix yes\n'
+    return '\npdb_cif.py prepare --input 1BRS.pdb\n'
 
 
 if __name__ == '__main__':

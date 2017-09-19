@@ -1,0 +1,9 @@
+{% macro load_fix_sequence(sequence) -%}
+open read unit 1 card name {{sequence.seq}}
+read sequence unit 1 card
+close unit 1
+generate {{sequence.id}} first {{sequence.first}} last {{sequence.last}} setup
+stream "{{sequence.inp}}"
+{%- endmacro %}
+{{load_fix_sequence(a_sequence)}}
+

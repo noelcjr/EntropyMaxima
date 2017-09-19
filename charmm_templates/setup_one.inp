@@ -87,7 +87,7 @@ write coor card unit 1
 open write unit 1 card name OUTFILE.pdb
 write coor pdb unit 1
 
-write psf card xplo name OUTFILE_xplo.psf
+write psf card xplo name OUTFILE_xplor.psf
 
 stop
 

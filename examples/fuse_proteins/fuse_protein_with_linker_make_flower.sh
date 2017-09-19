@@ -9,8 +9,8 @@
 # Extending a protein structure by adding a linker to the N-terminal and fusing this
 # to another protein.  
 
-# Uncommment to clean up direcetory
-#rm *.pdb *cif *psf *csv *crd *ic *inp
+mkdir flower_pot
+cd flower_pot
 
 c_echo GREEN "1. Download insulin (2HIU) and Leucine zipper (2ZTA)."
 
@@ -76,27 +76,14 @@ script_cmd add_residues.py --apn "1,2,B,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS
 script_cmd rm 2HIU_2.pdb 2HIU_3.pdb 2HIU_4.pdb 2HIU_5.pdb 2HIU_6.pdb 2HIU_7.pdb 2HIU_8.pdb 2HIU_9.pdb 2HIU_10.pdb
 
 #7. For insulin and Leucine Zipper, reduce adds hydrogens to histidines, pdb_cif.py --prepare prepares files for charmm, and then charmm is ran.
-
-c_echo YELLOW "charmm < setup_2hiu.inp > setup_2hiu.out"
-reduce -HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000 2HIU_1.pdb > 2hiu_1r.pdb
-
-script_cmd pdb_cif.py prepare --input 2hiu_1r.pdb --crdout 2hiu_1r.crd --seqfix yes
-c_echo YELLOW "charmm < setup_2hiu.inp > setup_2hiu.out"
-charmm < setup_2hiu.inp > setup_2hiu.out
-
-c_echo YELLOW "reduce -HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000 2ZTA_1.pdb > 2zta_1r.pdb"
-reduce -HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000 2ZTA_1.pdb > 2zta_1r.pdb
-
-script_cmd pdb_cif.py prepare --input 2zta_1r.pdb --crdout 2zta_1r.crd --seqfix yes
-
-c_echo YELLOW "charmm < setup_2zta.inp > setup_2zta.out"
-charmm < setup_2zta.inp > setup_2zta.out
+script_cmd pdb_cif.py prepare --input 2HIU_1.pdb --terminals "A,none,CTER:B,none,CTER"
+script_cmd pdb_cif.py prepare --input 2ZTA_1.pdb --terminals "A,ACE,none:B,ACE,none"
 
 #9. Fix PDBs from Charmm output. For some reason charmm places the chain identifier in a different column that
 #   Biopyhton's parser can't detect.
 
-script_cmd pdb_cif.py fixpdb --input 2hiu_1rr.pdb
-script_cmd pdb_cif.py fixpdb --input 2zta_1rr.pdb
+script_cmd pdb_cif.py fixpdb --input 2hiu_1r.pdb
+script_cmd pdb_cif.py fixpdb --input 2zta_1r.pdb
 
 #10.Build a flower or dandalion type of ensemble. That is, take the insulin with the linker addition, the leucine zipper
 #   and put it together into a single structure. That means that chains are joined and relabled according to --link.
@@ -105,22 +92,13 @@ script_cmd pdb_cif.py fixpdb --input 2zta_1rr.pdb
 #   we do not know which way Inuslin would bind to Leucine zipper, so we try from every angle in 3D and choosen 
 #   intervals.
 
-script_cmd flower.py --center 2hiu_1rr.pdb --rotate 2zta_1rr.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
+script_cmd flower.py --center 2hiu_1r.pdb --rotate 2zta_1r.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
 
 #11.A flower was built in the previous step. The flower.vmd file opens the structure in VMD. This
 #   allows you to see the 26 pdb files output. The vmd and pdb files need to be copied from the docker 
 #   container to the operating system for visualization. The following bash command is great to substitute
 #   system specific paths during installation
+script_cmd cp ../flower.vmd .
 
-# clean up
-script_cmd rm A_FIXRES.INP
-script_cmd rm A.SEQ
-script_cmd rm B_FIXRES.INP
-script_cmd rm B.SEQ
+cd ..
 
-#script_cmd rm 2HIU_1.pdb
-script_cmd rm 2zta_1rr.ic
-script_cmd rm 2hiu_1r.pdb
-#script_cmd rm 2ZTA_1.pdb
-script_cmd rm 2zta_1r.pdb
-script_cmd rm *out

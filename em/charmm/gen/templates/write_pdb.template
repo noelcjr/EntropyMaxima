@@ -1,0 +1,3 @@
+open write unit 1 card name {{out_filename}}.pdb
+write coor pdb unit 1
+

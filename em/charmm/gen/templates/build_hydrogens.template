@@ -1,0 +1,18 @@
+! Build hydrogens
+! Default parameters are rdiel of 4, with no cutoffs.
+! ===================================================
+
+hbuild sele hydrogen end -
+elec atom rdiel switch eps 2 -
+vdw vatom vswitch -
+cutnb 999 ctofnb 998 ctonnb 997 wmin 1.5 -
+e14fac 1 nbxmod 5
+
+hbuild sele hydrogen end -
+elec atom rdiel switch eps 2 -
+vdw vatom vswitch -
+cutnb 999 ctofnb 998 ctonnb 997 wmin 1.5 -
+e14fac 1 nbxmod 5
+
+update
+

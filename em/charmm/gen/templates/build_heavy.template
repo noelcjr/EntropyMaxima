@@ -1,0 +1,14 @@
+! Check for and build in missing heavy atoms
+! Build is done into default geometry from parameter file.
+! ==========================================
+
+define missing1 sele .not. ( init .or. hydrogen ) end
+if ?nsel ne 0 print coor sele .not. ( init .or. hydrogen ) end
+
+ic param
+ic fill preserve
+ic build
+
+define missing2 sele .not. ( init .or. hydrogen ) end
+if ?nsel ne 0 print coor sele .not. ( init .or. hydrogen ) end
+

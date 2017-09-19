@@ -1,0 +1,4 @@
+open read unit 1 card name {{in_filename}}.crd
+read coor card unit 1 resid
+close unit 1
+
