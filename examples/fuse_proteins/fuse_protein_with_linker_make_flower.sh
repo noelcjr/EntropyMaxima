@@ -2,9 +2,9 @@
 
 #TITLE: Making a fusion peptide by joining Insulin and Leucine Zipper with a linker.
 
-# REQUIREMENTS: Entropy Maxima, reduce, charmm and VMD. VMD is needed for the last
-#               two lines in the file. So if VMD is not installed in your system,
-#               I recomend you install it, or delete the line that calls VMD.
+# REQUIREMENTS: Entropy and VMD. A VMD state for visualization is created in the last
+#               two lines of this script. This VMD file needs to be copied outside the
+#               conteiner to be opened in VMD.
                
 # Extending a protein structure by adding a linker to the N-terminal and fusing this
 # to another protein.  
@@ -67,8 +67,12 @@ script_cmd del_residue.py --rem "34,1,B,CTER" --inp 2ZTA.csv --out 2ZTA.csv
 #   N-terminal would be, and Cdir in the opositite directions. The two possible directions would add amino acids
 #   in oposites directions using atoms on the amino acid that is attached to as reference point.
 
-script_cmd add_residues.py --apn "1,1,A,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS" --inp 2HIU.csv --out 2HIU.csv
-script_cmd add_residues.py --apn "1,2,B,Ndir" --res "SER,GLY,ASP,ASP,ASP,ASP,LYS" --inp 2HIU.csv --out 2HIU.csv
+linker1="ASP,ASP,ASP,ASP,LYS"
+linker1s="DDDDK"
+linker2="ASP,ASP,ASP,ASP,LYS"
+linker2s="DDDDK"
+script_cmd add_residues.py --apn "1,1,A,Ndir" --res $linker1 --inp 2HIU.csv --out 2HIU.csv
+script_cmd add_residues.py --apn "1,2,B,Ndir" --res $linker2 --inp 2HIU.csv --out 2HIU.csv
 
 #6. Clean up. We will work on only one insulin structure, so we will delete some other files to
 #   make things neat.
@@ -92,13 +96,14 @@ script_cmd pdb_cif.py fixpdb --input 2zta_1r.pdb
 #   we do not know which way Inuslin would bind to Leucine zipper, so we try from every angle in 3D and choosen 
 #   intervals.
 
-script_cmd flower.py --center 2hiu_1r.pdb --rotate 2zta_1r.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
+mkdir "2hiu_2zta_AA_"$linker1s"_BB_"$linker2s
+cd "2hiu_2zta_AA_"$linker1s"_BB_"$linker2s
+script_cmd flower.py --center ../2hiu_1r.pdb --rotate ../2zta_1r.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
 
 #11.A flower was built in the previous step. The flower.vmd file opens the structure in VMD. This
 #   allows you to see the 26 pdb files output. The vmd and pdb files need to be copied from the docker 
 #   container to the operating system for visualization. The following bash command is great to substitute
 #   system specific paths during installation
-script_cmd cp ../flower.vmd .
+script_cmd cp ../../flower.vmd .
 
-cd ..
-
+cd ../..

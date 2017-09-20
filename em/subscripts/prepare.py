@@ -1,7 +1,7 @@
 import argparse
 
-import em.tools.input_output as IO
-
+import em.charmm.gen.inputs as IO
+#import em.tools.input_output as IO
 
 def register_parser(subparsers):
     parser = subparsers.add_parser('prepare', usage=usage(), description=description())
@@ -12,8 +12,6 @@ def add_arguments(parser):
     parser.add_argument("--input", metavar="FILE", help="Input File.", required=True)
     parser.add_argument('--terminals', type=str, help=
     "Format: A,none,CTER:B,ACE,none (e.i. for chain A, not ACE and a CTER. For chain B, an Ace, and no CTER.)")
-    #parser.add_argument('--seqfix', type=str, help=
-    #"This option takes only a 'Yes' or 'no', default is no. This file is needed for CHARMM to an amino acid sequence of a structure for simulations.")
     parser.set_defaults(func=run)
 
 
@@ -22,13 +20,11 @@ def run(options):
 
 
 def description():
-    return '''This command takes a PDB file that has been run through the reduce program to determine missing
-        hydrogen atoms in histidines, and based on the added hydrogens by reduce, to identify HIS residues
-        as any of the three histidine types in CHARMM, HSD, HSE or HSP. Runing reduce before this program
-        is strongly recomended because hydrogen atoms added without running reduce are likely to be wrong.
-        The input PDB file is outputed as a CRD structure file which is the type CHARMM takes as input.
-        Prepare has an optional feature that outputs to files needed by CHARMM to finish setting up the
-        structure. The files generated have the following suffixes .SEQ and _FIXERS.INP.'''
+    return '''This command takes a PDB file that has been output from gen_csv.py, and it prepares it so
+        hydrogen and heavy atoms are added when missing. It first runs reduce to identify HIS residues
+        as any of the three histidine types in CHARMM, HSD, HSE or HSP, depending on their particular 
+        protonation state. Then a CHARMM script is automatically generated and run to check for other
+        missing atoms in the protein, and to add ACE or CTER terminasl to the protein ends.'''
 
 def usage():
     return '\npdb_cif.py prepare --input 1BRS.pdb\n'

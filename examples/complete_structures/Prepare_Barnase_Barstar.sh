@@ -75,4 +75,4 @@ cd ..
 #CONCLUSION: It is important to know what is inside a CIF structure file to find out
 #            if there are mutiple repeated structures of the same protein. We then can
 #extract only one dimer from the original crystal structure and use the other dimers
-#`to fill gaps in the selected dimer. The selected dimer could be prepared for simulation.
+#to fill gaps in the selected dimer. The selected dimer could be prepared for simulation.

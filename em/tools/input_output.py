@@ -329,7 +329,6 @@ def write_pdb(SS, basedir, filename, output='original'):
             outFile.write(i + '\n')
         outFile.close()
 
-
 def fix_pdb_from_CHARMM(PDB_file, a=21, b=72):
     """ This fixes the problem of CHARMM not generating a chain id.
     But needs to be tested in more systems """
@@ -350,6 +349,7 @@ def fix_pdb_from_CHARMM(PDB_file, a=21, b=72):
         outFile.write(i + '\n')
     outFile.close()
 
+"""
 def _print_template(outFile,template):
     for i in template:
         outFile.write(i)
@@ -502,11 +502,9 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.id = 'O2P'
                             l.fullname = ' O2P'
             num_residues[j.id] = count
-    '''
-     This fixes when there are multiple chains and the residue number gets
-     reset at the beginning of each chain. With this fix, residue numbers
-     will be renumbered
-    '''
+    #This fixes when there are multiple chains and the residue number gets
+    #reset at the beginning of each chain. With this fix, residue numbers
+    #will be renumbered
     # f = '/home/noel/Projects/Protein_design/Insulin/Struct_Prep/pdbs/init_setup_bridge/cen/2hiu_1.pdb'
     # cen = pdb_parser.get_structure('test', f)
     line = '{:>5}{:>5}{:>4}  {:4}{:>10.5f}{:>10.5f}{:>10.5f} {:4} {:<4}{:>12.5f}'
@@ -624,7 +622,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
     # TODO WARNING: Check output if Ions are present in the original pdb structure.
     #               Check INF and SEQ files for systems with missing amino acids.')
     #               Modifications to the code might be required.')
-
+"""
 def _get_atom_coordinates(sp):
     atoms = []
     for i in sp.get_models():

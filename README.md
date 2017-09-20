@@ -1,4 +1,3 @@
-# For Yann
 # Entropy Maxima
 
 "The Entropy Maximum principle has a corollary that is the Energy minimum principle" David Chandler

@@ -1,0 +1,174 @@
+*FILENAME: minimize.inp
+*PURPOSE:  minimize protein with xtal waters in vacuum
+*AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
+*
+! use harmonic constraints to make minimization gradual
+! take psf and coordinates that were generated with gen-prot.inp
+! Unix environment variable CHM_HOME has to point to CHARMM installation directory
+
+open read unit 1 card name "/code/em/params/charmm27.ff/top_all27_prot_na.rtf"
+read rtf card unit 1
+close unit 1
+
+open read unit 2 card name "/code/em/params/charmm27.ff/par_all27_prot_na.prm"
+read para card unit 2
+close unit 2
+
+! Get psf and coordinates
+read psf card name s_90_315_18_aa_bbr.psf
+read coor card name s_90_315_18_aa_bbr.crd
+
+stream "/code/em/params/radii_prot_na_dfg.str"
+
+*FILENAME: minimize.inp
+*PURPOSE:  minimize protein with xtal waters in vacuum
+*AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
+*
+! use harmonic constraints to make minimization gradual
+! take psf and coordinates that were generated with gen-prot.inp
+! Unix environment variable CHM_HOME has to point to CHARMM installation directory
+
+! Save coordinates also in comparsion coordinate set for later use
+coor copy comp
+
+! Harmonic constraints on all atoms
+cons harm force 20.0 sele all end
+
+! First used Steepest Descent (a gentle minimizer)
+minimize sd nstep 100 cdie eps 1.0 fshift vshift cutnb 13.0 ctofnb 12.0
+
+! How different is the structure now?
+coor orie rms sele all end
+
+! Reduce harmonic constraints and minimize some more
+cons harm force 10.0 sele all end
+minimize abnr nstep 50
+coor orie rms sele all end
+
+! turn off harmonic constraints
+cons harm force 0.0 sele all end
+! then small constraints on backbone only
+cons harm force 5.0 sele (segid A .or. segid B) .and. -
+    (type C .or. type N .or. type CA .or. type O) end
+
+minimize abnr nstep 50
+coor orie rms sele all end
+cons harm force  0.0 sele all end
+
+open write unit 69 form name OUTPUT_enr.dat
+write title unit 69
+*Min, Bond, Angles, Dihedrals, Impropers, VDW, ELEC
+*
+
+open write unit 70 form name OUTPUT_rmsd.dat
+
+write title unit 70
+*Min, full, center, link, rotate, ener
+*
+
+set j 10
+label loop
+
+minimize abnr nstep 10
+coor orie rms sele all end
+
+write coor card name OUTPUT_@j.crd
+* FILEID coordinates after some minimization
+* rmsd from xtal: ?rms
+* total energy: ?ener
+*
+
+set enr ?ENER
+set bnd ?BOND
+set ang ?ANGL
+set dih ?DIHE
+set imp ?IMPR
+set vdw ?VDW
+set ele ?ELEC
+
+write title unit 69
+*@j, @bnd, @ang, @dih, @imp, @vdw, @ele
+*
+
+open read unit 1 card name OUTPUT_@j.crd
+read coor unit 1 card
+close unit 1
+
+coor orien rms sele type CA end
+set rmsfull ?RMS
+
+! example ROT1 = resid 1 : 34 
+coor orien rms sele (type CA .and. ((segid A .and. (ROT1)) .or. (segid B .and. (ROT2)))) end
+set rmsrotate ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. (LIN1)) .or. (segid B .and. (LIN2)))) end
+set rmslinker ?RMS
+
+coor orien rms sele (type CA .and. ((segid A .and. (CEN1)) .or. (segid B .and. (CEN2)))) end
+set rmscenter ?RMS
+
+write title unit 70
+*@j, @rmsfull, @rmscenter, @rmslinker, @rmsrotate, @enr
+*
+
+incr j by 10
+if j le 1000 goto loop
+close unit 69
+close unit 70
+!#######################################################
+open write unit 69 form name OUTPUT_mmgbsa.dat
+
+write title unit 69
+*Min, elecS, gbenD, vdwaD, aspD
+*
+
+set jj 10
+label loop2
+
+open read unit 1 card name OUTPUT_@jj.crd
+read coor unit 1 card
+close unit 1
+
+stream "/code/em/params/radii_prot_na_dfg.str"
+
+gbsw gbener molsurf sw 0.2 sgamma 0.01 dgp 1.5 -
+aa0 1.2045 aa1 0.1866 epsp 1.0 epsw 80.0
+
+nbond -
+inbfrq 10 ctonnb 960.0 ctofnb 980.0 cutnb 900.0 wmin 1.5  -
+elec atom switch cdiel eps 1.0 vdw vatom vswitch -
+e14fac 1.0 nbxmod 5
+
+energy
+
+stream "/code/em/params/radii_prot_na_dfg.str"
+
+set eleB ?ELEC
+set gbeB ?GBEN
+set vdwB ?VDW
+set aspB ?ASP
+
+coor trans xdir 0 ydir 0 zdir 500 factor 1.0 -
+  sele (segid A) end
+
+energy
+
+set eleU ?ELEC
+set gbeU ?GBEN
+set vdwU ?VDW
+set aspU ?ASP
+
+calc eleD @eleB - @eleU
+calc gbeD @gbeB - @gbeU
+calc vdwD @vdwB - @vdwU
+calc aspD @aspB - @aspU
+
+write title unit 69
+*@jj, @eleD, @gbeD, @vdwD, @aspD
+*
+
+incr jj by 10
+if jj le 1000 goto loop2
+
+close unit 69
+!################################################################
