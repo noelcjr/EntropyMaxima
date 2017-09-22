@@ -1,0 +1,2 @@
+read psf card name {{in_filename}}.psf
+

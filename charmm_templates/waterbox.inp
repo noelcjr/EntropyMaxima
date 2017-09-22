@@ -24,7 +24,7 @@ close unit 21
 !label loop
 
 set inpsf = "PATH/INFILE.psf"
-set incrd = "PATH/INFILE_min3.crd"
+set incrd = "PATH/INFILE_1000.crd"
 set outpsf1  = OUTFILE.psf
 set outcrd1  = OUTFILE.crd
 set outpdb1  = OUTFILE.pdb

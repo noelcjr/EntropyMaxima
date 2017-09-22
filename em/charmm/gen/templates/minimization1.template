@@ -1,29 +1,7 @@
-*FILENAME: minimize.inp
-*PURPOSE:  minimize protein with xtal waters in vacuum
-*AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
-*
-! use harmonic constraints to make minimization gradual
-! take psf and coordinates that were generated with gen-prot.inp
-! Unix environment variable CHM_HOME has to point to CHARMM installation directory
-
-open read unit 1 card name "/code/em/params/charmm27.ff/top_all27_prot_na.rtf"
-read rtf card unit 1
-close unit 1
-
-open read unit 2 card name "/code/em/params/charmm27.ff/par_all27_prot_na.prm"
-read para card unit 2
-close unit 2
-
-! Get psf and coordinates
-read psf card name s_90_315_18_aa_bbr.psf
-read coor card name s_90_315_18_aa_bbr.crd
-
-stream "/code/em/params/radii_prot_na_dfg.str"
-
-*FILENAME: minimize.inp
-*PURPOSE:  minimize protein with xtal waters in vacuum
-*AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
-*
+! FILENAME: minimize.inp
+! PURPOSE:  minimize protein with xtal waters in vacuum
+! AUTHOR:   Lennart Nilsson, Karolinska Institutet, October 2003
+!
 ! use harmonic constraints to make minimization gradual
 ! take psf and coordinates that were generated with gen-prot.inp
 ! Unix environment variable CHM_HOME has to point to CHARMM installation directory
@@ -48,19 +26,19 @@ coor orie rms sele all end
 ! turn off harmonic constraints
 cons harm force 0.0 sele all end
 ! then small constraints on backbone only
-cons harm force 5.0 sele (segid A .or. segid B) .and. -
+cons harm force 5.0 sele (segid {{A}} .or. segid {{B}}) .and. -
     (type C .or. type N .or. type CA .or. type O) end
 
 minimize abnr nstep 50
 coor orie rms sele all end
 cons harm force  0.0 sele all end
 
-open write unit 69 form name OUTPUT_enr.dat
+open write unit 69 form name {{OUTFILE}}_enr.dat
 write title unit 69
 *Min, Bond, Angles, Dihedrals, Impropers, VDW, ELEC
 *
 
-open write unit 70 form name OUTPUT_rmsd.dat
+open write unit 70 form name {{OUTFILE}}_rmsd.dat
 
 write title unit 70
 *Min, full, center, link, rotate, ener
@@ -72,7 +50,7 @@ label loop
 minimize abnr nstep 10
 coor orie rms sele all end
 
-write coor card name OUTPUT_@j.crd
+write coor card name {{OUTFILE}}_@j.crd
 * FILEID coordinates after some minimization
 * rmsd from xtal: ?rms
 * total energy: ?ener
@@ -90,7 +68,7 @@ write title unit 69
 *@j, @bnd, @ang, @dih, @imp, @vdw, @ele
 *
 
-open read unit 1 card name OUTPUT_@j.crd
+open read unit 1 card name {{OUTFILE}}_@j.crd
 read coor unit 1 card
 close unit 1
 
@@ -98,13 +76,13 @@ coor orien rms sele type CA end
 set rmsfull ?RMS
 
 ! example ROT1 = resid 1 : 34 
-coor orien rms sele (type CA .and. ((segid A .and. (ROT1)) .or. (segid B .and. (ROT2)))) end
+coor orien rms sele (type CA .and. ((segid {{A}} .and. ({{ROTA}})) .or. (segid {{B}} .and. ({{ROTB}})))) end
 set rmsrotate ?RMS
 
-coor orien rms sele (type CA .and. ((segid A .and. (LIN1)) .or. (segid B .and. (LIN2)))) end
+coor orien rms sele (type CA .and. ((segid {{A}} .and. ({{LINA}})) .or. (segid {{B}} .and. ({{LINB}})))) end
 set rmslinker ?RMS
 
-coor orien rms sele (type CA .and. ((segid A .and. (CEN1)) .or. (segid B .and. (CEN2)))) end
+coor orien rms sele (type CA .and. ((segid {{A}} .and. ({{CENA}})) .or. (segid {{B}} .and. ({{CENB}})))) end
 set rmscenter ?RMS
 
 write title unit 70
@@ -116,7 +94,7 @@ if j le 1000 goto loop
 close unit 69
 close unit 70
 !#######################################################
-open write unit 69 form name OUTPUT_mmgbsa.dat
+open write unit 69 form name {{OUTFILE}}_mmgbsa.dat
 
 write title unit 69
 *Min, elecS, gbenD, vdwaD, aspD
@@ -125,7 +103,7 @@ write title unit 69
 set jj 10
 label loop2
 
-open read unit 1 card name OUTPUT_@jj.crd
+open read unit 1 card name {{OUTFILE}}_@jj.crd
 read coor unit 1 card
 close unit 1
 
@@ -149,7 +127,7 @@ set vdwB ?VDW
 set aspB ?ASP
 
 coor trans xdir 0 ydir 0 zdir 500 factor 1.0 -
-  sele (segid A) end
+  sele (segid {{A}}) end
 
 energy
 

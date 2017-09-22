@@ -28,7 +28,8 @@ setuptools.setup(
       platforms='Tested on a Ubuntu linux machine with python 2.7.12. Should work with Windows or Macs but not tested.',
       scripts=['em/scripts/add_residues.py',
                'em/scripts/charmm_setup_water_to_ion_replacer.py','em/scripts/del_residue.py',
-               'em/scripts/flower.py','em/scripts/gen_csv.py','em/scripts/MMGBSA_CA.py','em/scripts/pdb_cif.py'],
+               'em/scripts/flower.py','em/scripts/gen_csv.py','em/scripts/MMGBSA_CA.py','em/scripts/pdb_cif.py',
+               'em/scripts/minimization.py'],
       install_requires=[
         'biopython',
         'pandas',

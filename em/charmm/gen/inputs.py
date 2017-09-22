@@ -12,6 +12,7 @@ import string
 import em.manipulate.Molecular_Rigid_Manipulations as MRM
 from em.charmm.gen import *
 from em.charmm import run
+import re
 
 def fix_pdb_from_CHARMM(PDB_file, a=21, b=72):
     """ This fixes the problem of CHARMM not generating a chain id.
@@ -292,18 +293,36 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
     for i in sp.get_chains():
         _print_template(outFile,fix_sequence(chains_info[i.id]))
     _print_template(outFile,wmain('charge'))
-    _print_template(outFile,out_psf(input_name.lower()+'r'))
-    _print_template(outFile,out_ic(input_name.lower()+'r'))
-    _print_template(outFile,in_crd(input_name.lower()))
+    _print_template(outFile,write_psf(input_name.lower()+'r'))
+    _print_template(outFile,write_ic(input_name.lower()+'r'))
+    _print_template(outFile,read_crd(input_name.lower()))
     _print_template(outFile,build_heavy_atoms())
     _print_template(outFile,build_hydrogens())
     _print_template(outFile,wmain('charge'))
-    _print_template(outFile,out_crd(output_name+'r'))
-    _print_template(outFile,out_pdb(output_name+'r'))
-    _print_template(outFile,out_psf_xplor(output_name+'r'))
+    _print_template(outFile,write_crd(output_name+'r'))
+    _print_template(outFile,write_pdb(output_name+'r'))
+    _print_template(outFile,write_psf_xplor(output_name+'r'))
     _print_template(outFile,stop())
     outFile.close()
     run.run("setup_"+input_name+".inp","setup_"+input_name+".out")
-    # TODO WARNING: Check output if Ions are present in the original pdb structure.
-    #               Check INF and SEQ files for systems with missing amino acids.')
-    #               Modifications to the code might be required.')
+
+def minimization_1(input_file,input_info):
+    input_name = os.path.basename(input_file).split('.')[0]
+    dir_name = os.path.dirname(input_file)
+    output_name = input_name.lower()
+    outFile = open("min1_"+input_name+".inp", 'w')
+    _print_template(outFile,gen_parameters().split('/n'))
+    _print_template(outFile,stream_nina_radii())
+    if len(dir_name) == 0:
+        _print_template(outFile,read_psf(input_name))
+        _print_template(outFile,read_crd2(input_name))
+    else:
+        _print_template(outFile,read_psf(dir_name+"/"+input_name))
+        _print_template(outFile,read_crd2(dir_name+"/"+input_name))
+    input_list = input_info.split(':')
+    input_list = [i.replace('-', ',') for i in input_list]
+    input_list = [i.split(',') for i in input_list]
+    _print_template(outFile,minimization1(output_name,input_list))
+    _print_template(outFile,stop())
+    outFile.close()
+    run.run("min1_"+input_name+".inp","min1_"+input_name+".out")

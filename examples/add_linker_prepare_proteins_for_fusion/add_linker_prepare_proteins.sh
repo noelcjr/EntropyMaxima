@@ -2,12 +2,8 @@
 
 #TITLE: Making a fusion peptide by joining Insulin and Leucine Zipper with a linker.
 
-# REQUIREMENTS: Entropy and VMD. A VMD state for visualization is created in the last
-#               two lines of this script. This VMD file needs to be copied outside the
-#               conteiner to be opened in VMD.
-               
 # Extending a protein structure by adding a linker to the N-terminal and fusing this
-# to another protein.  
+# to another protein's C-terminal.  
 
 mkdir flower_pot
 cd flower_pot
@@ -79,7 +75,8 @@ script_cmd add_residues.py --apn "1,2,B,Ndir" --res $linker2 --inp 2HIU.csv --ou
 
 script_cmd rm 2HIU_2.pdb 2HIU_3.pdb 2HIU_4.pdb 2HIU_5.pdb 2HIU_6.pdb 2HIU_7.pdb 2HIU_8.pdb 2HIU_9.pdb 2HIU_10.pdb
 
-#7. For insulin and Leucine Zipper, reduce adds hydrogens to histidines, pdb_cif.py --prepare prepares files for charmm, and then charmm is ran.
+#7. For insulin and Leucine Zipper, reduce adds hydrogens to histidines, pdb_cif.py --prepare prepares files for
+#   charmm, and then charmm is ran.
 script_cmd pdb_cif.py prepare --input 2HIU_1.pdb --terminals "A,none,CTER:B,none,CTER"
 script_cmd pdb_cif.py prepare --input 2ZTA_1.pdb --terminals "A,ACE,none:B,ACE,none"
 
@@ -89,21 +86,13 @@ script_cmd pdb_cif.py prepare --input 2ZTA_1.pdb --terminals "A,ACE,none:B,ACE,n
 script_cmd pdb_cif.py fixpdb --input 2hiu_1r.pdb
 script_cmd pdb_cif.py fixpdb --input 2zta_1r.pdb
 
-#10.Build a flower or dandalion type of ensemble. That is, take the insulin with the linker addition, the leucine zipper
-#   and put it together into a single structure. That means that chains are joined and relabled according to --link.
-#   After that, the construct is aligned along the y axes, and replicated at 45 degrees angles in every direction.
-#   These are actually 26 separate structures that are output to a unique PDB file. The rasoining behind this is that
-#   we do not know which way Inuslin would bind to Leucine zipper, so we try from every angle in 3D and choosen 
-#   intervals.
-
-mkdir "2hiu_2zta_AA_"$linker1s"_BB_"$linker2s
-cd "2hiu_2zta_AA_"$linker1s"_BB_"$linker2s
-script_cmd flower.py --center ../2hiu_1r.pdb --rotate ../2zta_1r.pdb --angle 45 --distance 45 --map yes --link "A:A,B:B"
-
-#11.A flower was built in the previous step. The flower.vmd file opens the structure in VMD. This
-#   allows you to see the 26 pdb files output. The vmd and pdb files need to be copied from the docker 
-#   container to the operating system for visualization. The following bash command is great to substitute
-#   system specific paths during installation
-script_cmd cp ../../flower.vmd .
+# CONCLUSION: In this example we fused 2hiu (insulin) with a linker. The structures were properly prepared
+#             by adding missing residues and atoms, and adding terminals. So far this script has not fused the 
+#             extended 2hiu (insulin) to 2zta (leucine zipper). The following example, make_flower_and_minimize,
+#             the structures prepared in this example (2hiu_1r.pdb and 2zta_1r.pdb) will be joined to be one
+#             protein. The joining of these two structures will be done from every possible angle of approach
+#             and at different distances. This will create 26 structures of the same joined proteins in differen
+#             orientational approaches that when open all at once for vizualization, it resembles a dandalion, or
+#             a flower with insulin at the middle and leucine zipper around resembling sepals.  
 
 cd ../..

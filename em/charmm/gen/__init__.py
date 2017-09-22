@@ -28,28 +28,36 @@ def wmain(value):
     template = env.get_template('wmain.template')
     return template.render(val=value)
 
-def out_psf(file_name):
+def write_psf(file_name):
     template = env.get_template('write_psf.template')
     return template.render(out_filename=file_name)
 
-def out_psf_xplor(file_name):
+def write_psf_xplor(file_name):
     template = env.get_template('write_psf_xplor.template')
     return template.render(out_filename=file_name)
 
-def out_pdb(file_name):
+def read_psf(file_name):
+    template = env.get_template('read_psf.template')
+    return template.render(in_filename=file_name)
+
+def write_pdb(file_name):
     template = env.get_template('write_pdb.template')
     return template.render(out_filename=file_name)
 
-def out_ic(file_name):
+def write_ic(file_name):
     template = env.get_template('write_ic.template')
     return template.render(out_filename=file_name)
 
-def out_crd(file_name):
+def write_crd(file_name):
     template = env.get_template("write_crd.template")
     return template.render(out_filename=file_name)
 
-def in_crd(file_name):
+def read_crd(file_name):
     template = env.get_template("read_crd.template")
+    return template.render(in_filename=file_name)
+
+def read_crd2(file_name):
+    template = env.get_template("read_crd2.template")
     return template.render(in_filename=file_name)
 
 def build_heavy_atoms():
@@ -63,6 +71,19 @@ def build_hydrogens():
 def stop():
     template = env.get_template("stop.template")
     return template.render()
+
+def minimization1(outfile,input_list):
+    template = env.get_template("minimization1.template")
+    return template.render(
+        OUTFILE=outfile,
+        A=input_list[0][0],
+        ROTA="resid "+input_list[0][1]+" : "+input_list[0][2],
+        LINA="resid "+input_list[0][3]+" : "+input_list[0][4],
+        CENA="resid "+input_list[0][5]+" : "+input_list[0][6],
+        B = input_list[1][0],
+        ROTB="resid "+input_list[1][1]+" : "+input_list[1][2],
+        LINB="resid "+input_list[1][3]+" : "+input_list[1][4],
+        CENB="resid "+input_list[1][5]+" : "+input_list[1][6])
 
 def gen_setup_one():
     template = env.get_template('setup_one.inp.template')
