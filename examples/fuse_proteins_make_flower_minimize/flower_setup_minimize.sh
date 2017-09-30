@@ -12,6 +12,7 @@ then
    echo "usage: $0 Folder insulin_pdb_path lue_zip_pdb_path A:A,B:B 45 30 45 5 terminals regions"
    exit
 else
+   script_cmd cd flower_pot
    dir=$1
    if [ ! -d $dir ];
    then
@@ -65,4 +66,5 @@ else
       done
       cd ..
    done
+   cd ..
 fi

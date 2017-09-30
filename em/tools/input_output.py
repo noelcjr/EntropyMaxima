@@ -213,6 +213,14 @@ def gap_report(optionsinp):
             for c in inserts_report:
                 print(c)
 
+def write_pdb_from_crd(lines):
+    line = '{:6}{:>5} {:4}{:1}{:3} {:1}{:>4d}{:1}   {:>8.3f}{:>8.3f}{:>8.3f}{:>6.2f}{:>6.2f}          {:>2}{:2}'
+    pdb_converted_lines = []
+    for i in lines:
+        t = i.split()
+        pdb_converted_lines.append(line.format('ATOM',t[0],t[3],'',t[2],t[7],int(t[1]),'',float(t[4]),float(t[5]),\
+                                               float(t[6]),float('0'),float('0'),t[3][0],''))
+    return pdb_converted_lines
 
 def write_pdb(SS, basedir, filename, output='original'):
     ''' TODO: write pdbdirectly with all chains the right way.
@@ -696,7 +704,6 @@ class crd(object):
                         crd_contents.append(ii)
                         atom_number += 1
         return crd_contents
-
 
 class psf(object):
     # http://www.ks.uiuc.edu/Training/Tutorials/namd/namd-tutorial-win-html/node24.html

@@ -15,8 +15,8 @@ then
 fi
 
 mkdir DDDDK_DDDDK
-insulin_path="../add_linker_prepare_proteins_for_fusion/setup/2hiu_1r.pdb"
-lue_zip_path="../add_linker_prepare_proteins_for_fusion/setup/2zta_1r.pdb" 
+insulin_path="../../add_linker_prepare_proteins_for_fusion/setup/2hiu_1r.pdb"
+lue_zip_path="../../add_linker_prepare_proteins_for_fusion/setup/2zta_1r.pdb" 
 terminals="A,ACE,CTER:B,ACE,CTER"
 regions="A,1-34,35-39,40-60:B,1-34,35-39,40-69"
 
@@ -24,3 +24,8 @@ time ./flower_setup_minimize.sh DDDDK_DDDDK $insulin_path $lue_zip_path "A:A,B:B
 time ./flower_setup_minimize.sh DDDDK_DDDDK $insulin_path $lue_zip_path "A:B,B:A" 45 30 45 5 $terminals $regions &> DDDDK_DDDDK/2hiu_1r_2zta_1r_AB_BA_45_30_45_5.out &
 time ./flower_setup_minimize.sh DDDDK_DDDDK $lue_zip_path $insulin_path "A:A,B:B" 45 30 45 5 $terminals $regions &> DDDDK_DDDDK/2zta_1r_2hiu_1r_AA_BB_45_30_45_5.out &
 time ./flower_setup_minimize.sh DDDDK_DDDDK $lue_zip_path $insulin_path "A:B,B:A" 45 30 45 5 $terminals $regions &> DDDDK_DDDDK/2zta_1r_2hiu_1r_AB_BA_45_30_45_5.out &
+#ls -lt DDDDK_DDDDK/*/*/*dat > data_outputs.txt
+echo "DDDDK_DDDDK" > data_outputs.txt
+ls -l DDDDK_DDDDK/ | awk '{print $9}' >> data_outputs.txt
+ls -l DDDDK_DDDDK/2zta_1r_2hiu_1r_ab_ba_45 | awk '{print $9}' >> data_outputs.txt
+
