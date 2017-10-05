@@ -21,6 +21,7 @@ else
       exit
    fi
    script_cmd cd $dir
+   # Relative from where the script is run.
    relative_path="../../"
    centerPDB=$2
    rotatePDB=$3
@@ -30,8 +31,8 @@ else
    distance=$7
    interval=$8
    
-   flwr1=${chn_lnk1//[,]/_}
-   flwr1=${flwr1//[:]/}
+   flwr1=${chn_lnk1//[:]/_}
+   flwr1=${flwr1//[,]/}
    rnm_chn1=${flwr1: 1:1}
    rnm_chn2=${flwr1: 4:1}
    centerHeader=`basename ${centerPDB%.*b}`
@@ -40,7 +41,6 @@ else
    do
       current_flwr=$centerHeader"_"$rotateHeader"_"$flwr1"_"$i
       current_flwr=${current_flwr,,}
-      echo $current_flwr
       if [ -d $current_flwr ];
       then
          echo "Warning: Folder for center structure already exist. Script will exit without any changes to the folder to avoid losing data. Delete Manually if needed."
@@ -59,11 +59,11 @@ else
         script_cmd cd $folder
         
         script_cmd pdb_cif.py prepare --input $file --terminals $9
-        script_cmd minimization.py --input $folder"r.crd" --info $10
+        script_cmd minimization.py --input $folder"r.crd" --info ${10}
 
         script_cmd cd ..
         script_cmd mv $folder "d_"$folder
-      done
+        exit
       cd ..
    done
    cd ..

@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 """
 Created on Fri Jun 24 16:49:07 2016
 @author: noel
@@ -20,49 +19,85 @@ from Bio.PDB.PDBIO import PDBIO
 from Bio.PDB.Vector import *
 import Bio.PDB as struct
 
-def join_chains(first_struct,begining_struc,end_struct,chains_to_connect,chains_range):
+def join_chains(center_struct,rotate_struct,joint_struct,fusion_order,linker):
     """ Join chains in to different structures and adds them to a third structure for output. This can only join two
         chains, for more, just add more chains to already joined chains by calling this function multiple times. All
         amino acids in the chain will be joined. Chains are joined by sequence number, but the chains might be sepa-
         rated, and they might require minimization or translation to join.
-        first_struct:       Structure where the joininig chains will be together.
-        begining_struct:    When joining two chains, this one will be the chain with the N-terminal.
-        end_struct:         This is the chain that will follow the first chain and will have a C-ter.
-        chains_to_connect:  Only two chains can be joined at once, and they must be two strings in a list. ex: ['A','B']
-        chains_range:       Subsections of chains to be joined. Ex: [(2,4),(5,9)]
+        first_struct:       Structure where the joininig chains will be together. New Chain.
+        begining_struct:    This one will be the one rotated.
+        end_struct:         This one will be at the centers.
+        linker              linker. Describes chains to connect and the connencting terminals in any order.
     """
-    if len(chains_to_connect) != 2:
+    #join_chains(s3,s2,s1,lnk_o[0],join_range1)
+    linker = link_o.split(':')
+    linker = [i.split(',') for i in linker]
+    lnk_label = ''
+    for i in linker:
+        lnk_label += '_'
+        for j in i:
+            lnk_label += j.lower()
+    chain_info_s1 = get_chains_info(s1)#center_struct)
+    chain_info_s2 = get_chains_info(s2)#rotate_struct)
+    chains_range = []
+    chains_range.append([(chain_info_s1[linker[0][0][0]]['min_res'],chain_info_s1[linker[0][0][0]]['max_res']),
+                        (chain_info_s2[linker[0][1][0]]['min_res'],chain_info_s2[linker[0][1][0]]['max_res'])])
+    chains_range.append([(chain_info_s1[linker[1][0][0]]['min_res'],chain_info_s1[linker[1][0][0]]['max_res']),
+                        (chain_info_s2[linker[1][1][0]]['min_res'],chain_info_s2[linker[1][1][0]]['max_res'])])
+    if len(linker) != 2:
         print("ERROR: There can only be two chains in the chains_to_connect list. Program exits with an ERROR.")
         sys.exit(1)
-    add_res = []
-    rotate_chain = chains_to_connect[0]
-    center_chain = chains_to_connect[1]
-    for ii in begining_struc[0].get_chains():
-        if ii.get_id() == rotate_chain:
-            for jj in ii.get_residues():
-                if jj.get_id()[1] >= chains_range[0][0] and jj.get_id()[1] <= chains_range[0][1]: 
-                    add_res.append(jj.copy())
-    
-    for ii in end_struct[0].get_chains():
-        if ii.get_id() == center_chain:
-            for jj in ii.get_residues():
-                if jj.get_id()[1] >= chains_range[1][0] and jj.get_id()[1] <= chains_range[1][1]: 
-                    add_res.append(jj.copy())
-    newChain = struct.Chain.Chain(chains_to_connect[0])
-    count = 1
-    for i in add_res:
-        if i.get_id() != (' ',count,' '):
-            i.id = (' ',count,' ')
-        newChain.add(i)
-        count += 1
-    for ii in newChain.get_residues():
-        if ii.get_parent().get_id() != rotate_chain:
-            ii.get_parent().id = rotate_chain
-    first_struct[0].add(newChain)
+    cntr = 0
+    for i in linker:
+        add_center_chain_res = []
+        center_chain, center_direction = i[0].split('.')
+        for ii in center_struct[0].get_chains():
+            if ii.get_id() == center_chain:
+                for jj in ii.get_residues(): 
+                    add_center_chain_res.append(jj.copy())
+        if center_direction == 'r':
+            add_center_chain_res = add_center_chain_res[::-1]
+        elif center_direction == 'f':
+            pass
+        else:
+            print("Error: Wrong option for chain's amino acid order entered. Only 'f' for forward, or 'r' for reverse.")
+            sys.exit(1)
+        add_rotate_chain_res = []       
+        rotate_chain, rotate_direction = i[1].split('.')
+        for ii in rotate_struct[0].get_chains():
+            if ii.get_id() == rotate_chain:
+                for jj in ii.get_residues(): 
+                    add_rotate_chain_res.append(jj.copy())
+        if rotate_direction == 'r':
+            add_rotate_chain_res = add_rotate_chain_res[::-1]
+        elif rotate_direction == 'f':
+            pass
+        else:
+            print("Error: Wrong option for chain's amino acid order. Only 'f' for forward, or 'r' for reverse.")
+            sys.exit(1)
+        newChain = struct.Chain.Chain(linker[cntr][0][0])
+        count = 1
+        if fusion_order == 'CR': 
+            add_res = add_center_chain_res + add_rotate_chain_res
+        elif fusion_order == 'RC':
+            add_res = add_rotate_chain_res + add_center_chain_res
+        else:
+            print("Error: Wrong option for fusion order. Only 'CR' or 'RC', for Center to Rotate or viceversa")
+        for j in add_res:
+            #if j.get_id() != (' ',count,' '):
+            j.id = (' ',count,' ')
+            newChain.add(j)
+            count += 1
+        for ii in newChain.get_residues():
+            if ii.get_parent().get_id() != rotate_chain:
+                ii.get_parent().id = rotate_chain
+        joint_struct[0].add(newChain)
+        cntr += 1
+    return ''.join(lnk_label.split('.'))
 
 def get_chains_info(struct):
     """
-       For now it only gets the macimum and minimum aminoa acid for each chain, but we could give out more info later.
+       For now it only gets the maximum and minimum amino acid for each chain, but we could give out more info later.
     """
     dictionary_info = {}
     for i in struct.get_chains():
@@ -79,49 +114,33 @@ def get_chains_info(struct):
     return dictionary_info
 def main():
     usage = "usage: %prog [options]"
-    d = "It takes two pdbs and aligns the structures in different \
-    orientations. A center-pdb is placed at (0,0,0),and a rotate-pdb \
-    is place around at given angle intervals and distances. \
-    The program assumes that the rotated protein's N-terminal will \
-    become the N-Terminal when joined to the center protein. \
-    WARNING: The programs needs to be extended to allow the reading \
-    of the dipole vectors of the two proteins, and align them in any \
-    way the user wants. As is, it centers the center-protein in whatever \
-    orientation it is, and it alings the center of charge vector with \
-    vector <0, 1, 0>. From that starting point, it rotates rotate-protein \
-    by the angle given as input."
+    d = "It takes two pdbs and aligns the structures in different orientations. A center-pdb is placed at (0,0,0),and \
+    a rotate-pdb is place around center at given angle intervals and distances. You can choose to join chains to make \
+    a fusion peptide, or, if no, you can just align proteins for searching protein-protein interactions."
     option_parser = optparse.OptionParser(usage,description=d)
     option_parser.add_option("--center", type="str", \
-                             help="Path to pdb structure to place at (0,0,0) \
-                             according to its center of mass.")
+                             help="Path to pdb structure to place at (0,0,0) according to its center of mass.")
     option_parser.add_option("--rotate", type="str", \
-                             help="Path to pdb structure to rotated around \
-                             center structure at X degree intervals. Angle \
-                             intervals must be multiple of 360.")
+                             help="Path to pdb structure to rotated around center structure at X degree intervals. \
+                             Angle intervals must be multiple of 360.")
     option_parser.add_option("--angle", type="int", \
-                             help="Angle intervals used to place rotated \
-                             structured around center one.")
+                             help="Angle intervals used to place rotated structured around center one.")
     option_parser.add_option("--distance", type="float",\
-                             help="Center of mass distance between rotated and \
-                            centered structures.")
+                             help="Center of mass distance between rotated and centered structures.")
     option_parser.add_option('--id', type="str",action = "store", 
-                             default = 's', help = "A prefix id to identify the \
-                             output structures. Default is s.")    
-    option_parser.add_option('--map', type="str",action = "store", 
-                             default = 'no', help = "Optional arg if not present it \
-                             is 'no', and it will add rotate with different chain \
-                             identifiers. if it is 'yes' then it expects --link \
-                             to be something different from 'X' and in the right format.")
-    option_parser.add_option('--link', type="str",action = "store", 
-                             default = "X", help = "Optional arg if not present it \
-                             is 'X', and it will add \'rotate\' structure with different chain \
-                             identifiers. If it is 'yes', it will add the \'rotate\' structure \
-                             with the same identifiers as \'center\' structure in the following \
-                             format: A:A,B:B or chain A in \'rotate\' will link with A in \'center\' \
-                             and B to B respectively. When both proteins have two chains, the only \
-                             other option is A:B,B:A. There can be as many chains linked separated \
-                             by commas but be careful because the program does not checks the \
-                             physicality of this connections.")
+                             default = 's', help = "A prefix id to identify the output structures. Default is s.")    
+    option_parser.add_option('--link', type="str",action = "store", default = 'x', \
+                             help = "Option only works with a 'yes' value from the --join option. It will join chains \
+                             in the following format, for example: 'A.r,B.f:B.f,A.f'. This --link option can be read as\
+                             the centered structure's chain 'A' amino acid sequence numbering is reversed and joind to \
+                             the rotated structure's chain B with amino acid sequenced numbers not reversed, or kept \
+                             forward. The values after the column are read similarly. Default if missing: 'x'")
+    option_parser.add_option('--join', type="str",action = "store", default = 'no', \
+                             help = "Only two possible options 'CR' and 'RC'. In both options C stands for Center, and \
+                             R for rotate. CR means that the numbering starts at the first amino acid of --center \
+                             structure up to its end, and it is followed by the first amino acid of --rotate up to its \
+                             end. This option might overide the directions (r or f) of amino acid numbering for each\
+                             chain in --link option. This gives total manipulation flexibility for joining chains.")
     options, args = option_parser.parse_args()     
     if not os.path.exists(options.center):
         print "Error: File path for molecule to be centered does not exist."
@@ -142,29 +161,22 @@ def main():
     #directory = os.path.dirname(options.center)
     filepath1 = options.center
     filepath2 = options.rotate
-    map_o = options.map
-    lnk_o = options.link
+    join_o = options.join
+    link_o = options.link
     ###########################################################################
     # Uncomment to test from spyder IDE
-    # pdb_parser = PDBParser(QUIET = True)
-    # Angle = 45
-    # distance = 45
-    ##file_name = os.path.basename(options.out).split('.')[0]
-    # directory = "/home/noel/Projects/Protein_design/ccl_lectures/Lecture_4/"
-    # filepath1 = directory+'2hiu_1rr.pdb'
-    # filepath2 = directory+'2zta_1rr.pdb'
-    # param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
-    # map_o = "yes"
-    # lnk_o = "A:A,B:B"
+    pdb_parser = PDBParser(QUIET = True)
+    Angle = 45
+    distance = 45
+    #file_name = os.path.basename(options.out).split('.')[0]
+    directory = "/home/noel/Projects/Protein_design/ccl_lectures/Lecture_4/"
+    filepath1 = directory+'2hiu_1rr.pdb'
+    filepath2 = directory+'2zta_1rr.pdb'
+    #param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
+    join_o = "RC"
+    link_o = "A.f,A.f:B.f,B.f"
     ####################################################################################################################
     # Process strig that the determines how the centered and rotated structures will be connected.
-    lnk_o = lnk_o.split(',')
-    lnk_o = [i.split(':') for i in lnk_o]
-    lnk_label = ''
-    for i in lnk_o:
-        lnk_label += '_'
-        for j in i:
-            lnk_label += j.lower()
     params = CP.read_charmm_FF()
     cmc = md.CenterOfMassCalculator(params)
     rig = MRM.Molecular_Rigid_Manipulation(params)
@@ -191,7 +203,7 @@ def main():
     if countS2 != 1:
         print("ERROR: Number of models cannot be different from 1. Models found:"+str(countS2))
         print("       Make sure Rotated PDBs have only one model.")
-        sys.exit(1)  
+        sys.exit(1)
     rig.translate_molecule(s2,modelS2,rig.center_molecule(cmc.get_center_of_mass(s2)))
     ####################################################################################################################
     # TODO: This works only for angles between 0 and 90 not including 0, and 90 and will generate angles in all 8 
@@ -223,7 +235,7 @@ def main():
     ####################################################################################################################
     # This works when you do not want to link two proteins but instead you want to place one around the other and check
     # protein-protein interaction's binding affinity.
-    if map_o.lower() == 'no' and options.link.lower() == 'x':
+    if join_o.lower() == 'no' and link_o.lower() == 'x':
         ids = {}
         for i in string.ascii_uppercase:
             ids[i] = False
@@ -231,7 +243,7 @@ def main():
         for i in s1[0]:
             ids[i.id] = True
         # Now we go through structure 2 and if there are any chains with the same id as those found in structure 1, 
-        # we will change the chain ids to something else becase if chain id is repeated in the same structure
+        # we will change the chain ids to something else becase if chain ids are repeated in the same structure
         # it will be consider one chain when they are actually separated.
         for i in s2[0]:
             if ids[i.id]:
@@ -253,9 +265,6 @@ def main():
         s3.id = 'Ensamble'
         for i in s2.get_chains():
             s3[0].add(i)
-    else:
-        chain_info_s1 = get_chains_info(s1)
-        chain_info_s2 = get_chains_info(s2)
     ###############################################################################
     structure_id = 0
     for i in locations:
@@ -301,23 +310,18 @@ def main():
         # This 45 changes to explore different distaces between insulin and LZ
         ii = [k*distance for k in i]
         rig.translate_molecule(s2,modelS2,ii)
-        
+        ###
         # We want to join the two structures into one structure, with one model
-        # and the chains of structure 1 and 2 joined and name consistently.
-        if map_o.lower() == 'no' and lnk_o.lower() == 'x':
+        # and the chains of structure 1 and 2 joined and named consistently.
+        if join_o.lower() == 'no' and link_o.lower() == 'x':
             pass
         else:
             s3 = struct.StructureBuilder.Structure('newrot')
             s3.add(struct.Model.Model(0))
-            join_range1 = [(chain_info_s2[lnk_o[0][0]]['min_res'],chain_info_s2[lnk_o[0][0]]['max_res']),
-                           (chain_info_s1[lnk_o[0][1]]['min_res'],chain_info_s1[lnk_o[0][1]]['max_res'])]
-            join_chains(s3,s2,s1,lnk_o[0],join_range1)
-            join_range2 = [(chain_info_s2[lnk_o[1][0]]['min_res'],chain_info_s2[lnk_o[1][0]]['max_res']),
-                           (chain_info_s1[lnk_o[1][1]]['min_res'],chain_info_s1[lnk_o[1][1]]['max_res'])]
-            join_chains(s3,s2,s1,lnk_o[1],join_range2)          
+            lnk_label = join_chains(s1,s2,s3,join_o,link_o)
         io = PDBIO()
         io.set_structure(s3)
-        io.save('s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
+        io.save(directory+'s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         #io.save(directory+options.id+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         structure_id = structure_id + 1
         rig.translate_molecule(s2,modelS2,rig.center_molecule(cmc.get_center_of_mass(s2)))
