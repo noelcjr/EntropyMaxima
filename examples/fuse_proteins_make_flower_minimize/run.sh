@@ -21,10 +21,10 @@ terminals="A,ACE,CTER:B,ACE,CTER"
 regions="A,1-34,35-39,40-60:B,1-34,35-39,40-69"
 regions2="A,1-26,27-31,32-65:B,1-35,36-40,41-74"
 
-time ./flower_setup_minimize.sh DDDDK_DDDDK $insulin_path $lue_zip_path "Ac,An:Bc,Bn" 45 30 45 5 $terminals $regions &> flower_pot/DDDDK_DDDDK/2hiu_1r_2zta_1r_AA_BB_45_30_45_5.out &
-time ./flower_setup_minimize.sh DDDDK_DDDDK $insulin_path $lue_zip_path "Ac,Bn:Bc,An" 45 30 45 5 $terminals $regions &> flower_pot/DDDDK_DDDDK/2hiu_1r_2zta_1r_AB_BA_45_30_45_5.out &
-time ./flower_setup_minimize.sh DDDDK_DDDDK $lue_zip_path $insulin_path "An,Ac:Bn,Bc" 45 30 45 5 $terminals $regions2 &> flower_pot/DDDDK_DDDDK/2zta_1r_2hiu_1r_AA_BB_45_30_45_5.out &
-time ./flower_setup_minimize.sh DDDDK_DDDDK $lue_zip_path $insulin_path "An:Bc,Bn:Ac" 45 30 45 5 $terminals $regions2 &> flower_pot/DDDDK_DDDDK/2zta_1r_2hiu_1r_AB_BA_45_30_45_5.out &
+time ./flower_setup_minimize.sh DDDDK_DDDDK $insulin_path $lue_zip_path "A.f,A.f:B.f,B.f" 45 30 45 5 $terminals $regions &> flower_pot/DDDDK_DDDDK/2hiu_1r_2zta_1r_AA_BB_45_30_45_5.out &
+time ./flower_setup_minimize.sh DDDDK_DDDDK $insulin_path $lue_zip_path "A.f,B.f:B.f,A.f" 45 30 45 5 $terminals $regions &> flower_pot/DDDDK_DDDDK/2hiu_1r_2zta_1r_AB_BA_45_30_45_5.out &
+time ./flower_setup_minimize.sh DDDDK_DDDDK $lue_zip_path $insulin_path "A.f,A.f:B.f,B.f" 45 30 45 5 $terminals $regions2 &> flower_pot/DDDDK_DDDDK/2zta_1r_2hiu_1r_AA_BB_45_30_45_5.out &
+time ./flower_setup_minimize.sh DDDDK_DDDDK $lue_zip_path $insulin_path "A.f:B.f,B.f:A.f" 45 30 45 5 $terminals $regions2 &> flower_pot/DDDDK_DDDDK/2zta_1r_2hiu_1r_AB_BA_45_30_45_5.out &
 #ls -lt DDDDK_DDDDK/*/*/*dat > data_outputs.txt
 echo "DDDDK_DDDDK" > data_outputs.txt
 ls -l DDDDK_DDDDK/ | awk '{print $9}' >> data_outputs.txt

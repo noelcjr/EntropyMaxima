@@ -48,7 +48,7 @@ else
       fi
       script_cmd mkdir $current_flwr
       script_cmd cd $current_flwr
-      script_cmd flower.py --center $relative_path$centerPDB --rotate $relative_path$rotatePDB --angle $angle --distance $i --map yes --link $chn_lnk1
+      script_cmd flower.py --center $relative_path$centerPDB --rotate $relative_path$rotatePDB --angle $angle --distance $i --join yes:RC --link $chn_lnk1
       for file in $(ls s_*);
       do  
         folder=${file%.*b}

@@ -165,16 +165,16 @@ def main():
     link_o = options.link
     ###########################################################################
     # Uncomment to test from spyder IDE
-    pdb_parser = PDBParser(QUIET = True)
-    Angle = 45
-    distance = 45
+    #pdb_parser = PDBParser(QUIET = True)
+    #Angle = 45
+    #distance = 45
     #file_name = os.path.basename(options.out).split('.')[0]
-    directory = "/home/noel/Projects/Protein_design/ccl_lectures/Lecture_4/"
-    filepath1 = directory+'2hiu_1rr.pdb'
-    filepath2 = directory+'2zta_1rr.pdb'
+    #directory = "/home/noel/Projects/Protein_design/ccl_lectures/Lecture_4/"
+    #filepath1 = directory+'2hiu_1rr.pdb'
+    #filepath2 = directory+'2zta_1rr.pdb'
     #param_path = "/home/noel/Projects/Protein_design/EntropyMaxima/params/charmm27.ff/"
-    join_o = "RC"
-    link_o = "A.f,A.f:B.f,B.f"
+    #join_o = "RC"
+    #link_o = "A.f,A.f:B.f,B.f"
     ####################################################################################################################
     # Process strig that the determines how the centered and rotated structures will be connected.
     params = CP.read_charmm_FF()
@@ -321,7 +321,7 @@ def main():
             lnk_label = join_chains(s1,s2,s3,join_o,link_o)
         io = PDBIO()
         io.set_structure(s3)
-        io.save(directory+'s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
+        io.save('s'+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         #io.save(directory+options.id+'_'+angles[structure_id]+"_"+str(structure_id)+lnk_label+'.pdb')
         structure_id = structure_id + 1
         rig.translate_molecule(s2,modelS2,rig.center_molecule(cmc.get_center_of_mass(s2)))
