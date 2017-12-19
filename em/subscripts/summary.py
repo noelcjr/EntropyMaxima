@@ -1,6 +1,6 @@
 import argparse
 
-import em.tools.input_output as IO
+import em.tools.structure as structure
 
 
 def register_parser(subparsers):
@@ -14,7 +14,7 @@ def add_arguments(parser):
 
 
 def run(options):
-    IO.CIF_summary(options.input)
+    structs = structure(options.input)
 
 
 def description():

@@ -2,20 +2,16 @@ import argparse
 
 from em.tools.input_output import gap_report
 
-
 def register_parser(subparsers):
     parser = subparsers.add_parser('gaps', usage=usage(), description=description())
     add_arguments(parser)
-
 
 def add_arguments(parser):
     parser.add_argument("--input", metavar="FILE", help="Input File.", required=True)
     parser.set_defaults(func=run)
 
-
 def run(args):
     gap_report(args.input)
-
 
 def description():
     return '''This command detects gaps in the crystal structure of a protein. The search for gaps
@@ -25,7 +21,6 @@ def description():
     that the last residue number is actually the last one of the crystal structure.(TODO: use
     sequence iformation found in CIF files to detect gaps in the C-terminal end of the protein)
     '''
-
 
 def usage():
     return '\npdb_cif.py gaps --input 1BRS.pdb'

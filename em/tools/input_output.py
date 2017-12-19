@@ -8,7 +8,6 @@ import os
 import pandas as pd
 import Bio.PDB as struct
 import em.describe.utilities as utilities
-import string
 import em.manipulate.Molecular_Rigid_Manipulations as MRM
 from em.charmm.gen import *
 from em.charmm import run
@@ -16,7 +15,7 @@ from em.charmm import run
 def CIF_summary(path):
     raise NotImplementedError("CIF summary needs to be coded.")
 
-
+# Deprecated for __init__ in structure.py 
 def _read_structure(path, pdb_id='pdb', cif_id='cif' ):
     file_name = os.path.basename(path).split('.')[0]
     file_sufix = os.path.basename(path).split('.')[1]
@@ -32,12 +31,10 @@ def _read_structure(path, pdb_id='pdb', cif_id='cif' ):
         sys.exit(1)
     return structure, dir_path, file_name
 
-
 def _save_structure(structure, path):
     io = struct.PDBIO()
     io.set_structure(structure)
     io.save(path)
-
 
 def PDBs_from_CIF(inFile, optionsmodels, optionschains, optionsgroups):
     structure, dir_path, file_name = _read_structure(inFile)
@@ -59,7 +56,6 @@ def PDBs_from_CIF(inFile, optionsmodels, optionschains, optionsgroups):
                     if j.get_id() in h:
                         m2.add(j)
                 _save_structure(s2, dir_path + file_name + "_" + str(i.get_id()) + "_" + h + ".pdb")
-
 
 def align_pdbs(referencePath, fitPath, optionsrefatomsA, optionsfitatomsA, optionsoutA,
                optionsaddatomsA=""):
@@ -191,27 +187,6 @@ def align_pdbs(referencePath, fitPath, optionsrefatomsA, optionsfitatomsA, optio
  RMSD=" + str(super_imposer.rms))
     # Save the aligned version
     _save_structure(fit_model, dir_path + optionsoutA)
-
-
-def gap_report(optionsinp):
-    if not os.path.exists(optionsinp):
-        print "Error: File path for Super Structure CSV file does not exist."
-        print("Type -h or --help for description and options.")
-        sys.exit(1)
-    sp, dir_path, file_name = _read_structure(optionsinp)
-
-    print("Gap report for " + dir_path + "/" + file_name + " in tuple format:")
-    for i in sp.get_models():
-        for j in i.get_chains():
-            aa_present = []
-            for k in j.get_residues():
-                if k.get_id()[1] != 'W' and k.resname != 'HOH':
-                    aa_present.append(k.get_full_id()[3][1])
-            print("Model " + str(i.get_id()) + ", Chain " + j.get_id())
-            inserts = utilities.check_gaps(aa_present)
-            inserts_report = utilities.gap_report(inserts)
-            for c in inserts_report:
-                print(c)
 
 def write_pdb_from_crd(lines):
     line = '{:6}{:>5} {:4}{:1}{:3} {:1}{:>4d}{:1}   {:>8.3f}{:>8.3f}{:>8.3f}{:>6.2f}{:>6.2f}          {:>2}{:2}'
@@ -631,6 +606,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
     #               Check INF and SEQ files for systems with missing amino acids.')
     #               Modifications to the code might be required.')
 """
+""" Moved to structure.py """
 def _get_atom_coordinates(sp):
     atoms = []
     for i in sp.get_models():
@@ -656,7 +632,7 @@ def min_max(path):
     print('Zmin - Zmax', Zmin, ' - ', Zmax)
     print('--------------------------------')
     print('Celbasis X, Y, Z:', (Xmax - Xmin), (Ymax - Ymin), (Zmax - Zmin))
-
+"""--------------"""
 
 class crd(object):
     '''

@@ -918,6 +918,7 @@ HS   S    CT2    38.800    95.0000 ! ALLOW   SUL ION ALI
 HS   S    CT3    43.000    95.0000 ! ALLOW   SUL ION ALI
                 ! methanethiol pure solvent, adm jr., 6/22/92
 HT   OT   HT     55.000   104.5200 ! ALLOW WAT
+OT   HT   HT     55.000   104.5200 ! ALLOW WAT
                 ! TIP3P GEOMETRY, ADM JR.
 N    C    CP1    20.000   112.5000 ! ALLOW PRO
                 ! 6-31g* AcProNH2, ProNH2, 6-31g*//3-21g AcProNHCH3 RLD 4/23/93
