@@ -75,10 +75,8 @@ class read_charmm_FF():
         self.toppath = pkg_resources.resource_filename('em', 'params/charmm27.ff/' + 'top_all27_prot_na.rtf')
         self.parpath = pkg_resources.resource_filename('em', 'params/charmm27.ff/' + 'par_all27_prot_na.prm')
         self.v = verbose
-        # FIXME: Do not load DNA because of formating differences witn amino acids.
-        self.exceptions = ['GUA','ADE','CYT','THY','URA',\
-                           '5MET','5PHO','5POM','3PHO','3POM','3PO3',\
-                           'DELB','CY35','LKNA']
+        # FIXME: Do not load DNA because of formating differences with amino acids.
+        self.exceptions = ['GUA','ADE','CYT','THY','URA','5MET','5PHO','5POM','3PHO','3POM','3PO3','DELB','CY35','LKNA']
         self.AA = {}
         self.am = atom_mass()
         self.current_aa = ''
@@ -124,32 +122,28 @@ class read_charmm_FF():
                             self.BONDS[' '.join(s[:2])] = s[2:]
                         else:
                             if self.v:
-                                print("ERROR: BOND "+' '.join(s[:2])+" \
-                                       entry already in dictionary.")
+                                print("ERROR: BOND "+' '.join(s[:2])+" entry already in dictionary.")
                 if angles:
                     if len(s) == 5:
                         if ' '.join(s[:3]) not in self.ANGLES:
                             self.ANGLES[' '.join(s[:3])] = s[3:]
                         else:
                             if self.v:
-                                print("ERROR: ANGLES "+' '.join(s[:3])+" \
-                                       entry already in dictionary.")
+                                print("ERROR: ANGLES "+' '.join(s[:3])+" entry already in dictionary.")
                 if dihedrals:
                     if len(s) == 7:
                         if ' '.join(s[:4]) not in self.DIHEDRALS:
                             self.DIHEDRALS[' '.join(s[:4])] = s[4:]
                         else:
                             if self.v:
-                                print("ERROR: DIHEDRAL "+' '.join(s[:4])+" \
-                                       entry already in dictionary.")
+                                print("ERROR: DIHEDRAL "+' '.join(s[:4])+" entry already in dictionary.")
                 if improper:
                     if len(s) == 7:
                         if ' '.join(s[:4]) not in self.IMPROPER:
                             self.IMPROPER[' '.join(s[:4])] = s[4:]
                         else:
                             if self.v:
-                                print("ERROR: IMPROPER "+' '.join(s[:4])+" \
-                                       entry already in dictionary.")
+                                print("ERROR: IMPROPER "+' '.join(s[:4])+" entry already in dictionary.")
                 if cmap:
                     pass
                 if nonbonded:                    
@@ -157,15 +151,12 @@ class read_charmm_FF():
                         self.NONBONDED[' '.join(s[:1])] = s[1:]
                     else:
                         if self.v:
-                            print("ERROR: NONBONDED "+' '.join(s[:1])+" \
-                                   entry already in dictionary.")
+                            print("ERROR: NONBONDED "+' '.join(s[:1])+" entry already in dictionary.")
             if not self.v:
-                print("WARNING: Some parameters are missing. Read \n\
-                       parmaters with verbose set to True for details.")
+                print("WARNING: Some parameters are missing. Read \n parmaters with verbose set to True for details.")
 
     def load_topology(self):
         nuc_add_first_group = {'GUA':True,'ADE':True,'CYT':True,'THY':True,'URA':True}
-        count = 0
         with open(self.toppath, 'r') as f:
             for line in f:
                 s = line[1:line.find('!')].split()
