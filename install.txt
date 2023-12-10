@@ -1,0 +1,182 @@
+running install
+running bdist_egg
+running egg_info
+writing requirements to Entropy_Maxima.egg-info/requires.txt
+writing Entropy_Maxima.egg-info/PKG-INFO
+writing top-level names to Entropy_Maxima.egg-info/top_level.txt
+writing dependency_links to Entropy_Maxima.egg-info/dependency_links.txt
+reading manifest file 'Entropy_Maxima.egg-info/SOURCES.txt'
+writing manifest file 'Entropy_Maxima.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/em
+creating build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/summary.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/reduce_pdb.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/minmax.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/prepare.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/fixpdb.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/gaps.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/extract.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/dbinding.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/pdb2crd.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/dhydration.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/align.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/__init__.py -> build/bdist.linux-x86_64/egg/em/subscripts
+copying build/lib.linux-x86_64-2.7/em/subscripts/rawsum.py -> build/bdist.linux-x86_64/egg/em/subscripts
+creating build/bdist.linux-x86_64/egg/em/charmm
+copying build/lib.linux-x86_64-2.7/em/charmm/run.py -> build/bdist.linux-x86_64/egg/em/charmm
+copying build/lib.linux-x86_64-2.7/em/charmm/__init__.py -> build/bdist.linux-x86_64/egg/em/charmm
+creating build/bdist.linux-x86_64/egg/em/charmm/gen
+copying build/lib.linux-x86_64-2.7/em/charmm/gen/testgen.py -> build/bdist.linux-x86_64/egg/em/charmm/gen
+copying build/lib.linux-x86_64-2.7/em/charmm/gen/inputs.py -> build/bdist.linux-x86_64/egg/em/charmm/gen
+copying build/lib.linux-x86_64-2.7/em/charmm/gen/__init__.py -> build/bdist.linux-x86_64/egg/em/charmm/gen
+creating build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/Energy_Functions.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/input_output.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/Molecular_Descriptors.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/structural_expression.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/Super_Structures.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/sequence.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/CHARMM_Parser.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/structure3D.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/testMolecular_Descriptors.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/utilities.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/__init__.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/MMGBSA_CA_L.py -> build/bdist.linux-x86_64/egg/em/code
+copying build/lib.linux-x86_64-2.7/em/code/Molecular_Rigid_Manipulations.py -> build/bdist.linux-x86_64/egg/em/code
+creating build/bdist.linux-x86_64/egg/em/params
+creating build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/top_all27_na.rtf -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/top_all27_lipid.rtf -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/par_all27_prot_na.prm -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/top_all27_na_lipid.rtf -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/top_all27_prot_na.rtf -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/dihe_atoms.txt -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/aminoacids.rtp -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/charmm27.ff/top_all27_prot_lipid.rtf -> build/bdist.linux-x86_64/egg/em/params/charmm27.ff
+copying build/lib.linux-x86_64-2.7/em/params/radii_prot_na_dfg.str -> build/bdist.linux-x86_64/egg/em/params
+copying build/lib.linux-x86_64-2.7/em/params/peptides.pdb -> build/bdist.linux-x86_64/egg/em/params
+copying build/lib.linux-x86_64-2.7/em/__init__.py -> build/bdist.linux-x86_64/egg/em
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/summary.py to summary.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/reduce_pdb.py to reduce_pdb.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/minmax.py to minmax.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/prepare.py to prepare.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/fixpdb.py to fixpdb.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/gaps.py to gaps.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/extract.py to extract.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/dbinding.py to dbinding.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/pdb2crd.py to pdb2crd.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/dhydration.py to dhydration.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/align.py to align.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/__init__.py to __init__.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/subscripts/rawsum.py to rawsum.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/charmm/run.py to run.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/charmm/__init__.py to __init__.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/charmm/gen/testgen.py to testgen.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/charmm/gen/inputs.py to inputs.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/charmm/gen/__init__.py to __init__.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/Energy_Functions.py to Energy_Functions.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/input_output.py to input_output.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/Molecular_Descriptors.py to Molecular_Descriptors.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/structural_expression.py to structural_expression.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/Super_Structures.py to Super_Structures.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/sequence.py to sequence.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/CHARMM_Parser.py to CHARMM_Parser.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/structure3D.py to structure3D.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/testMolecular_Descriptors.py to testMolecular_Descriptors.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/utilities.py to utilities.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/__init__.py to __init__.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/MMGBSA_CA_L.py to MMGBSA_CA_L.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/code/Molecular_Rigid_Manipulations.py to Molecular_Rigid_Manipulations.pyc
+byte-compiling build/bdist.linux-x86_64/egg/em/__init__.py to __init__.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/gen_csv.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/structure.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/flower.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/minimization.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/structure2.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/del_residue.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/mmgbsa.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/charmm_setup_water_to_ion_replacer.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-2.7/add_residues.py -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/gen_csv.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/structure.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/flower.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/minimization.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/structure2.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/del_residue.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/mmgbsa.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/charmm_setup_water_to_ion_replacer.py to 755
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/add_residues.py to 755
+copying Entropy_Maxima.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Entropy_Maxima.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Entropy_Maxima.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Entropy_Maxima.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying Entropy_Maxima.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+creating 'dist/Entropy_Maxima-0.1.0-py2.7.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing Entropy_Maxima-0.1.0-py2.7.egg
+Removing /usr/local/lib/python2.7/dist-packages/Entropy_Maxima-0.1.0-py2.7.egg
+Copying Entropy_Maxima-0.1.0-py2.7.egg to /usr/local/lib/python2.7/dist-packages
+Entropy-Maxima 0.1.0 is already the active version in easy-install.pth
+Installing mmgbsa.py script to /usr/local/bin
+Installing flower.py script to /usr/local/bin
+Installing del_residue.py script to /usr/local/bin
+Installing gen_csv.py script to /usr/local/bin
+Installing minimization.py script to /usr/local/bin
+Installing charmm_setup_water_to_ion_replacer.py script to /usr/local/bin
+Installing add_residues.py script to /usr/local/bin
+Installing structure.py script to /usr/local/bin
+Installing structure2.py script to /usr/local/bin
+
+Installed /usr/local/lib/python2.7/dist-packages/Entropy_Maxima-0.1.0-py2.7.egg
+Processing dependencies for Entropy-Maxima==0.1.0
+Searching for Jinja2==2.10
+Best match: Jinja2 2.10
+Adding Jinja2 2.10 to easy-install.pth file
+
+Using /usr/local/lib/python2.7/dist-packages
+Searching for pandas==0.22.0
+Best match: pandas 0.22.0
+Adding pandas 0.22.0 to easy-install.pth file
+
+Using /usr/lib/python2.7/dist-packages
+Searching for biopython==1.70
+Best match: biopython 1.70
+Processing biopython-1.70-py2.7-linux-x86_64.egg
+biopython 1.70 is already the active version in easy-install.pth
+
+Using /usr/local/lib/python2.7/dist-packages/biopython-1.70-py2.7-linux-x86_64.egg
+Searching for MarkupSafe==1.0
+Best match: MarkupSafe 1.0
+Adding MarkupSafe 1.0 to easy-install.pth file
+
+Using /usr/lib/python2.7/dist-packages
+Searching for pytz==2018.4
+Best match: pytz 2018.4
+Adding pytz 2018.4 to easy-install.pth file
+
+Using /home/noel/.local/lib/python2.7/site-packages
+Searching for python-dateutil==2.7.3
+Best match: python-dateutil 2.7.3
+Adding python-dateutil 2.7.3 to easy-install.pth file
+
+Using /home/noel/.local/lib/python2.7/site-packages
+Searching for numpy==1.14.5
+Best match: numpy 1.14.5
+Adding numpy 1.14.5 to easy-install.pth file
+
+Using /home/noel/.local/lib/python2.7/site-packages
+Searching for six==1.11.0
+Best match: six 1.11.0
+Adding six 1.11.0 to easy-install.pth file
+
+Using /usr/lib/python2.7/dist-packages
+Finished processing dependencies for Entropy-Maxima==0.1.0

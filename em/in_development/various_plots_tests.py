@@ -145,7 +145,7 @@ cwd = os.getcwd()
 folder = '/home/noel/Projects/Protein_design/Cas9/aln_pdb/4OO8/GBenergy/'
 file_name = '4oo8_abc_swiss_min3_1_self.mmgbsa'
 mmgbsa = pd.read_csv(folder+file_name)
-mmgbsa.sort(['MMGBSA'],inplace=True)
+mmgbsa.sort_values('MMGBSA',inplace=True)
 mmgbsa_dict = {}
 for i in mmgbsa.index:
     mmgbsa_dict[mmgbsa.comp1[i]+mmgbsa.comp2[i]] = i  

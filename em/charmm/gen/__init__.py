@@ -3,16 +3,18 @@ from jinja2 import Environment, PackageLoader
 env = Environment(
     loader=PackageLoader('em.charmm.gen','templates')
 )
+# TODO gen_parameters(), strewam_nina_radii() gen_setup_one() need to have the
+# paths as a variable that depends on installation directory
 
 def gen_parameters():
     template = env.get_template('parameters.template')
-    return template.render(
-           param_absolute_path='/code/em/params/charmm27.ff/')
+    return template.render()
+#          param_absolute_path="/home//nnoel/Code/EntropyMaxima/em/params/charmm27.ff/")
 
 def stream_nina_radii():
     template = env.get_template('stream_nina_radii.template')
-    return template.render(
-           param_absolute_path='/code/em/params/')
+    return template.render()
+# param_absolute_path="/home//nnoel/Code/EntropyMaxima/em/params/")
 
 def fix_sequence(chain_info):
     template = env.get_template('fix_sequence.template')
@@ -103,7 +105,7 @@ def gen_setup_one():
     }
 
     return template.render(
-        param_absolute_path='/code/em/params/charmm27.ff/',
+        param_absolute_path='/home/noel/Code/EntropyMaxima/em/params/charmm27.ff/',
         a_sequence=a_pair,
         b_sequence=b_pair,
         in_filename='INFILE',

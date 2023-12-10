@@ -5,84 +5,52 @@ Created on Tue Aug 30 23:26:00 2016
 """
 import sys
 import os
-import pandas as pd
 import Bio.PDB as struct
-#import em.describe.utilities as utilities
+#import em.code.utilities as utilities
 import string
-import em.manipulate.Molecular_Rigid_Manipulations as MRM
+import em.code.Molecular_Rigid_Manipulations as MRM
 from em.charmm.gen import *
+from . import *
 from em.charmm import run
-import re
-
-def fix_pdb_from_CHARMM(PDB_file, a=21, b=72):
-    """ This fixes the problem of CHARMM not generating a chain id.
-    But needs to be tested in more systems """
-    if not os.path.exists(PDB_file):
-        print "Error: No --pdbin option entered. Type -h or --help."
-        sys.exit(1)
-    inFile = open(PDB_file, 'r')
-    contents = inFile.read()
-    contents_list = contents.split('\n')
-    for i in range(len(contents_list)):
-        if contents_list[i][0:4] == 'ATOM':
-            temp = list(contents_list[i])
-            # The following two indexes are off by one becasue list index start at 0, and lines in files at 1.
-            temp[a] = temp[b]
-            contents_list[i] = ''.join(temp)
-    outFile = open(PDB_file, 'w')
-    for i in contents_list:
-        outFile.write(i + '\n')
-    outFile.close()
+# import re
 
 def _print_template(outFile,template):
     for i in template:
         outFile.write(i)
 
-def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000"):
-    if not os.path.exists(optionspdbin):
-        print "Error: No path --input option."
+def prepare_pdb_for_charmm(pdbin,
+                           prot_ends,
+                           dir_path = ''):
+    if not os.path.exists(pdbin):
+        print("Error: Invalid path in --structure option.")
         sys.exit(1)
-    input_name = os.path.basename(optionspdbin).split('.')[0]
-    output_name = input_name.lower()
-    os.system("reduce {} {} > {}".format(reduceopt,optionspdbin,output_name+"r.pdb"))
+    if (os.path.basename(pdbin).split('.')[1] != 'pdb'):
+        print("""ERROR: A PDB file with lower case 'pdb' suffix is required.
+              Program will exit without results.""")
+        sys.exit(1)
+    input_name = os.path.basename(pdbin).split('.')[0]
+    if dir_path == '':
+        output_name = input_name.lower()
+    else:
+        if dir_path[-1] == '/':
+            pass
+        else:
+            dir_path += '/'
+        output_name = dir_path+input_name.lower()
+    reduceopt="-HIS -FLIP -OH -ROTEXOH -BUILD -OCC0.0 -H2OOCC0.0 -H2OB1000"
+    os.system("reduce {} {} > {} &".format(reduceopt,pdbin,"r.pdb"))
     if not os.path.exists(output_name+"r.pdb"):
-        print "Error: System call to run reduce did not produce an output file."
+        print("Error: System call to run reduce didn't output a PDB file.")
         sys.exit(1)
     pdb_parser = struct.PDBParser(QUIET=True)
-    sp = pdb_parser.get_structure(input_name, optionspdbin)
-    # This fixes the problem of CHARMM not generating a chain id.
-    # But needs to be tested in more systems
-    print("For pdb=", optionspdbin, input_name)
-    # TODO the problem with c_10 not being process seems to be here.
-    for i in sp.get_chains():
-        print("chain fix", i, i.id, i.get_level())
-        if i.id == ' ':
-            i.id = i.get_level()
-    chain_resnum = []
-    for i in sp.get_chains():
-        min_max = [1000000, -1000000]
-        for j in i.get_residues():
-            if j.get_full_id()[3][1] < min_max[0]:
-                min_max[0] = j.get_full_id()[3][1]
-            if j.get_full_id()[3][1] > min_max[1]:
-                min_max[1] = j.get_full_id()[3][1]
-        chain_resnum.append(min_max)
-    print("chain_resnum=", chain_resnum)
-    # TODO: the following 2 loops also found in flower.py. They need to be moved to a class to avoid repetitive code
-    ids = {}
-    for i in string.ascii_uppercase:
-        ids[i] = False
-    for i in sp[0]:
-        ids[i.id] = True
-    # TODO: FOR some reason ids are not lased consecutively but functions works
-    # def get_next_avail_id():
-    #    id_val = -1
-    #    for i in ids:
-    #        if not ids[i]:
-    #            ids[i] = True
-    #            id_val = i
-    #            break
-    #    return id_val
+    sp = pdb_parser.get_structure(input_name, pdbin)
+    for i in self.structure.get_models():
+        count_models += 1
+    if count_models != 1:
+        print("ERROR: This function works on a PDB file with only one model.")
+        print("       Extract PDBs from CIF if needed. Simulations can only be done")
+        print("       from a single structure and not multiple structure models.")
+        sys.exit(1)
     num_residues = {}
     count_ions = 0
     HC = MRM.Histidin_Correction()
@@ -93,20 +61,20 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                 count += 1
                 if k.resname == 'HIS':
                     newname = HC.rename_HIS(k)
-                    print('change HIS', k.get_id()[1], 'to', newname)
+                    print('changed HIS', k.get_id()[1], 'to', newname)
                     if not newname == 'HIS':
-                        for l in k.get_atom():
+                        for l in k.get_atoms():
                             k.resname = newname
                 elif k.resname == ' NA':
                     k.resname = 'SOD'
                     count_ions += 1
                     # k.id = (' ',count_ions,' ')
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         l.id = 'SOD'
                         l.fullname = ' SOD'
                 elif k.resname == '  A':
                     k.resname = 'ADE'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -115,7 +83,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == ' DA':
                     k.resname = 'ADE'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -124,7 +92,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == '  G':
                     k.resname = 'GUA'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -133,7 +101,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == ' DG':
                     k.resname = 'GUA'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -142,7 +110,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == '  C':
                     k.resname = 'CYT'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -151,7 +119,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == ' DC':
                     k.resname = 'CYT'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -160,7 +128,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == '  T':
                     k.resname = 'THY'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -169,7 +137,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == ' DT':
                     k.resname = 'THY'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -178,7 +146,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
                             l.fullname = ' O2P'
                 elif k.resname == '  U':
                     k.resname = 'URA'
-                    for l in k.get_atom():
+                    for l in k.get_atoms():
                         if l.id == 'OP1':
                             l.id = 'O1P'
                             l.fullname = ' O1P'
@@ -191,9 +159,9 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
      reset at the beginning of each chain. With this fix, residue numbers
      will be renumbered
     '''
-    # f = '/home/noel/Projects/Protein_design/Insulin/Struct_Prep/pdbs/init_setup_bridge/cen/2hiu_1.pdb'
+    # f ='/home/noel/Projects/Protein_design/Insulin/struct_prep/2hiu/2hiu.pdb'
     # cen = pdb_parser.get_structure('test', f)
-    line = '{:>5}{:>5}{:>4}  {:4}{:>10.5f}{:>10.5f}{:>10.5f} {:4} {:<4}{:>12.5f}'
+    line='{:>5}{:>5}{:>4}  {:4}{:>10.5f}{:>10.5f}{:>10.5f} {:4} {:<4}{:>12.5f}'
     atom_count = 0
     resi_count = 0
     lines = []
@@ -202,11 +170,14 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
             for b in a.get_chains():
                 for c in b.get_residues():
                     resi_count += 1
-                    for d in c.get_atom():
+                    for d in c.get_atoms():
                         atom_count += 1
                         lines.append(line.format(atom_count, resi_count, \
-                                                 c.get_resname(), d.get_name(), d.get_coord()[0], \
-                                                 d.get_coord()[1], d.get_coord()[2], b.id, \
+                                                 c.get_resname(), \
+                                                 d.get_name(), \
+                                                 d.get_coord()[0], \
+                                                 d.get_coord()[1], \
+                                                 d.get_coord()[2], b.id, \
                                                  c.get_full_id()[3][1], 0))
 
     outFile = open(output_name+".crd", 'w')
@@ -219,16 +190,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
         outFile.write(i + '\n')
     outFile.close()
 
-    # The Following loops work for fixers that do not require an offset
-    # Code needs to be checked for other possible ways to do this renaming
-    #a_pair = {
-    #    'id': 'A',
-    #    'seq': "A.SEQ",
-    #    'first': 'none',
-    #    'last': 'none',
-    #    'inp': "A_FIXRES.INP"
-    #}
-    # TODO we need a way to check that prot_ends match number of chains in structure.
+    # TODO we need way to check prot_ends match number of chains in structure
     chain_terminals = prot_ends.split(':')
     temp = {}
     for i in chain_terminals:
@@ -244,7 +206,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
         chains_info[i.id]['seq'] = file_name
         chains_info[i.id]['first'] = temp[i.id]['first']
         chains_info[i.id]['last'] = temp[i.id]['last']
-        outFile = open('./'+file_name, 'w')
+        outFile = open(dir_path+file_name, 'w')
         outFile.write('* Sequence of Chain ' + i.id + '\n')
         outFile.write('* Name: Molecule\n')
         outFile.write('* Title: New Molecule Generated by pdb_tp_crd.py\n')
@@ -259,7 +221,7 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
     for i in sp.get_chains():
         file_name = i.id + '_FIXRES.INP'
         chains_info[i.id]['inp'] = file_name
-        outFile = open('./'+file_name, 'w')
+        outFile = open(dir_path+file_name, 'w')
         outFile.write("! CHARMM Script to renumber RESID's after reading from SEQ file\n")
         outFile.write('! Generated by pdb_to_crd.py\n')
         outFile.write('\n')
@@ -288,7 +250,8 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
         outFile.write('\n')
         outFile.write('! End of generated script\n')
         outFile.close()
-    outFile = open("setup_"+input_name+".inp", 'w')
+    print(dir_path+"setup_"+input_name+".inp")
+    outFile = open(dir_path+"setup_"+input_name+".inp", 'w')
     _print_template(outFile,gen_parameters().split('/n'))
     for i in sp.get_chains():
         _print_template(outFile,fix_sequence(chains_info[i.id]))
@@ -304,7 +267,10 @@ def prepare_pdb_for_charmm(optionspdbin,prot_ends, reduceopt="-HIS -FLIP -OH -RO
     _print_template(outFile,write_psf_xplor(output_name+'r'))
     _print_template(outFile,stop())
     outFile.close()
-    run.run("setup_"+input_name+".inp","setup_"+input_name+".out")
+    run.run(dir_path+"setup_"+input_name+".inp",dir_path+"setup_"+input_name+".out")
+    
+def simple_minimization():
+    pass
 
 def minimization_1(input_file,input_info):
     input_name = os.path.basename(input_file).split('.')[0]
