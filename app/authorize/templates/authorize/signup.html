@@ -1,0 +1,117 @@
+{% extends "authorize/layout.html" %}
+
+{% block pagestyles %}
+  <link href="{{ url_for('static', filename='dist/css/styles.css') }}" rel="stylesheet" type="text/css">
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+  <script>
+    function onSubmit(token) {
+      document.getElementById("demo-form").submit();
+    }
+  </script>
+{% endblock %}
+
+{% block content %}
+  <div class="form-wrapper">
+    <div class="login-signup">
+
+    </div>
+
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"/>
+    </div>
+
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+      </div>
+    {% endfor %}
+
+    <h1>Rigister</h1>
+
+    <form id="demo-form" method="POST" action="/signup">
+      {{ form.csrf_token }}
+
+      <fieldset class="name">
+        {{ form.name.label }}
+        {{ form.name(placeholder='First name') }}
+        {% if form.name.errors %}
+          <ul class="errors">
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+      <fieldset class="name">
+        {{ form.last_name.label }}
+        {{ form.last_name(placeholder='Last name') }}
+        {% if form.last_name.errors %}
+          <ul class="errors">
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+      <fieldset class="email">
+        {{ form.email.label }}
+        {{ form.email(placeholder='youremail@example.com') }}
+        {% if form.email.errors %}
+          <ul class="errors">
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+
+      <fieldset class="password">
+        {{ form.password.label }}
+        {{ form.password }}
+        {% if form.password.errors %}
+          <ul class="errors">
+            {% for error in form.password.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+      <fieldset class="confirm">
+        {{ form.confirm.label }}
+        {{ form.confirm }}
+        {% if form.confirm.errors %}
+          <ul class="errors">
+            {% for error in form.confirm.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+
+      <!-- <div class="submit-button">
+       
+        <button style="width: 100%;
+        background: #5eb9d7;
+        color: white;
+        border-radius: 2px;
+        margin-top: 15px;
+        font-weight: 400;
+        border: 1px solid #5eb9d7;
+        transition: all .3s ease-out;
+        height: 52px;" type="submit" class="g-recaptcha" 
+        data-sitekey="{{site_key}}" 
+        data-callback='onSubmit' 
+        data-action='submit'>Registrarse</button>
+      </div> -->
+      <div class="submit-button">
+        {{ form.submit }}
+      </div>
+      
+    </form>
+
+    <div class="login-signup">
+      <span>Already have an account? <a href="{{ url_for('authorize_bp.login') }}">Login</a></span>
+    </div>
+  </div>
+{% endblock %}

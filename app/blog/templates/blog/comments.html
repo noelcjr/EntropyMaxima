@@ -1,0 +1,22 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+    <span class="title"><h1>{% block title %} Latest Comments {% endblock %}</h1></span>
+    <div class="content">
+                {% for comment in comments %}
+                    <div class="comment">
+                        <i>
+                            (#{{ comment.id }})
+                            <p>{{ comment.content }}</p>
+                        </i>
+                        <p class="title">
+                        On <a href="{{ url_for('blog_bp.post',
+                                                post_id=comment.post.id) }}">
+                                {{ comment.post.title }}
+                              </a>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+    </div>
+{% endblock %}

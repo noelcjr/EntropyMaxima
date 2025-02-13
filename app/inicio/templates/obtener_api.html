@@ -1,0 +1,65 @@
+{% extends "base2.html" %}
+
+{% block pagestyles %}
+<style>
+
+h1 {
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#apiKeyCode {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  word-wrap: break-word;
+}
+
+.hidden {
+  display: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>Obtener código API Key</h1>
+    <button id="showCodeBtn">Mostrar API Key</button>
+    <div id="apiKeyCode" class="{{ 'hidden' if not show_api_key else '' }}"></div>
+    <div id="loadingSpinner" class="hidden">Cargando...</div>  </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.getElementById('showCodeBtn').addEventListener('click', function () {
+            var apiKeyCode = document.getElementById('apiKeyCode');
+            var loadingSpinner = document.getElementById('loadingSpinner');
+            
+            apiKeyCode.classList.toggle('hidden');
+            loadingSpinner.classList.toggle('hidden');
+            
+            if (!apiKeyCode.classList.contains('hidden')) {
+                fetch('/update_api_key', {
+                    method: 'POST',
+  
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                })
+                .then(function(data) {
+                    if (data.api_key) {
+                        apiKeyCode.textContent = data.api_key; // Actualizar el valor del API key en la página
+                        loadingSpinner.classList.add('hidden'); // Ocultar la barra de carga
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

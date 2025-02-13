@@ -33,3 +33,23 @@ to install the scripts in the bin so that you will be able to run from anywhere 
 ## Structure
 
 WIP
+
+https://github.com/toddbirchard/plotlydash-flask-tutorial.git
+
+I removed 
+uwsgi==2.0.20
+from requirements
+
+created a .env and added it to .gitignore
+
+Installed
+pip install lesscpy  # I am not sure if needed.
+pip install cssmin
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
+
+
+# ritmomotion

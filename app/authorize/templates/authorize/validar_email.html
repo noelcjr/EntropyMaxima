@@ -1,0 +1,12 @@
+{% extends "authorize/layout.html" %}
+
+{% block pagestyles %}
+  <link href="{{ url_for('static', filename='dist/css/styles.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+  <div class="form-wrapper">
+    <img style="width:100% ;" src="{{ url_for('static', filename='img/logo/ALO_animation_Test1.gif') }}">
+    <h2 style="text-align: center;">REVISA TU CORREO</h2>
+  </div>
+{% endblock %}

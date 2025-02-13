@@ -1,0 +1,46 @@
+{% extends "base2.html" %}
+
+{% block pagestyles %}
+
+{% endblock %}
+
+{% block content %}
+<div id="dash-container">
+<div id="histogram-graph">
+    {{ plot_div|safe }}
+</div>
+<table id="myTable" class="display">
+    <thead>
+        <tr>
+            {% for column in table[0].keys() %}
+            <th>{{ column }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in table %}
+        <tr>
+            {% for value in row.values() %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
+{% block script %}
+<script> var jqueryNuevo= jQuery.noConflict();</script>
+<script type="text/javascript">jqueryNuevo(document).ready(function () {
+       var table= jqueryNuevo('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
+            "scrollX": false,  // Habilitar el desplazamiento horizontal
+             "autoWidth": true,  // Redimensionar columnas automáticamente
+
+        });
+});
+</script>
+
+{% endblock %}

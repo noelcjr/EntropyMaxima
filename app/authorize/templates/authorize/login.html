@@ -1,0 +1,102 @@
+{% extends "authorize/layout.html" %}
+
+{% block pagestyles %}
+  <link href="{{ url_for('static', filename='dist/css/styles.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+  <div class="form-wrapper">
+    <div class="login-signup">
+
+    </div>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"/>
+    </div>
+
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+      </div>
+    {% endfor %}
+
+    <h1>Login</h1>
+
+    <form  id="login-form" method="post" action="/login">
+      {{ form.csrf_token }}
+
+      <fieldset class="email">
+        {{ form.email.label }}
+        {{ form.email(placeholder='youremail@example.com') }}
+        {% if form.email.errors %}
+          <ul class="errors">
+            {% for error in form.email.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+      <fieldset class="password">
+        {{ form.password.label }}
+        {{ form.password }}
+        {% if form.email.errors %}
+          <ul class="errors">
+            {% for error in form.password.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+      <div class="submit-button">
+        {{ form.submit }}
+      </div>
+      <div class="login-signup">
+        <span>Password recovery <!-- a href="{{ url_for('authorize_bp.recuperar') }}">Recover</a --></span>
+      </div>
+      <div class="login-signup">
+        <span>Don't have an account? <!-- a href="{{ url_for('authorize_bp.signup') }}">Register</a --></span>
+      </div>
+
+    </form>
+    <p>
+      <!-- a class="btn btn-primary" href=" url_for('oauth2_authorize', provider='google') ">Login with Google</a -->
+      <!-- a class="btn btn-primary" href=" url_for('oauth2_authorize', provider='github') ">Login with GitHub</a -->
+    </p>
+  </div>
+{% endblock %}
+
+
+{% block additionalscripts %}
+<!-- <script>
+  // Escuchar el evento de envío del formulario
+  document.getElementById("login-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    // Obtener los datos del formulario
+    const formData = new FormData(event.target);
+    const jsonData = {};
+
+    formData.forEach((value, key) => {
+      jsonData[key] = value;
+    });
+
+    // Enviar la solicitud utilizando fetch
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json" // Configurar el tipo de contenido como JSON
+      },
+      body: JSON.stringify(jsonData) // Convertir los datos a JSON y enviarlos en el cuerpo de la solicitud
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Manejar la respuesta del servidor
+      console.log(data);
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  });
+</script> -->
+
+{% endblock %}

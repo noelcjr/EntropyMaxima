@@ -1,0 +1,41 @@
+{% extends "authorize/layout.html" %}
+
+{% block pagestyles %}
+  <link href="{{ url_for('static', filename='dist/css/styles.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+  <div class="form-wrapper">
+
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"/>
+    </div>
+    <div class="text-center">Ingrese su identificacion para enviar un mensaje  de recuperacion de contraseña al correo asignado al momento del registro de su cuenta </div><br>
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+      </div>
+    {% endfor %}
+
+
+    <form method="POST" action="/recuperar">
+      {{ form.csrf_token }}
+
+      <fieldset class="email">
+        {{ form.identificacion.label }}
+        {{ form.identificacion}}
+        {% if form.identificacion.errors %}
+          <ul class="errors">
+            {% for error in form.identificacion.errors %}
+              <li>{{ error }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+      </fieldset>
+
+      <div class="submit-button">
+        {{ form.submit }}
+      </div>
+    </form>
+  </div>
+{% endblock %}
